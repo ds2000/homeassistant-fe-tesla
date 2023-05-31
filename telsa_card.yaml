@@ -1,0 +1,364 @@
+type: vertical-stack
+cars:
+  terrance:
+    model: 3
+    color: red
+cards:
+  - type: conditional
+    condition: and
+    conditions:
+      - entity: input_boolean.tesla_charger_menu
+        state: 'off'
+      - entity: input_boolean.tesla_controls_menu
+        state: 'off'
+      - entity: input_boolean.tesla_climate_menu
+        state: 'off'
+    card:
+      type: custom:stack-in-card
+      cards:
+        - type: picture-elements
+          image: "/local/Tesla/images/models/${cars.tesla.terrance.models}/${cars.tesla.terrance.color}baseWide.jpg"
+          elements:
+            - type: state-label
+              entity: sensor.terrance_range
+              style:
+                top: 7.2%
+                left: 22%
+                font-weight: bold
+                font-size: 100%
+                color: '#8a8a8d'
+                font-family: gotham
+            - type: state-label
+              entity: sensor.terrance_range
+              style:
+                top: 7.2%
+                left: 22%
+                font-weight: bold
+                font-size: 100%
+                color: '#8a8a8d'
+                font-family: gotham
+            - type: state-icon
+              show_name: true
+              title: Refresh Data
+              entity: button.terrance_force_data_update
+              icon: mdi:refresh
+              style:
+                top: 9.5%
+                left: 90%
+                color: '#039be5'
+                width: 40px
+                height: 50px
+              tap_action:
+                action: call-service
+                service: button.press
+                service_data: {}
+                target:
+                  entity_id: button.terrance_force_data_update
+              double_tap_action: none
+              hold_action: none
+            - type: image
+              title: Unlock
+              style:
+                top: 30%
+                left: 90%
+                width: 40px
+                height: 40px
+              state_image:
+                locked: /local/Tesla/images/Tesla_Door_Lock.jpg
+                unlocked: /local/Tesla/images/Tesla_Door_Unlock.jpg
+              tap_action:
+                action: toggle
+              entity: lock.terrance_doors
+              double_tap_action: none
+              hold_action: none
+            - type: image
+              title: ClimateIcon
+              image: /local/Tesla/images/Tesla_Climate_Fan_On.jpg
+              style:
+                top: 50%
+                left: 90%
+                width: 40px
+                height: 40px
+              state_image:
+                'off': /local/Tesla/images/Tesla_Climate_Fan_Off.jpg
+              tap_action:
+                action: toggle
+              entity: climate.terrance_hvac_climate_system
+              double_tap_action: none
+              hold_action: none
+            - type: image
+              title: Unlock
+              image: /local/Tesla/images/Tesla_Charge_Port_Open.jpg
+              style:
+                top: 72%
+                left: 90%
+                width: 40px
+                height: 40px
+              state_image:
+                closed: /local/Tesla/images/Tesla_Charge_Port_Closed.jpg
+              tap_action:
+                action: toggle
+              entity: cover.terrance_charger_door
+              double_tap_action: none
+              hold_action: none
+            - type: conditional
+              conditions:
+                - entity: cover.terrance_charger_door
+                  state: open
+              elements:
+                - type: image
+                  title: Charger_Door_Body
+                  style:
+                    top: 55.2%
+                    left: 50.9%
+                    width: 298px
+                    height: 298px
+                  image: "/local/Tesla/images/models/${cars.tesla.terrance.models}/${cars.tesla.terrance.color}/baseChargeportOpened.jpg"
+            - type: image
+              title: Frunk
+              image: /local/Tesla/images/Tesla_Frunk_Opened.jpg
+              style:
+                top: 90%
+                left: 90%
+                width: 40px
+                height: 40px
+              state_image:
+                closed: /local/Tesla/images/Tesla_Frunk_Closed.jpg
+              tap_action:
+                action: toggle
+              entity: cover.terrance_frunk
+              double_tap_action: none
+              hold_action: none
+            - type: conditional
+              conditions:
+                - entity: cover.terrance_frunk
+                  state: open
+              elements:
+                - type: image
+                  title: Frunk_Body
+                  style:
+                    top: 55%
+                    left: 50.9%
+                    width: 288px
+                    height: 288px
+                  image: "/local/Tesla/images/models/${cars.terrance.models}/${cars.terrance.color}/baseFrunkOpened.jpg"
+            - type: conditional
+              conditions:
+                - entity: cover.terrance_charger_door
+                  state: open
+              elements:
+                - type: icon
+                  icon: mdi:ev-plug-tesla
+                  tap_action: toggle
+                  double_tap_action: none
+                  hold_action: none
+                  style:
+                    top: 13%
+                    left: 21%
+                    color: '#039be5'
+            - type: conditional
+              conditions:
+                - entity: cover.terrance_charger_door
+                  state_not: open
+              elements:
+                - type: icon
+                  icon: mdi:ev-plug-tesla
+                  tap_action: none
+                  double_tap_action: none
+                  hold_action: none
+                  style:
+                    top: 13%
+                    left: 21%
+                    color: black
+            - type: conditional
+              conditions:
+                - entity: binary_sensor.terrance_charger
+                  state: 'on'
+              elements:
+                - type: state-label
+                  entity: sensor.terrance_charging_rate
+                  tap_action: none
+                  double_tap_action: none
+                  hold_action: none
+                  style:
+                    top: 26%
+                    left: 21%
+                    font-size: 100%
+                    font-weight: normal
+                    color: '#039be5'
+            - type: conditional
+              conditions:
+                - entity: binary_sensor.terrance_charger
+                  state: 'on'
+              elements:
+                - type: state-label
+                  entity: binary_sensor.terrance_charger
+                  attribute: charging_state
+                  tap_action: none
+                  double_tap_action: none
+                  hold_action: none
+                  style:
+                    top: 22%
+                    left: 21%
+                    font-size: 100%
+                    font-weight: normal
+                    color: '#039be5'
+            - type: image
+              title: Controls
+              image: /local/Tesla/images/Tesla_Controls_Button_Stateless.jpg
+              style:
+                top: 80%
+                left: 42%
+                width: 400px
+                height: 100px
+              tap_action:
+                action: toggle
+              entity: lock.terrance_doors
+              double_tap_action: none
+              hold_action: none
+            - type: image
+              title: ClimateControls
+              image: /local/Tesla/images/Tesla_Climate_Button_On.jpg
+              state_image:
+                'off': /local/Tesla/images/Tesla_Climate_Button_Off.jpg
+              style:
+                font-family: gotham
+                top: 96%
+                left: 42%
+                width: 400px
+                height: 100px
+              tap_action:
+                action: toggle
+              entity: climate.terrance_hvac_climate_system
+              double_tap_action: none
+              hold_action: none
+            - type: conditional
+              conditions:
+                - entity: climate.terrance_hvac_climate_system
+                  state: heat_cool
+              elements:
+                - type: state-label
+                  entity: sensor.terrance_temperature_inside
+                  style:
+                    top: 94.44%
+                    left: 41.3%
+                    font-size: 97%
+                    color: '#8a8a8d'
+                    font-family: gotham
+            - type: conditional
+              conditions:
+                - entity: climate.terrance_hvac_climate_system
+                  state: 'off'
+              elements:
+                - type: state-label
+                  entity: sensor.terrance_temperature_inside
+                  style:
+                    top: 94.44%
+                    left: 30.3%
+                    font-size: 97%
+                    color: '#8a8a8d'
+                    font-family: gotham
+            - type: conditional
+              conditions:
+                - entity: binary_sensor.terrance_ischarging
+                  state: 'on'
+                - entity: device_tracker.terrance_location_tracker
+                  state: home
+              elements:
+                - type: icon
+                  icon: mdi:home-lightning-bolt-outline
+                  tap_action: none
+                  double_tap_action: none
+                  hold_action: none
+                  style:
+                    top: 84.7%
+                    left: 55%
+                    color: green
+            - type: conditional
+              conditions:
+                - entity: binary_sensor.terrance_ischarging
+                  state: 'on'
+                - entity: device_tracker.terrance_location_tracker
+                  state_not: home
+              elements:
+                - type: icon
+                  icon: mdi:ev-station
+                  tap_action: none
+                  double_tap_action: none
+                  hold_action: none
+                  style:
+                    top: 84.7%
+                    left: 55%
+                    color: green
+            - type: conditional
+              conditions:
+                - entity: cover.terrance_charger_door
+                  state: open
+              elements:
+                - type: image
+                  image: /local/Tesla/images/Telsa_Charge_Background.jpg
+                  style:
+                    top: 40%
+                    left: 44%
+                    height: 190px
+                    width: 380px
+                - type: state-label
+                  entity: binary_sensor.terrance_charger
+                  style:
+                    top: 50%
+                    left: 50%
+                    font-weight: bold
+                    font-size: 100%
+                    color: '#8a8a8d'
+                    font-family: gotham
+                - type: custom:bar-card
+                  entity: sensor.terrance_energy_added
+                  severity:
+                    - color: Green
+                      from: 0
+                      to: 600
+                  entity_row: true
+                  positions:
+                    icon: 'off'
+                    name: 'off'
+                    indicator: 'off'
+                  width: 323px
+                  height: 4px
+                  style:
+                    top: 37.4%
+                    left: 43.8%
+                    font-size: 0%
+                    font-weight: normal
+                    color: black
+            - type: custom:bar-card
+              entity: sensor.terrance_range
+              severity:
+                - color: Red
+                  from: 0
+                  to: 60
+                - color: Orange
+                  from: 61
+                  to: 120
+                - color: Green
+                  from: 121
+                  to: 600
+              entity_row: true
+              positions:
+                icon: 'off'
+                name: 'off'
+                indicator: 'off'
+              animation:
+                state: 'on'
+                speed: 5
+              width: 26px
+              height: 12px
+              tap_action: none
+              hold_action: none
+              double_tap_action: none
+              stack: vertical
+              style:
+                top: 7.4%
+                left: 8%
+                font-size: 0%
+                font-weight: normal
+                color: black
