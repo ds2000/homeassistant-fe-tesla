@@ -9,7 +9,7 @@ This Home Assistant configuration allows you to control the functionality of you
 
 This is an early release, time is short so I will work on adding features and funtions when and as I can.  People are welcome to fork the code and tweak it too.
 
-If you use this and like it then please: [<img src="/images/bmac.jpg">](https://www.buymeacoffee.com/daveshaw301)
+If you use this and like it then please: [<img src="/images/bmac.jpeg">](https://www.buymeacoffee.com/daveshaw301)
 
 ### Things to know
 At present I only have the screen shots for a Red Model 3.  I don't have any access to other Teslas so the user will need to screenshot and format the images as needed.  The images are stored under models/{3/y/x/s}/{colour} - feel free to copy the red model 3 folder and add new images in the appropriate place.
