@@ -25,7 +25,8 @@ At present I only have the screen shots for a Red Model 3.  I don't have any acc
 8) Controls screen - Adding charging flap icon and changing the background state when opened
 9) Controls screen - Adding PSI to toggle
 10) Controls screen - Higher and Lower buttons to set the charge ampage.
-11) Visuals - some of the car images bounce around slightly when clicked, screenshots need redoing.
+11) Visuals - Rogue charging icon needs work
+12) Visuals - some of the car images bounce around slightly when clicked, screenshots need redoing.
 
 # Installation
 To install you'll need a few pre-requistites.  These are:
