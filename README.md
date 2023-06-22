@@ -7,7 +7,7 @@ This is an early release, time is short so I will work on adding features and fu
 
 If you use this and like it then please: 
 
-[<img src="[/images/bmac.png]()">](https://www.buymeacoffee.com/daveshaw301)
+[<img src="/images/bmac.png()">](https://www.buymeacoffee.com/daveshaw301)
 
 ### Things to know
 At present I only have the screen shots for a Red Model 3.  I don't have any access to other Teslas so the user will need to screenshot and format the images as needed.  The images are stored under models/{3/y/x/s}/{colour} - feel free to copy the red model 3 folder and add new images in the appropriate place.
