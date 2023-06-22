@@ -3,11 +3,13 @@ This is an alpha / preview release.
 
 This Home Assistant configuration allows you to control the functionality of your Telsa with a GUI that is similar to the mobile phone application.
 
+![Screenshot 2023-06-22 at 21 26 00](https://github.com/ds2000/homeassistant-fe-tesla/assets/10222737/9494b833-b968-49e3-96a3-893a7d6ba267)
+![Screenshot 2023-06-22 at 21 26 29](https://github.com/ds2000/homeassistant-fe-tesla/assets/10222737/30c267da-e6d7-49e2-beb1-6afd8dfa197c)
+
+
 This is an early release, time is short so I will work on adding features and funtions when and as I can.  People are welcome to fork the code and tweak it too.
 
-If you use this and like it then please: 
-
-[<img src="/images/bmac.png">](https://www.buymeacoffee.com/daveshaw301)
+If you use this and like it then please: [<img src="/images/bmac.png">](https://www.buymeacoffee.com/daveshaw301)
 
 ### Things to know
 At present I only have the screen shots for a Red Model 3.  I don't have any access to other Teslas so the user will need to screenshot and format the images as needed.  The images are stored under models/{3/y/x/s}/{colour} - feel free to copy the red model 3 folder and add new images in the appropriate place.
