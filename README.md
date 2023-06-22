@@ -3,8 +3,9 @@ This is an alpha / preview release.
 
 This Home Assistant configuration allows you to control the functionality of your Telsa with a GUI that is similar to the mobile phone application.
 
-![Screenshot 2023-06-22 at 21 26 00](https://github.com/ds2000/homeassistant-fe-tesla/assets/10222737/9494b833-b968-49e3-96a3-893a7d6ba267)
-![Screenshot 2023-06-22 at 21 26 29](https://github.com/ds2000/homeassistant-fe-tesla/assets/10222737/30c267da-e6d7-49e2-beb1-6afd8dfa197c)
+![Screenshot 2023-06-22 at 21 26 00](https://github.com/ds2000/homeassistant-fe-tesla/assets/10222737/adff06dd-176e-4c23-af94-f30e405cb222)
+
+![Screenshot 2023-06-22 at 21 26 29](https://github.com/ds2000/homeassistant-fe-tesla/assets/10222737/af036517-a545-41d6-8263-9ddc2d58c8ec)
 
 
 This is an early release, time is short so I will work on adding features and funtions when and as I can.  People are welcome to fork the code and tweak it too.
