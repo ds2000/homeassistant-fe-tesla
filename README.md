@@ -28,6 +28,7 @@ At present I only have the screen shots for a Red Model 3.  I don't have any acc
 10) Controls screen - Higher and Lower buttons to set the charge ampage.
 11) Visuals - Rogue charging icon needs work
 12) Visuals - some of the car images bounce around slightly when clicked, screenshots need redoing.
+13) Review conditional yaml state code.  At the time of writing the state icons weren't working.  If this has been fixed I can rewrite a few things.
 
 # Installation
 To install you'll need a few pre-requistites.  These are:
