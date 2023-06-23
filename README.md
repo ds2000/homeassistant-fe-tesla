@@ -1,7 +1,7 @@
 # homeassistant-fe-tesla
 This is an alpha / preview release.
 
-This Home Assistant configuration allows you to control the functionality of your Telsa with a GUI that is similar to the mobile phone application.
+This Home Assistant configuration allows you to control the functionality of your Telsa with a GUI that is similar to the mobile phone application.  It is a front end / tile for the brilliant intereface from https://github.com/alandtse/tesla 
 
 ![Screenshot 2023-06-22 at 21 26 00](https://github.com/ds2000/homeassistant-fe-tesla/assets/10222737/adff06dd-176e-4c23-af94-f30e405cb222)
 
