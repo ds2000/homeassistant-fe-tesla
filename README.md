@@ -38,6 +38,7 @@ To install you'll need a few pre-requistites.  These are:
    a) stack-in-card https://github.com/custom-cards/stack-in-card
    b) slider-entity-row https://github.com/thomasloven/lovelace-slider-entity-row
 4) A way to upload images to your Home Assistant Installation.  I just use the https://community.home-assistant.io/t/home-assistant-community-add-on-visual-studio-code/107863
+5) Add the Gotham font to the Dashboard Resources: https://fonts.cdnfonts.com/css/gotham
 
 Once you have the above all configured, you can add the yaml file to your dashboard.  I found it best to create a hidden dashboard and add any card to it.
 From there you can edit the card, click the show code editor button in the bottom corner and paste it all in.
