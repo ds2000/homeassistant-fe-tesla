@@ -34,11 +34,15 @@ At present I only have the screen shots for a Red Model 3.  I don't have any acc
 To install you'll need a few pre-requistites.  These are:
 1) Working home assistant
 2) Working Telsa Add-on, this can be found here https://github.com/alandtse/tesla
-3) These card add-ons
+3) Create 3 helpers.  Click settings, devices and services and then click the helper tab.  Create the following 3 heloers:
+   a) Name: Tesla Charger Menu | EntityID: input_boolean.tesla_charger_menu | Type: Toggle
+   b) Name: Tesla Climate Menu | EntityID: input_boolean.tesla_climate_menu | Type: Toggle 
+   c) Name: Tesla Controls Menu | EntityID: input_boolean.tesla_controls_menu | Type: Toggle
+4) These card add-ons
    a) stack-in-card https://github.com/custom-cards/stack-in-card
    b) slider-entity-row https://github.com/thomasloven/lovelace-slider-entity-row
-4) A way to upload images to your Home Assistant Installation.  I just use the https://community.home-assistant.io/t/home-assistant-community-add-on-visual-studio-code/107863
-5) Add the Gotham font to the Dashboard Resources: https://fonts.cdnfonts.com/css/gotham
+5) A way to upload images to your Home Assistant Installation.  I just use the https://community.home-assistant.io/t/home-assistant-community-add-on-visual-studio-code/107863
+6) Add the Gotham font to the Dashboard Resources: https://fonts.cdnfonts.com/css/gotham
 
 Once you have the above all configured, you can add the yaml file to your dashboard.  I found it best to create a hidden dashboard and add any card to it.
 From there you can edit the card, click the show code editor button in the bottom corner and paste it all in.
