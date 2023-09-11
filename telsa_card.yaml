@@ -99,7 +99,7 @@ cards:
                     left: 50.9%
                     width: 298px
                     height: 298px
-                  image: /local/Tesla/images/buttons/Tesla_ChargePort_Opened.jpg
+                  image: /local/Tesla/images/buttons/Tesla_ChargePort_Open.jpg
             - type: image
               title: Frunk
               image: /local/Tesla/images/buttons/Tesla_Frunk_Closed.jpg
