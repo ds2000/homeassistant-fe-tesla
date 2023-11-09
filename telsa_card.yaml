@@ -61,7 +61,7 @@ cards:
               hold_action: none
             - type: image
               title: ClimateIcon
-              image: /local/Tesla/images/buttonsTesla_Climate_Fan_On.jpg
+              image: /local/Tesla/images/buttons/Tesla_Climate_Fan_On.jpg
               style:
                 top: 50%
                 left: 90%
