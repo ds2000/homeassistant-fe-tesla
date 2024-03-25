@@ -9,26 +9,75 @@ cards:
         state: 'off'
       - entity: input_boolean.tesla_climate_menu
         state: 'off'
+      - entity: input_boolean.tesla_location_menu
+        state: 'off'
     card:
       type: custom:stack-in-card
       cards:
         - type: picture-elements
-          image: /local/Tesla/images/models/3/red/baseWide.jpg
-          entity: button.terrance_force_data_update
+          image: https://i.imgur.com/y1kknRb.jpg
+          entity: button.tesla_force_data_update
           elements:
-            - type: state-label
-              entity: sensor.terrance_range
-              style:
-                top: 7.2%
-                left: 22%
-                font-weight: bold
-                font-size: 100%
-                color: '#8a8a8d'
-                font-family: gotham
+            - type: conditional
+              conditions:
+                - entity: binary_sensor.tesla_charging
+                  state: 'off'
+              elements:
+                - type: state-label
+                  entity: sensor.tesla_range
+                  tap_action: none
+                  double_tap_action: none
+                  hold_action: none
+                  style:
+                    top: 5.6%
+                    left: 20%
+                    font-weight: bold
+                    font-size: 110%
+                    color: '#8a8a8d'
+                    font-family: gotham
+            - type: conditional
+              conditions:
+                - entity: binary_sensor.tesla_charging
+                  state: 'on'
+              elements:
+                - type: state-label
+                  entity: sensor.tesla_range
+                  tap_action: none
+                  double_tap_action: none
+                  hold_action: none
+                  style:
+                    top: 5.6%
+                    left: 20%
+                    font-weight: bold
+                    font-size: 110%
+                    color: green
+                    font-family: gotham
+                - type: state-label
+                  entity: sensor.tesla_time_charge_complete
+                  attribute: minutes_to_full_charge
+                  suffix: m remaining to charge limit
+                  tap_action: none
+                  double_tap_action: none
+                  hold_action: none
+                  style:
+                    top: 10%
+                    left: 31%
+                    font-size: 75%
+                    color: '#8a8a8d'
+                    font-family: gotham
+                - type: icon
+                  icon: mdi:lightning-bolt
+                  tap_action: none
+                  double_tap_action: none
+                  hold_action: none
+                  style:
+                    top: 5.6%
+                    left: 30%
+                    color: green
             - type: state-icon
               show_name: true
               title: Refresh Data
-              entity: button.terrance_force_data_update
+              entity: button.tesla_force_data_update
               icon: mdi:refresh
               style:
                 top: 9.5%
@@ -41,7 +90,7 @@ cards:
                 service: button.press
                 service_data: {}
                 target:
-                  entity_id: button.terrance_force_data_update
+                  entity_id: button.tesla_force_data_update
               double_tap_action: none
               hold_action: none
             - type: image
@@ -52,31 +101,36 @@ cards:
                 width: 40px
                 height: 40px
               state_image:
-                locked: /local/Tesla/images/buttons/Tesla_Door_Lock.jpg
-                unlocked: /local/Tesla/images/buttons/Tesla_Door_Unlock.jpg
+                locked: >-
+                  https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/buttons/Tesla_Door_Lock.jpg
+                unlocked: >-
+                  https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/buttons/Tesla_Door_Unlock.jpg
               tap_action:
                 action: toggle
-              entity: lock.terrance_doors
+              entity: lock.tesla_doors
               double_tap_action: none
               hold_action: none
             - type: image
-              title: ClimateIcon
-              image: /local/Tesla/images/buttons/Tesla_Climate_Fan_On.jpg
+              title: Climate
+              image: >-
+                https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/buttons/Tesla_Climate_Fan_On.jpg
               style:
                 top: 50%
                 left: 90%
                 width: 40px
                 height: 40px
               state_image:
-                'off': /local/Tesla/images/buttons/Tesla_Climate_Fan_Off.jpg
+                'off': >-
+                  https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/buttons/Tesla_Climate_Fan_Off.jpg
               tap_action:
                 action: toggle
-              entity: climate.terrance_hvac_climate_system
+              entity: climate.tesla_hvac_climate_system
               double_tap_action: none
               hold_action: none
             - type: image
-              title: Unlock
-              image: /local/Tesla/images/buttons/Tesla_Charge_Port_Closed.jpg
+              title: Charging
+              image: >-
+                https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/buttons/Tesla_Charge_Port_Closed.jpg
               style:
                 top: 72%
                 left: 90%
@@ -89,215 +143,130 @@ cards:
               hold_action: none
             - type: conditional
               conditions:
-                - entity: cover.terrance_charger_door
+                - entity: cover.tesla_charger_door
                   state: open
               elements:
                 - type: image
-                  title: Charger_Door_Body
                   style:
-                    top: 55.2%
-                    left: 50.9%
-                    width: 298px
-                    height: 298px
-                  image: /local/Tesla/images/models/3/red/baseChargeportOpened.jpg
+                    top: 35%
+                    left: 35%
+                    width: 85%
+                  title: Charger_Door_Body
+                  image: https://i.imgur.com/m0KWGbq.jpg
             - type: image
               title: Frunk
-              image: /local/Tesla/images/buttons/Tesla_Frunk_Closed.jpg
+              image: >-
+                https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/buttons/Tesla_Frunk_Closed.jpg
               style:
                 top: 90%
                 left: 90%
                 width: 40px
                 height: 40px
               state_image:
-                opened: /local/Tesla/images/buttons/Tesla_Frunk_Opened.jpg
+                opened: >-
+                  https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/buttons/Tesla_Frunk_Opened.jpg
               tap_action:
                 action: toggle
-              entity: cover.terrance_frunk
+              entity: cover.tesla_frunk
               double_tap_action: none
               hold_action: none
             - type: conditional
               conditions:
-                - entity: cover.terrance_frunk
+                - entity: cover.tesla_frunk
                   state: open
               elements:
                 - type: image
                   title: Frunk_Body
                   style:
-                    top: 55%
-                    left: 50.9%
-                    width: 288px
-                    height: 288px
-                  image: /local/Tesla/images/models/3/red/baseFrunkOpened.jpg
-            - type: conditional
-              conditions:
-                - entity: cover.terrance_charger_door
-                  state: open
-              elements:
-                - type: icon
-                  icon: mdi:ev-plug-tesla
-                  tap_action: toggle
-                  double_tap_action: none
-                  hold_action: none
-                  style:
-                    top: 13%
-                    left: 21%
-                    color: '#039be5'
-            - type: conditional
-              conditions:
-                - entity: cover.terrance_charger_door
-                  state_not: open
-              elements:
-                - type: icon
-                  icon: mdi:ev-plug-tesla
-                  tap_action: none
-                  double_tap_action: none
-                  hold_action: none
-                  style:
-                    top: 13%
-                    left: 21%
-                    color: black
-            - type: conditional
-              conditions:
-                - entity: binary_sensor.terrance_charger
-                  state: 'on'
-              elements:
-                - type: state-label
-                  entity: sensor.terrance_charging_rate
-                  tap_action: none
-                  double_tap_action: none
-                  hold_action: none
-                  style:
-                    top: 26%
-                    left: 21%
-                    font-size: 100%
-                    font-weight: normal
-                    color: '#039be5'
-            - type: conditional
-              conditions:
-                - entity: binary_sensor.terrance_charger
-                  state: 'on'
-              elements:
-                - type: state-label
-                  entity: binary_sensor.terrance_charger
-                  attribute: charging_state
-                  tap_action: none
-                  double_tap_action: none
-                  hold_action: none
-                  style:
-                    top: 22%
-                    left: 21%
-                    font-size: 100%
-                    font-weight: normal
-                    color: '#039be5'
+                    top: 35%
+                    left: 35%
+                    width: 85%
+                  image: >-
+                    https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/models/y/silver/baseFrunkOpened.jpg
             - type: image
               title: Controls
-              image: /local/Tesla/images/buttons/Tesla_Controls_Button_Stateless.jpg
+              image: https://i.imgur.com/t6wTpK0.jpg
               style:
-                top: 80%
-                left: 42%
-                width: 400px
-                height: 100px
+                top: 68%
+                left: 43%
+                width: 85%
               tap_action:
                 action: toggle
               entity: input_boolean.tesla_controls_menu
               double_tap_action: none
               hold_action: none
+            - type: image
+              title: Climate
+              image: https://i.imgur.com/Ev2ROVh.jpg
+              style:
+                top: 79%
+                left: 43%
+                width: 85%
+              tap_action:
+                action: toggle
+              entity: input_boolean.tesla_climate_menu
+              double_tap_action: none
+              hold_action: none
             - type: conditional
               conditions:
-                - entity: climate.terrance_hvac_climate_system
-                  state: 'off'
-              elements:
-                - type: image
-                  title: ClimateControls
-                  image: /local/Tesla/images/buttons/Tesla_Climate_Button_Off.jpg
-                  style:
-                    font-family: gotham
-                    top: 96%
-                    left: 42%
-                    width: 400px
-                    height: 100px
-                  tap_action:
-                    action: toggle
-                  entity: input_boolean.tesla_climate_menu
-                  double_tap_action: none
-                  hold_action: none
-            - type: conditional
-              conditions:
-                - entity: climate.terrance_hvac_climate_system
-                  state: heat_cool
-              elements:
-                - type: image
-                  title: ClimateControls
-                  image: /local/Tesla/images/buttons/Tesla_Climate_Button_On.jpg
-                  style:
-                    font-family: gotham
-                    top: 96%
-                    left: 42%
-                    width: 400px
-                    height: 100px
-                  tap_action:
-                    action: toggle
-                  entity: input_boolean.tesla_climate_menu
-                  double_tap_action: none
-                  hold_action: none
-            - type: conditional
-              conditions:
-                - entity: climate.terrance_hvac_climate_system
+                - entity: climate.tesla_hvac_climate_system
                   state: heat_cool
               elements:
                 - type: state-label
-                  entity: sensor.terrance_temperature_inside
-                  style:
-                    top: 94.44%
-                    left: 41.3%
-                    font-size: 97%
-                    color: '#8a8a8d'
-                    font-family: gotham
-            - type: conditional
-              conditions:
-                - entity: climate.terrance_hvac_climate_system
-                  state: 'off'
-              elements:
-                - type: state-label
-                  entity: sensor.terrance_temperature_inside
-                  style:
-                    top: 94.44%
-                    left: 30.3%
-                    font-size: 97%
-                    color: '#8a8a8d'
-                    font-family: gotham
-            - type: conditional
-              conditions:
-                - entity: binary_sensor.terrance_ischarging
-                  state: 'on'
-                - entity: device_tracker.terrance_location_tracker
-                  state: home
-              elements:
-                - type: icon
-                  icon: mdi:home-lightning-bolt-outline
+                  entity: sensor.tesla_temperature_inside
+                  prefix: 'Active - Interior '
                   tap_action: none
                   double_tap_action: none
                   hold_action: none
                   style:
-                    top: 84.7%
-                    left: 55%
-                    color: green
+                    top: 76.8%
+                    left: 13%
+                    font-size: 90%
+                    transform: none
+                    color: '#8a8a8d'
+                    font-family: gotham
             - type: conditional
               conditions:
-                - entity: binary_sensor.terrance_ischarging
-                  state: 'on'
-                - entity: device_tracker.terrance_location_tracker
-                  state_not: home
+                - entity: climate.tesla_hvac_climate_system
+                  state: 'off'
               elements:
-                - type: icon
-                  icon: mdi:ev-station
+                - type: state-label
+                  entity: sensor.tesla_temperature_inside
+                  prefix: 'Interior '
                   tap_action: none
                   double_tap_action: none
                   hold_action: none
                   style:
-                    top: 84.7%
-                    left: 55%
-                    color: green
+                    top: 76.8%
+                    left: 13%
+                    font-size: 90%
+                    transform: none
+                    color: '#8a8a8d'
+                    font-family: gotham
+            - type: image
+              title: Location
+              image: https://i.imgur.com/Ob94QLe.jpg
+              style:
+                top: 91%
+                left: 43%
+                width: 85%
+              tap_action:
+                action: toggle
+              entity: input_boolean.tesla_location_menu
+              double_tap_action: none
+              hold_action: none
+            - type: state-label
+              entity: device_tracker.tesla_location_tracker
+              tap_action: none
+              double_tap_action: none
+              hold_action: none
+              style:
+                top: 89.3%
+                left: 13%
+                font-size: 90%
+                transform: none
+                color: '#8a8a8d'
+                font-family: gotham
   - type: conditional
     conditions:
       - entity: input_boolean.tesla_charger_menu
@@ -305,90 +274,111 @@ cards:
     card:
       type: custom:stack-in-card
       cards:
-        - type: horizontal-stack
+        - type: vertical-stack
           cards:
-            - type: markdown
-              content: >-
-                Charge limit: <font color=white>
-                {{states('number.terrance_charge_limit')}} % </font>
-
-                <font color=#8a8a8d>
-                {{state_attr('sensor.terrance_energy_added', 'added_range')}} km
-                added during last charging session </font>  
-              card_mod:
-                style: |
-                  ha-card {
-                  font-family: gotham;
-                  border: none;
-                  }
-        - type: entities
-          entities:
-            - type: custom:slider-entity-row
-              entity: number.terrance_charge_limit
-              full_row: true
-              step: 5
-              max: 100
-              min: 0
-              colorize: true
-              hide_state: true
-              card_mod:
-                style: |
-                  ha-card {
-                    font-family: gotham;
-                    border: none;
-                  }
-        - type: horizontal-stack
-          cards:
-            - type: markdown
-              content: \<
-              card_mod:
-                style: |
-                  ha-card {
-                    font-family: gotham;
-                    border: none;
-                    text-align: left;
-                  }
-            - type: glance
-              entities:
-                - entity: number.terrance_charging_amps
-              show_icon: false
-              show_name: false
-              card_mod:
-                style: |
-                  ha-card {
-                    font-family: gotham;
-                    border: none;
-                    color: white;
-                    font-weight: bold;
-                  }
-            - type: markdown
-              content: \>
-              card_mod:
-                style: |
-                  ha-card {
-                    font-family: gotham;
-                    border: none;
-                    text-align: right;
-                  }
-        - type: button
-          tap_action:
-            action: toggle
-          entity: input_boolean.tesla_charger_menu
-          show_state: false
-          show_icon: true
-          show_name: false
-          icon: mdi:arrow-down
-          icon_height: 15px
-          card_mod:
-            style: |
-              ha-card {
-                font-family: gotham;
-                font-weight: bold;
-                border: none;
-              }
+            - type: picture-elements
+              image: https://i.imgur.com/KQ9sBgN.jpg
+              elements:
+                - type: image
+                  title: Back
+                  image: >-
+                    https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/buttons/Telsa_Back_Button.jpg
+                  style:
+                    top: 20%
+                    left: 7%
+                    width: 50px
+                    height: 50px
+                  tap_action:
+                    action: toggle
+                  entity: input_boolean.tesla_charger_menu
+                - type: state-label
+                  prefix: 'Charge limit: '
+                  entity: number.tesla_charge_limit
+                  style:
+                    top: 7%
+                    left: 15%
+                    transform: none
+                    font-family: gotham
+                    color: white
+                - type: conditional
+                  conditions:
+                    - entity: binary_sensor.tesla_charging
+                      state: 'on'
+                  elements:
+                    - type: state-label
+                      entity: sensor.tesla_charging_rate
+                      tap_action: none
+                      double_tap_action: none
+                      hold_action: none
+                      style:
+                        top: 20%
+                        left: 15%
+                        transform: none
+                        color: '#8a8a8d'
+                        font-family: gotham
+                    - type: state-label
+                      entity: sensor.tesla_energy_added
+                      attribute: added_range
+                      suffix: ' km'
+                      tap_action: none
+                      double_tap_action: none
+                      hold_action: none
+                      style:
+                        top: 20%
+                        left: 43%
+                        transform: none
+                        color: '#8a8a8d'
+                        font-family: gotham
+                    - type: state-label
+                      entity: sensor.tesla_charger_power
+                      tap_action: none
+                      double_tap_action: none
+                      hold_action: none
+                      style:
+                        top: 20%
+                        left: 70%
+                        transform: none
+                        color: '#8a8a8d'
+                        font-family: gotham
+                - type: conditional
+                  conditions:
+                    - entity: binary_sensor.tesla_charging
+                      state: 'off'
+                  elements:
+                    - type: state-label
+                      suffix: ' km added during last charging session'
+                      entity: sensor.tesla_energy_added
+                      attribute: added_range
+                      style:
+                        top: 20%
+                        left: 15%
+                        transform: none
+                        font-family: gotham
+                        color: '#8a8a8d'
+                - type: custom:slider-entity-row
+                  entity: number.tesla_charge_limit
+                  full_row: true
+                  step: 1
+                  max: 100
+                  min: 0
+                  colorize: true
+                  hide_state: true
+                  style:
+                    top: 60%
+                    left: 50%
+                    width: 85%
+                - type: state-label
+                  entity: number.tesla_charging_amps
+                  style:
+                    top: 85%
+                    left: 48.5%
+                    font-size: 120%
+                    font-family: gotham
+                    color: '#8a8a8d'
   - type: conditional
     conditions:
-      - entity: input_boolean.tesla_controls_menu
+      - condition: state
+        entity: input_boolean.tesla_controls_menu
         state: 'on'
     card:
       type: custom:stack-in-card
@@ -396,105 +386,205 @@ cards:
         - type: horizontal-stack
           cards:
             - type: picture-elements
-              image: /local/Tesla/images/models/3/red/controlsBackground.jpg
-              entity: button.terrance_force_data_update
+              image: https://i.imgur.com/LQHoi2S.jpg
               elements:
-                - type: state-label
-                  entity: sensor.terrance_range
-                  style:
-                    top: 7.2%
-                    left: 22%
-                    font-weight: bold
-                    font-size: 100%
-                    color: '#8a8a8d'
-                    font-family: gotham
-                  card_mod:
-                    style: |
-                      ha-card {
-                        font-family: gotham;
-                        border: none;
-                      }
                 - type: image
-                  title: Flash
-                  entity: button.terrance_flash_lights
-                  image: /local/Tesla/images/buttons/Tesla_Flash_Lights_Button.jpg
+                  title: Back
+                  image: >-
+                    https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/buttons/Telsa_Back_Button.jpg
                   style:
-                    top: 20%
-                    left: 70%
+                    top: 8%
+                    left: 7%
+                    width: 50px
+                    height: 50px
+                  tap_action:
+                    action: toggle
+                  entity: input_boolean.tesla_controls_menu
+                - type: image
+                  title: Unlock
+                  style:
+                    top: 57%
+                    left: 36.8%
                     width: 40px
                     height: 40px
+                  state_image:
+                    locked: >-
+                      https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/buttons/Tesla_Door_Lock.jpg
+                    unlocked: >-
+                      https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/buttons/Tesla_Door_Unlock.jpg
+                  tap_action:
+                    action: toggle
+                  entity: lock.tesla_doors
+                  double_tap_action: none
+                  hold_action: none
+                - type: state-label
+                  entity: cover.tesla_frunk
+                  tap_action: toggle
+                  double_tap_action: none
+                  hold_action: none
+                  style:
+                    top: 15%
+                    left: 36.8%
+                    font-size: 92%
+                    color: white
+                    font-family: gotham
+                - type: state-label
+                  entity: cover.tesla_trunk
+                  tap_action: toggle
+                  double_tap_action: none
+                  hold_action: none
+                  style:
+                    top: 85%
+                    left: 36.8%
+                    font-size: 92%
+                    color: white
+                    font-family: gotham
+                - type: conditional
+                  conditions:
+                    - entity: binary_sensor.tesla_charging
+                      state: 'off'
+                  elements:
+                    - type: icon
+                      icon: mdi:lightning-bolt
+                      tap_action:
+                        action: toggle
+                      entity: input_boolean.tesla_charger_menu
+                      double_tap_action: none
+                      hold_action: none
+                      style:
+                        top: 84%
+                        left: 17%
+                        color: '#8a8a8d'
+                - type: conditional
+                  conditions:
+                    - entity: binary_sensor.tesla_charging
+                      state: 'on'
+                  elements:
+                    - type: icon
+                      icon: mdi:lightning-bolt
+                      tap_action:
+                        action: toggle
+                      entity: input_boolean.tesla_charger_menu
+                      double_tap_action: none
+                      hold_action: none
+                      style:
+                        top: 84%
+                        left: 17%
+                        color: green
+                - type: state-label
+                  entity: sensor.tesla_tpms_front_left
+                  tap_action: none
+                  double_tap_action: none
+                  hold_action: none
+                  style:
+                    top: 22%
+                    left: 12%
+                    font-size: 92%
+                    color: white
+                    font-family: gotham
+                - type: state-label
+                  entity: sensor.tesla_tpms_front_right
+                  tap_action: none
+                  double_tap_action: none
+                  hold_action: none
+                  style:
+                    top: 22%
+                    left: 61%
+                    font-size: 92%
+                    color: white
+                    font-family: gotham
+                - type: state-label
+                  entity: sensor.tesla_tpms_rear_left
+                  tap_action: none
+                  double_tap_action: none
+                  hold_action: none
+                  style:
+                    top: 72%
+                    left: 12%
+                    font-size: 92%
+                    color: white
+                    font-family: gotham
+                - type: state-label
+                  entity: sensor.tesla_tpms_rear_right
+                  tap_action: none
+                  double_tap_action: none
+                  hold_action: none
+                  style:
+                    top: 72%
+                    left: 61%
+                    font-size: 92%
+                    color: white
+                    font-family: gotham
+                - type: image
+                  title: Flash
+                  entity: button.tesla_flash_lights
+                  image: >-
+                    https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/buttons/Tesla_Flash_Lights_Button.jpg
+                  style:
+                    top: 20%
+                    left: 90%
+                    width: 60px
+                    height: 60px
                   tap_action:
                     action: call-service
                     service: button.press
                     service_data: {}
                     target:
-                      entity_id: button.terrance_flash_lights
+                      entity_id: button.tesla_flash_lights
                   double_tap_action: none
                   hold_action: none
                 - type: image
                   title: Horn
-                  entity: button.terrance_horn
-                  image: /local/Tesla/images/buttons/Tesla_Horn_Button.jpg
+                  entity: button.tesla_horn
+                  image: >-
+                    https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/buttons/Tesla_Horn_Button.jpg
                   style:
                     top: 40%
-                    left: 70%
-                    width: 40px
-                    height: 40px
+                    left: 90%
+                    width: 60px
+                    height: 60px
                   tap_action:
                     action: call-service
                     service: button.press
                     service_data: {}
                     target:
-                      entity_id: button.terrance_horn
+                      entity_id: button.tesla_horn
                   double_tap_action: none
                   hold_action: none
                 - type: image
                   title: Remote Start
-                  image: /local/Tesla/images/buttons/Tesla_Remote_Start_Button_Off.jpg
+                  image: >-
+                    https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/buttons/Tesla_Remote_Start_Button_Off.jpg
                   style:
                     top: 60%
-                    left: 70%
-                    width: 40px
-                    height: 40px
+                    left: 90%
+                    width: 58px
+                    height: 60px
                   tap_action:
                     action: call-service
                     service: button.press
                     service_data: {}
                     target:
-                      entity_id: button.terrance_remote_start
+                      entity_id: button.tesla_remote_start
                   double_tap_action: none
                   hold_action: none
                 - type: image
                   title: Vent
                   state_image:
-                    opened: /local/Tesla/images/buttons/Tesla_Close_Windows_Button.jpg
-                    closed: /local/Tesla/images/buttons/Tesla_Vent_Windows_Button.jpg
+                    opened: >-
+                      https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/buttons/Tesla_Close_Windows_Button.jpg
+                    closed: >-
+                      https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/buttons/Tesla_Vent_Windows_Button.jpg
                   style:
                     top: 80%
-                    left: 70%
-                    width: 40px
-                    height: 40px
+                    left: 90%
+                    width: 60px
+                    height: 60px
                   tap_action:
                     action: toggle
-                  entity: cover.terrance_windows
+                  entity: cover.tesla_windows
                   double_tap_action: none
                   hold_action: none
-        - type: button
-          tap_action:
-            action: toggle
-          entity: input_boolean.tesla_controls_menu
-          show_state: false
-          show_icon: true
-          show_name: false
-          icon: mdi:arrow-down
-          icon_height: 15px
-          card_mod:
-            style: |
-              ha-card {
-                font-family: gotham;
-                font-weight: bold;
-                border: none;
-              }
   - type: conditional
     conditions:
       - entity: input_boolean.tesla_climate_menu
@@ -505,165 +595,12 @@ cards:
         - type: horizontal-stack
           cards:
             - type: picture-elements
-              image: >-
-                /local/Tesla/images/models/3/red/climateBackground_Fire8HD.jpg
-              entity: button.terrance_force_data_update
+              image: https://i.imgur.com/UENBxpv.jpg
               elements:
                 - type: image
-                  title: Heated_Seat_Left
-                  entity: select.terrance_heated_seat_left
-                  image: /local/Tesla/images/buttons/Tesla_Heated_Seat_Off.jpg
-                  style:
-                    top: 31%
-                    left: 25.9%
-                    width: 25px
-                    height: 25px
-                  tap_action:
-                    action: call-service
-                    service: button.press
-                    service_data: {}
-                    target:
-                      entity_id: select.terrance_heated_seat_left
-                  double_tap_action: none
-                  hold_action: none
-                - type: image
-                  title: Heated_Seat_Right
-                  entity: select.terrance_heated_seat_right
-                  image: /local/Tesla/images/buttons/Tesla_Heated_Seat_Off.jpg
-                  style:
-                    top: 31%
-                    left: 38%
-                    width: 25px
-                    height: 25px
-                  tap_action:
-                    action: call-service
-                    service: button.press
-                    service_data: {}
-                    target:
-                      entity_id: select.terrance_heated_seat_right
-                  double_tap_action: none
-                  hold_action: none
-                - type: image
-                  title: Heated_Seat_Rear_Left
-                  entity: select.terrance_heated_seat_rear_left
-                  image: /local/Tesla/images/buttons/Tesla_Heated_Seat_Off.jpg
-                  style:
-                    top: 50%
-                    left: 25.9%
-                    width: 25px
-                    height: 25px
-                  tap_action:
-                    action: call-service
-                    service: button.press
-                    service_data: {}
-                    target:
-                      entity_id: select.terrance_heated_seat_rear_left
-                  double_tap_action: none
-                  hold_action: none
-                - type: image
-                  title: Heated_Seat_Rear_Center
-                  entity: select.terrance_heated_seat_rear_center
-                  image: /local/Tesla/images/buttons/Tesla_Heated_Seat_Off.jpg
-                  style:
-                    top: 50%
-                    left: 31.5%
-                    width: 25px
-                    height: 25px
-                  tap_action:
-                    action: call-service
-                    service: button.press
-                    service_data: {}
-                    target:
-                      entity_id: select.terrance_heated_seat_rear_center
-                  double_tap_action: none
-                  hold_action: none
-                - type: image
-                  title: Heated_Seat_Rear_Right
-                  entity: select.terrance_heated_seat_rear_right
-                  image: /local/Tesla/images/buttons/Tesla_Heated_Seat_Off.jpg
-                  style:
-                    top: 50%
-                    left: 37.2%
-                    width: 25px
-                    height: 25px
-                  tap_action:
-                    action: call-service
-                    service: button.press
-                    service_data: {}
-                    target:
-                      entity_id: select.terrance_heated_seat_rear_right
-                  double_tap_action: none
-                  hold_action: none
-                - type: state-label
-                  prefix: 'Interior '
-                  entity: sensor.terrance_temperature_inside
-                  style:
-                    top: 20%
-                    left: 64%
-                    font-size: 92%
-                    color: '#8a8a8d'
-                    font-family: gotham
-                - type: state-label
-                  prefix: '- Exterior '
-                  entity: sensor.terrance_temperature_outside
-                  style:
-                    top: 20%
-                    left: 87%
-                    font-size: 92%
-                    color: '#8a8a8d'
-                    font-family: gotham
-                - type: image
-                  title: Climate
-                  entity: climate.terrance_hvac_climate_system
-                  image: /local/Tesla/images/buttons/Tesla_Climate_Button_Power_Off.jpg
-                  style:
-                    top: 40%
-                    left: 58%
-                    width: 50px
-                    height: 50px
-                  tap_action:
-                    action: toggle
-                    entity_id: climate.terrance_hvac_climate_system
-                  double_tap_action: none
-                  hold_action: none
-                - type: state-label
-                  entity: climate.terrance_hvac_climate_system
-                  attribute: temperature
-                  style:
-                    top: 42.5%
-                    left: 73.7%
-                    font-size: 200%
-                    font-family: gotham
-                    color: white
-                - type: image
-                  title: Vent_Windows
-                  entity: cover.terrance_windows
-                  image: /local/Tesla/images/buttons/Tesla_Vent_Windows_Button.jpg
-                  style:
-                    top: 41%
-                    left: 90.5%
-                    width: 60px
-                    height: 60px
-                  tap_action:
-                    action: toggle
-                  double_tap_action: none
-                  hold_action: none
-                - type: image
-                  title: Defrost
-                  entity: cover.terrance_windows
-                  image: /local/Tesla/images/buttons/Tesla_Climate_Button_Defrost_Off_324.jpg
-                  style:
-                    top: 77%
-                    left: 74.5%
-                    width: 210px
-                    height: 150px
-                  tap_action:
-                    action: toggle
-                  double_tap_action: none
-                  hold_action: none
-                - type: image
-                  title: Defrost
-                  image: /local/Tesla/images/buttons/Telsa_Back_Button.jpg
+                  title: Back
+                  image: >-
+                    https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/buttons/Telsa_Back_Button.jpg
                   style:
                     top: 8%
                     left: 7%
@@ -672,3 +609,148 @@ cards:
                   tap_action:
                     action: toggle
                   entity: input_boolean.tesla_climate_menu
+                - type: image
+                  title: Heated_Seat_Left
+                  entity: select.tesla_heated_seat_left
+                  image: >-
+                    https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/buttons/Tesla_Heated_Seat_Off.jpg
+                  style:
+                    top: 31.2%
+                    left: 23.9%
+                    width: 25px
+                    height: 25px
+                  tap_action:
+                    action: call-service
+                    service: button.press
+                    service_data: {}
+                    target:
+                      entity_id: select.tesla_heated_seat_left
+                  double_tap_action: none
+                  hold_action: none
+                - type: image
+                  title: Heated_Seat_Right
+                  entity: select.tesla_heated_seat_right
+                  image: >-
+                    https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/buttons/Tesla_Heated_Seat_Off.jpg
+                  style:
+                    top: 31.2%
+                    left: 40.3%
+                    width: 25px
+                    height: 25px
+                  tap_action:
+                    action: call-service
+                    service: button.press
+                    service_data: {}
+                    target:
+                      entity_id: select.tesla_heated_seat_right
+                  double_tap_action: none
+                  hold_action: none
+                - type: state-label
+                  prefix: 'Interior '
+                  entity: sensor.tesla_temperature_inside
+                  style:
+                    top: 55%
+                    left: 77%
+                    font-size: 85%
+                    color: '#8a8a8d'
+                    font-family: gotham
+                - type: state-label
+                  prefix: 'Exterior '
+                  entity: sensor.tesla_temperature_outside
+                  style:
+                    top: 60%
+                    left: 77%
+                    font-size: 85%
+                    color: '#8a8a8d'
+                    font-family: gotham
+                - type: image
+                  title: Climate
+                  entity: climate.tesla_hvac_climate_system
+                  image: >-
+                    https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/buttons/Tesla_Climate_Button_Power_Off.jpg
+                  style:
+                    top: 72%
+                    left: 63%
+                    width: 12%
+                  tap_action:
+                    action: toggle
+                    entity_id: climate.tesla_hvac_climate_system
+                  double_tap_action: none
+                  hold_action: none
+                - type: state-label
+                  suffix: °C
+                  entity: climate.tesla_hvac_climate_system
+                  attribute: temperature
+                  style:
+                    top: 72%
+                    left: 77%
+                    font-size: 160%
+                    font-family: gotham
+                    color: '#8a8a8d'
+                - type: image
+                  title: Vent_Windows
+                  entity: cover.tesla_windows
+                  image: >-
+                    https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/buttons/Tesla_Vent_Windows_Button.jpg
+                  style:
+                    top: 72%
+                    left: 91%
+                    width: 13%
+                  tap_action:
+                    action: toggle
+                  double_tap_action: none
+                  hold_action: none
+                - type: image
+                  title: Defrost
+                  entity: cover.tesla_windows
+                  image: >-
+                    https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/buttons/Tesla_Climate_Button_Defrost_Off_324.jpg
+                  style:
+                    top: 90%
+                    left: 77%
+                    width: 40%
+                  tap_action:
+                    action: toggle
+                  double_tap_action: none
+                  hold_action: none
+  - type: conditional
+    conditions:
+      - entity: input_boolean.tesla_location_menu
+        state: 'on'
+    card:
+      type: custom:stack-in-card
+      cards:
+        - type: picture-elements
+          image: https://i.imgur.com/h4kuRJT.jpg
+          elements:
+            - type: image
+              title: Back
+              image: >-
+                https://raw.githubusercontent.com/ds2000/homeassistant-fe-tesla/main/images/buttons/Telsa_Back_Button.jpg
+              style:
+                top: 45%
+                left: 7%
+                width: 50px
+                height: 50px
+              tap_action:
+                action: toggle
+              entity: input_boolean.tesla_location_menu
+            - type: state-label
+              entity: device_tracker.tesla_location_tracker
+              tap_action: none
+              double_tap_action: none
+              hold_action: none
+              style:
+                top: 45%
+                left: 50%
+                font-size: 120%
+                font-family: gotham
+                color: white
+        - type: map
+          entities:
+            - person.guest
+          aspect_ratio: '1:0.8'
+      card_mod:
+        style: |
+          ha-card {
+            --stack-card-gap: 0;
