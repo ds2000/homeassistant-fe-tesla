@@ -46,7 +46,7 @@ To install you'll need a few pre-requistites.  These are:
     - stack-in-card <https://github.com/custom-cards/stack-in-card> | HACS search string: `Stack In Card`
     - slider-entity-row <https://github.com/thomasloven/lovelace-slider-entity-row> | HACS search string: `slider-entity-row`
 5. Upload images to your Home Assistant Installation. I suggest putting the `Tesla` folder inside `/config/www/` (keep in mind that yaml configuration is case sensitive). I just use the <https://community.home-assistant.io/t/home-assistant-community-add-on-visual-studio-code/107863>
-7. Add the Gotham font to the Dashboard Resources: <https://fonts.cdnfonts.com/css/gotham>. Go to Settings/Dashboards and click on the 3-dot menu at the top right.
+7. Add the Gotham font (Stylesheet Resource Type) to the Dashboard Resources: <https://fonts.cdnfonts.com/css/gotham>. Go to Settings/Dashboards and click on the 3-dot menu at the top right.
 
 Once you have the above all configured, fine-tune the yaml:
 1. My car is called terrance, you can see this from in the entity names (eg: "button.**terrance**_force_data_update").  You need to find and replace these value with your car's name.
