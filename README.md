@@ -46,6 +46,24 @@ To install you'll need a few pre-requistites.  These are:
     - stack-in-card <https://github.com/custom-cards/stack-in-card> | HACS search string: `Stack In Card`
     - slider-entity-row <https://github.com/thomasloven/lovelace-slider-entity-row> | HACS search string: `slider-entity-row`
 5. Upload images to your Home Assistant Installation. I suggest putting the `Tesla` folder inside `/config/www/` (keep in mind that yaml configuration is case sensitive). I just use the <https://community.home-assistant.io/t/home-assistant-community-add-on-visual-studio-code/107863>
+6. Add the following template sensor:
+    ```yaml
+    sensor:
+      - platform: template
+        sensors:
+          terrance_status:
+            friendly_name: "Terrance Status"
+            value_template: >
+              {% if is_state('binary_sensor.terrance_parking_brake', 'on') %}
+                Parked
+              {% else %}
+                {% if state_attr('device_tracker.terrance_location_tracker', 'speed') is not none %}
+                  {{ state_attr('device_tracker.terrance_location_tracker', 'speed') }} km/h
+                {% else %}
+                  Unknown
+                {% endif %}
+              {% endif %}
+    ```
 7. Add the Gotham font to the Dashboard Resources: <https://fonts.cdnfonts.com/css/gotham>. Go to Settings/Dashboards and click on the 3-dot menu at the top right.
 
 Once you have the above all configured, fine-tune the yaml:

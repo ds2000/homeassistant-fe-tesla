@@ -25,6 +25,15 @@ cards:
                 font-size: 100%
                 color: '#8a8a8d'
                 font-family: gotham
+            - type: state-label
+              entity: sensor.terrance_status
+              style:
+                top: 15%
+                left: 10%
+                font-weight: bold
+                font-size: 100%
+                color: '#8a8a8d'
+                font-family: gotham
             - type: state-icon
               show_name: true
               title: Refresh Data
