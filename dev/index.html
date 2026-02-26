@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tesla Card — Dev Preview</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #1a1a1a;
+      font-family: system-ui, sans-serif;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 24px 16px;
+    }
+    h1 { color: rgba(255,255,255,0.4); font-size: 0.8em; letter-spacing: 0.1em; text-transform: uppercase; }
+    #card-container { width: 100%; max-width: 380px; }
+    .toolbar { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+    .toolbar button {
+      padding: 6px 14px; border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.07); color: #fff; font-size: 0.78em; cursor: pointer;
+    }
+    #log {
+      width: 100%; max-width: 380px;
+      font-family: monospace; font-size: 0.72em;
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    #log .ok   { color: #2ecc71; }
+    #log .err  { color: #e74c3c; white-space: pre-wrap; }
+    #log .info { color: rgba(255,255,255,0.4); }
+  </style>
+</head>
+<body>
+
+<h1>Tesla Card — Dev Preview</h1>
+
+<div class="toolbar">
+  <button onclick="toggle('charging')">Toggle Charging</button>
+  <button onclick="toggle('locked')">Toggle Lock</button>
+  <button onclick="toggle('online')">Toggle Online</button>
+  <button onclick="location.reload()">Reload</button>
+</div>
+
+<div id="log"></div>
+<div id="card-container"></div>
+
+<script>
+  // Visible logger — shows steps without needing DevTools
+  function log(msg, type = 'info') {
+    const el = document.createElement('div');
+    el.className = type;
+    el.textContent = msg;
+    document.getElementById('log').appendChild(el);
+  }
+  window.onerror = (msg, src, line, col, err) => {
+    log('Global error: ' + msg + (err ? '\n' + err.stack : ''), 'err');
+  };
+  window.addEventListener('unhandledrejection', e => {
+    log('Unhandled rejection: ' + (e.reason?.stack || e.reason), 'err');
+  });
+
+  log('Page loaded');
+
+  // ha-icon stub
+  class HaIcon extends HTMLElement {
+    static get observedAttributes() { return ['icon']; }
+    connectedCallback()        { this._r(); }
+    attributeChangedCallback() { this._r(); }
+    _r() {
+      const name = (this.getAttribute('icon') || '').replace(/^mdi:/, '');
+      this.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;';
+      // Fallback text glyph if Iconify not loaded yet
+      this.textContent = name ? `[${name}]` : '';
+    }
+  }
+  if (!customElements.get('ha-icon')) customElements.define('ha-icon', HaIcon);
+
+  class HaCard extends HTMLElement {}
+  if (!customElements.get('ha-card')) customElements.define('ha-card', HaCard);
+
+  log('Stubs registered');
+</script>
+
+<script type="module">
+  const L = (msg, type = 'info') => {
+    const el = document.createElement('div');
+    el.className = type;
+    el.textContent = msg;
+    document.getElementById('log').appendChild(el);
+  };
+
+  L('Module script started');
+
+  try {
+    await import('../dist/tesla-card.js');
+    L('dist/tesla-card.js imported ✓', 'ok');
+  } catch (e) {
+    L('FAILED to import dist/tesla-card.js: ' + (e.stack || e.message), 'err');
+    throw e;
+  }
+
+  const CAR = 'terrance';
+
+  const states = {
+    [`binary_sensor.${CAR}_charging`]:         { state: 'off',          attributes: {} },
+    [`binary_sensor.${CAR}_plugged_in`]:        { state: 'on',           attributes: {} },
+    [`binary_sensor.${CAR}_parking_brake`]:     { state: 'on',           attributes: {} },
+    [`binary_sensor.${CAR}_frunk`]:             { state: 'off',          attributes: {} },
+    [`binary_sensor.${CAR}_trunk`]:             { state: 'off',          attributes: {} },
+    [`binary_sensor.${CAR}_doors`]:             { state: 'off',          attributes: {} },
+    [`binary_sensor.${CAR}_windows`]:           { state: 'off',          attributes: {} },
+    [`binary_sensor.${CAR}_online`]:            { state: 'on',           attributes: {} },
+    [`binary_sensor.${CAR}_sentry_mode`]:       { state: 'off',          attributes: {} },
+    [`sensor.${CAR}_battery`]:                  { state: '82',           attributes: { unit_of_measurement: '%' } },
+    [`sensor.${CAR}_battery_range`]:            { state: '340',          attributes: { unit_of_measurement: 'km' } },
+    [`sensor.${CAR}_charging_state`]:           { state: 'Disconnected', attributes: {} },
+    [`sensor.${CAR}_charge_rate`]:              { state: '0',            attributes: { unit_of_measurement: 'kW' } },
+    [`sensor.${CAR}_charge_limit`]:             { state: '90',           attributes: {} },
+    [`sensor.${CAR}_temperature_inside`]:       { state: '21',           attributes: { unit_of_measurement: '°C' } },
+    [`sensor.${CAR}_temperature_outside`]:      { state: '14',           attributes: { unit_of_measurement: '°C' } },
+    [`sensor.${CAR}_speed`]:                    { state: '0',            attributes: { unit_of_measurement: 'km/h' } },
+    [`sensor.${CAR}_odometer`]:                 { state: '18432',        attributes: { unit_of_measurement: 'km' } },
+    [`sensor.${CAR}_energy_added`]:             { state: '12.4',         attributes: { added_range: '76' } },
+    [`lock.${CAR}_doors`]:                      { state: 'locked',       attributes: {} },
+    [`switch.${CAR}_charger`]:                  { state: 'off',          attributes: {} },
+    [`switch.${CAR}_sentry_mode`]:              { state: 'off',          attributes: {} },
+    [`switch.${CAR}_defrost`]:                  { state: 'off',          attributes: {} },
+    [`switch.${CAR}_camp_mode`]:                { state: 'off',          attributes: {} },
+    [`switch.${CAR}_dog_mode`]:                 { state: 'off',          attributes: {} },
+    [`select.${CAR}_cabin_overheat_protection`]:{ state: 'Off',          attributes: { options: ['Off', 'No A/C', 'On'] } },
+    [`number.${CAR}_charge_limit`]:             { state: '90',           attributes: { min: 50, max: 100, step: 1 } },
+    [`number.${CAR}_charging_amps`]:            { state: '16',           attributes: { min: 5,  max: 32,  step: 1 } },
+    [`select.${CAR}_heated_seat_left`]:         { state: 'Off',          attributes: {} },
+    [`select.${CAR}_heated_seat_right`]:        { state: 'Low',          attributes: {} },
+    [`select.${CAR}_heated_seat_rear_left`]:    { state: 'Off',          attributes: {} },
+    [`select.${CAR}_heated_seat_rear_center`]:  { state: 'Off',          attributes: {} },
+    [`select.${CAR}_heated_seat_rear_right`]:   { state: 'Off',          attributes: {} },
+    [`climate.${CAR}_hvac_climate_system`]:     { state: 'off',          attributes: { temperature: 21.5, temperature_unit: '°C', min_temp: 15, max_temp: 28, target_temp_step: 0.5 } },
+    [`cover.${CAR}_windows`]:                   { state: 'closed',       attributes: {} },
+    [`cover.${CAR}_frunk`]:                     { state: 'closed',       attributes: {} },
+    [`cover.${CAR}_charger_door`]:              { state: 'open',         attributes: {} },
+    [`device_tracker.${CAR}_location_tracker`]: { state: 'home',         attributes: { speed: 0 } },
+  };
+
+  const hass = {
+    states,
+    async callService(domain, service, data) {
+      L(`callService: ${domain}.${service} ${JSON.stringify(data)}`, 'ok');
+      alert(`${domain}.${service}\n${JSON.stringify(data, null, 2)}`);
+    },
+  };
+
+  try {
+    L('Waiting for tesla-card to be defined...');
+
+    // 5-second timeout so we don't hang silently
+    await Promise.race([
+      customElements.whenDefined('tesla-card'),
+      new Promise((_, rej) => setTimeout(() => rej(new Error(
+        'Timed out waiting for tesla-card.\n' +
+        'dist/tesla-card.js likely has an error — check browser console (F12).'
+      )), 5000)),
+    ]);
+
+    L('tesla-card defined ✓', 'ok');
+
+    const card = document.createElement('tesla-card');
+    L('Element created');
+
+    card.setConfig({
+      car_name:    CAR,
+      car_model:   '3',
+      car_variant: '3.1',
+      car_color:   'neutral',
+      image_path:  '/local/Tesla',
+      show_speed:  true,
+      name:        'Terrance',
+    });
+    L('setConfig done');
+
+    card.hass = hass;
+    L('hass assigned');
+
+    document.getElementById('card-container').appendChild(card);
+    L('Card mounted ✓', 'ok');
+  } catch (err) {
+    L('ERROR: ' + (err.stack || err.message || err), 'err');
+    console.error(err);
+  }
+
+  function pushHass() {
+    const c = document.querySelector('tesla-card');
+    if (c) c.hass = { ...hass, states: { ...states } };
+  }
+
+  window.toggle = (what) => {
+    if (what === 'charging') {
+      const on = states[`binary_sensor.${CAR}_charging`].state === 'off';
+      states[`binary_sensor.${CAR}_charging`].state   = on ? 'on' : 'off';
+      states[`sensor.${CAR}_charging_state`].state    = on ? 'Charging' : 'Disconnected';
+      states[`sensor.${CAR}_charge_rate`].state       = on ? '7.4' : '0';
+      states[`binary_sensor.${CAR}_plugged_in`].state = on ? 'on' : 'off';
+    } else if (what === 'locked') {
+      const cur = states[`lock.${CAR}_doors`].state;
+      states[`lock.${CAR}_doors`].state = cur === 'locked' ? 'unlocked' : 'locked';
+    } else if (what === 'online') {
+      const cur = states[`binary_sensor.${CAR}_online`].state;
+      states[`binary_sensor.${CAR}_online`].state = cur === 'on' ? 'off' : 'on';
+    }
+    pushHass();
+    L(`Toggled ${what}`, 'ok');
+  };
+</script>
+
+</body>
+</html>

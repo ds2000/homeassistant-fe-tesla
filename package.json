@@ -1,0 +1,16 @@
+{
+  "name": "tesla-card",
+  "version": "0.1.0",
+  "description": "HACS custom Lovelace card for the alandtse/tesla Home Assistant integration",
+  "type": "module",
+  "scripts": {
+    "build": "node build.js",
+    "watch": "node build.js --watch",
+    "dev": "node build.js --watch",
+    "preview": "python3 -m http.server 8080"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "lit": "^3.2.0"
+  }
+}
