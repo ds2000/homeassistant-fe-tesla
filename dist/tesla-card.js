@@ -1,9 +1,9 @@
-var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,ct=Symbol(),Nt=new WeakMap,z=class{constructor(t,e,s){if(this._$cssResult$=!0,s!==ct)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o,e=this.t;if(st&&t===void 0){let s=e!==void 0&&e.length===1;s&&(t=Nt.get(e)),t===void 0&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),s&&Nt.set(e,t))}return t}toString(){return this.cssText}},It=o=>new z(typeof o=="string"?o:o+"",void 0,ct),x=(o,...t)=>{let e=o.length===1?o[0]:t.reduce((s,i,n)=>s+(a=>{if(a._$cssResult$===!0)return a.cssText;if(typeof a=="number")return a;throw Error("Value passed to 'css' function must be a 'css' function result: "+a+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(i)+o[n+1],o[0]);return new z(e,o,ct)},Lt=(o,t)=>{if(st)o.adoptedStyleSheets=t.map(e=>e instanceof CSSStyleSheet?e:e.styleSheet);else for(let e of t){let s=document.createElement("style"),i=et.litNonce;i!==void 0&&s.setAttribute("nonce",i),s.textContent=e.cssText,o.appendChild(s)}},ht=st?o=>o:o=>o instanceof CSSStyleSheet?(t=>{let e="";for(let s of t.cssRules)e+=s.cssText;return It(e)})(o):o;var{is:pe,defineProperty:de,getOwnPropertyDescriptor:ue,getOwnPropertyNames:ge,getOwnPropertySymbols:me,getPrototypeOf:_e}=Object,C=globalThis,Ht=C.trustedTypes,fe=Ht?Ht.emptyScript:"",be=C.reactiveElementPolyfillSupport,G=(o,t)=>o,pt={toAttribute(o,t){switch(t){case Boolean:o=o?fe:null;break;case Object:case Array:o=o==null?o:JSON.stringify(o)}return o},fromAttribute(o,t){let e=o;switch(t){case Boolean:e=o!==null;break;case Number:e=o===null?null:Number(o);break;case Object:case Array:try{e=JSON.parse(o)}catch{e=null}}return e}},Pt=(o,t)=>!pe(o,t),Ut={attribute:!0,type:String,converter:pt,reflect:!1,useDefault:!1,hasChanged:Pt};Symbol.metadata??(Symbol.metadata=Symbol("metadata")),C.litPropertyMetadata??(C.litPropertyMetadata=new WeakMap);var y=class extends HTMLElement{static addInitializer(t){this._$Ei(),(this.l??(this.l=[])).push(t)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(t,e=Ut){if(e.state&&(e.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(t)&&((e=Object.create(e)).wrapped=!0),this.elementProperties.set(t,e),!e.noAccessor){let s=Symbol(),i=this.getPropertyDescriptor(t,s,e);i!==void 0&&de(this.prototype,t,i)}}static getPropertyDescriptor(t,e,s){let{get:i,set:n}=ue(this.prototype,t)??{get(){return this[e]},set(a){this[e]=a}};return{get:i,set(a){let u=i?.call(this);n?.call(this,a),this.requestUpdate(t,u,s)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)??Ut}static _$Ei(){if(this.hasOwnProperty(G("elementProperties")))return;let t=_e(this);t.finalize(),t.l!==void 0&&(this.l=[...t.l]),this.elementProperties=new Map(t.elementProperties)}static finalize(){if(this.hasOwnProperty(G("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(G("properties"))){let e=this.properties,s=[...ge(e),...me(e)];for(let i of s)this.createProperty(i,e[i])}let t=this[Symbol.metadata];if(t!==null){let e=litPropertyMetadata.get(t);if(e!==void 0)for(let[s,i]of e)this.elementProperties.set(s,i)}this._$Eh=new Map;for(let[e,s]of this.elementProperties){let i=this._$Eu(e,s);i!==void 0&&this._$Eh.set(i,e)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(t){let e=[];if(Array.isArray(t)){let s=new Set(t.flat(1/0).reverse());for(let i of s)e.unshift(ht(i))}else t!==void 0&&e.push(ht(t));return e}static _$Eu(t,e){let s=e.attribute;return s===!1?void 0:typeof s=="string"?s:typeof t=="string"?t.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(t=>this.enableUpdating=t),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(t=>t(this))}addController(t){(this._$EO??(this._$EO=new Set)).add(t),this.renderRoot!==void 0&&this.isConnected&&t.hostConnected?.()}removeController(t){this._$EO?.delete(t)}_$E_(){let t=new Map,e=this.constructor.elementProperties;for(let s of e.keys())this.hasOwnProperty(s)&&(t.set(s,this[s]),delete this[s]);t.size>0&&(this._$Ep=t)}createRenderRoot(){let t=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return Lt(t,this.constructor.elementStyles),t}connectedCallback(){this.renderRoot??(this.renderRoot=this.createRenderRoot()),this.enableUpdating(!0),this._$EO?.forEach(t=>t.hostConnected?.())}enableUpdating(t){}disconnectedCallback(){this._$EO?.forEach(t=>t.hostDisconnected?.())}attributeChangedCallback(t,e,s){this._$AK(t,s)}_$ET(t,e){let s=this.constructor.elementProperties.get(t),i=this.constructor._$Eu(t,s);if(i!==void 0&&s.reflect===!0){let n=(s.converter?.toAttribute!==void 0?s.converter:pt).toAttribute(e,s.type);this._$Em=t,n==null?this.removeAttribute(i):this.setAttribute(i,n),this._$Em=null}}_$AK(t,e){let s=this.constructor,i=s._$Eh.get(t);if(i!==void 0&&this._$Em!==i){let n=s.getPropertyOptions(i),a=typeof n.converter=="function"?{fromAttribute:n.converter}:n.converter?.fromAttribute!==void 0?n.converter:pt;this._$Em=i;let u=a.fromAttribute(e,n.type);this[i]=u??this._$Ej?.get(i)??u,this._$Em=null}}requestUpdate(t,e,s,i=!1,n){if(t!==void 0){let a=this.constructor;if(i===!1&&(n=this[t]),s??(s=a.getPropertyOptions(t)),!((s.hasChanged??Pt)(n,e)||s.useDefault&&s.reflect&&n===this._$Ej?.get(t)&&!this.hasAttribute(a._$Eu(t,s))))return;this.C(t,e,s)}this.isUpdatePending===!1&&(this._$ES=this._$EP())}C(t,e,{useDefault:s,reflect:i,wrapped:n},a){s&&!(this._$Ej??(this._$Ej=new Map)).has(t)&&(this._$Ej.set(t,a??e??this[t]),n!==!0||a!==void 0)||(this._$AL.has(t)||(this.hasUpdated||s||(e=void 0),this._$AL.set(t,e)),i===!0&&this._$Em!==t&&(this._$Eq??(this._$Eq=new Set)).add(t))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(e){Promise.reject(e)}let t=this.scheduleUpdate();return t!=null&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??(this.renderRoot=this.createRenderRoot()),this._$Ep){for(let[i,n]of this._$Ep)this[i]=n;this._$Ep=void 0}let s=this.constructor.elementProperties;if(s.size>0)for(let[i,n]of s){let{wrapped:a}=n,u=this[i];a!==!0||this._$AL.has(i)||u===void 0||this.C(i,void 0,n,u)}}let t=!1,e=this._$AL;try{t=this.shouldUpdate(e),t?(this.willUpdate(e),this._$EO?.forEach(s=>s.hostUpdate?.()),this.update(e)):this._$EM()}catch(s){throw t=!1,this._$EM(),s}t&&this._$AE(e)}willUpdate(t){}_$AE(t){this._$EO?.forEach(e=>e.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(t){return!0}update(t){this._$Eq&&(this._$Eq=this._$Eq.forEach(e=>this._$ET(e,this[e]))),this._$EM()}updated(t){}firstUpdated(t){}};y.elementStyles=[],y.shadowRootOptions={mode:"open"},y[G("elementProperties")]=new Map,y[G("finalized")]=new Map,be?.({ReactiveElement:y}),(C.reactiveElementVersions??(C.reactiveElementVersions=[])).push("2.1.2");var K=globalThis,Dt=o=>o,it=K.trustedTypes,jt=it?it.createPolicy("lit-html",{createHTML:o=>o}):void 0,Ft="$lit$",A=`lit$${Math.random().toFixed(9).slice(2)}$`,Wt="?"+A,ve=`<${Wt}>`,L=document,F=()=>L.createComment(""),W=o=>o===null||typeof o!="object"&&typeof o!="function",bt=Array.isArray,xe=o=>bt(o)||typeof o?.[Symbol.iterator]=="function",dt=`[ 	
-\f\r]`,V=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,Bt=/-->/g,zt=/>/g,N=RegExp(`>|${dt}(?:([^\\s"'>=/]+)(${dt}*=${dt}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`,"g"),Gt=/'/g,Vt=/"/g,qt=/^(?:script|style|textarea|title)$/i,vt=o=>(t,...e)=>({_$litType$:o,strings:t,values:e}),l=vt(1),Ne=vt(2),Ie=vt(3),E=Symbol.for("lit-noChange"),_=Symbol.for("lit-nothing"),Kt=new WeakMap,I=L.createTreeWalker(L,129);function Yt(o,t){if(!bt(o)||!o.hasOwnProperty("raw"))throw Error("invalid template strings array");return jt!==void 0?jt.createHTML(t):t}var ke=(o,t)=>{let e=o.length-1,s=[],i,n=t===2?"<svg>":t===3?"<math>":"",a=V;for(let u=0;u<e;u++){let p=o[u],g,m,d=-1,f=0;for(;f<p.length&&(a.lastIndex=f,m=a.exec(p),m!==null);)f=a.lastIndex,a===V?m[1]==="!--"?a=Bt:m[1]!==void 0?a=zt:m[2]!==void 0?(qt.test(m[2])&&(i=RegExp("</"+m[2],"g")),a=N):m[3]!==void 0&&(a=N):a===N?m[0]===">"?(a=i??V,d=-1):m[1]===void 0?d=-2:(d=a.lastIndex-m[2].length,g=m[1],a=m[3]===void 0?N:m[3]==='"'?Vt:Gt):a===Vt||a===Gt?a=N:a===Bt||a===zt?a=V:(a=N,i=void 0);let b=a===N&&o[u+1].startsWith("/>")?" ":"";n+=a===V?p+ve:d>=0?(s.push(g),p.slice(0,d)+Ft+p.slice(d)+A+b):p+A+(d===-2?u:b)}return[Yt(o,n+(o[e]||"<?>")+(t===2?"</svg>":t===3?"</math>":"")),s]},q=class o{constructor({strings:t,_$litType$:e},s){let i;this.parts=[];let n=0,a=0,u=t.length-1,p=this.parts,[g,m]=ke(t,e);if(this.el=o.createElement(g,s),I.currentNode=this.el.content,e===2||e===3){let d=this.el.content.firstChild;d.replaceWith(...d.childNodes)}for(;(i=I.nextNode())!==null&&p.length<u;){if(i.nodeType===1){if(i.hasAttributes())for(let d of i.getAttributeNames())if(d.endsWith(Ft)){let f=m[a++],b=i.getAttribute(d).split(A),k=/([.?@])?(.*)/.exec(f);p.push({type:1,index:n,name:k[2],strings:b,ctor:k[1]==="."?gt:k[1]==="?"?mt:k[1]==="@"?_t:D}),i.removeAttribute(d)}else d.startsWith(A)&&(p.push({type:6,index:n}),i.removeAttribute(d));if(qt.test(i.tagName)){let d=i.textContent.split(A),f=d.length-1;if(f>0){i.textContent=it?it.emptyScript:"";for(let b=0;b<f;b++)i.append(d[b],F()),I.nextNode(),p.push({type:2,index:++n});i.append(d[f],F())}}}else if(i.nodeType===8)if(i.data===Wt)p.push({type:2,index:n});else{let d=-1;for(;(d=i.data.indexOf(A,d+1))!==-1;)p.push({type:7,index:n}),d+=A.length-1}n++}}static createElement(t,e){let s=L.createElement("template");return s.innerHTML=t,s}};function P(o,t,e=o,s){if(t===E)return t;let i=s!==void 0?e._$Co?.[s]:e._$Cl,n=W(t)?void 0:t._$litDirective$;return i?.constructor!==n&&(i?._$AO?.(!1),n===void 0?i=void 0:(i=new n(o),i._$AT(o,e,s)),s!==void 0?(e._$Co??(e._$Co=[]))[s]=i:e._$Cl=i),i!==void 0&&(t=P(o,i._$AS(o,t.values),i,s)),t}var ut=class{constructor(t,e){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){let{el:{content:e},parts:s}=this._$AD,i=(t?.creationScope??L).importNode(e,!0);I.currentNode=i;let n=I.nextNode(),a=0,u=0,p=s[0];for(;p!==void 0;){if(a===p.index){let g;p.type===2?g=new Y(n,n.nextSibling,this,t):p.type===1?g=new p.ctor(n,p.name,p.strings,this,t):p.type===6&&(g=new ft(n,this,t)),this._$AV.push(g),p=s[++u]}a!==p?.index&&(n=I.nextNode(),a++)}return I.currentNode=L,i}p(t){let e=0;for(let s of this._$AV)s!==void 0&&(s.strings!==void 0?(s._$AI(t,s,e),e+=s.strings.length-2):s._$AI(t[e])),e++}},Y=class o{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(t,e,s,i){this.type=2,this._$AH=_,this._$AN=void 0,this._$AA=t,this._$AB=e,this._$AM=s,this.options=i,this._$Cv=i?.isConnected??!0}get parentNode(){let t=this._$AA.parentNode,e=this._$AM;return e!==void 0&&t?.nodeType===11&&(t=e.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,e=this){t=P(this,t,e),W(t)?t===_||t==null||t===""?(this._$AH!==_&&this._$AR(),this._$AH=_):t!==this._$AH&&t!==E&&this._(t):t._$litType$!==void 0?this.$(t):t.nodeType!==void 0?this.T(t):xe(t)?this.k(t):this._(t)}O(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}T(t){this._$AH!==t&&(this._$AR(),this._$AH=this.O(t))}_(t){this._$AH!==_&&W(this._$AH)?this._$AA.nextSibling.data=t:this.T(L.createTextNode(t)),this._$AH=t}$(t){let{values:e,_$litType$:s}=t,i=typeof s=="number"?this._$AC(t):(s.el===void 0&&(s.el=q.createElement(Yt(s.h,s.h[0]),this.options)),s);if(this._$AH?._$AD===i)this._$AH.p(e);else{let n=new ut(i,this),a=n.u(this.options);n.p(e),this.T(a),this._$AH=n}}_$AC(t){let e=Kt.get(t.strings);return e===void 0&&Kt.set(t.strings,e=new q(t)),e}k(t){bt(this._$AH)||(this._$AH=[],this._$AR());let e=this._$AH,s,i=0;for(let n of t)i===e.length?e.push(s=new o(this.O(F()),this.O(F()),this,this.options)):s=e[i],s._$AI(n),i++;i<e.length&&(this._$AR(s&&s._$AB.nextSibling,i),e.length=i)}_$AR(t=this._$AA.nextSibling,e){for(this._$AP?.(!1,!0,e);t!==this._$AB;){let s=Dt(t).nextSibling;Dt(t).remove(),t=s}}setConnected(t){this._$AM===void 0&&(this._$Cv=t,this._$AP?.(t))}},D=class{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(t,e,s,i,n){this.type=1,this._$AH=_,this._$AN=void 0,this.element=t,this.name=e,this._$AM=i,this.options=n,s.length>2||s[0]!==""||s[1]!==""?(this._$AH=Array(s.length-1).fill(new String),this.strings=s):this._$AH=_}_$AI(t,e=this,s,i){let n=this.strings,a=!1;if(n===void 0)t=P(this,t,e,0),a=!W(t)||t!==this._$AH&&t!==E,a&&(this._$AH=t);else{let u=t,p,g;for(t=n[0],p=0;p<n.length-1;p++)g=P(this,u[s+p],e,p),g===E&&(g=this._$AH[p]),a||(a=!W(g)||g!==this._$AH[p]),g===_?t=_:t!==_&&(t+=(g??"")+n[p+1]),this._$AH[p]=g}a&&!i&&this.j(t)}j(t){t===_?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,t??"")}},gt=class extends D{constructor(){super(...arguments),this.type=3}j(t){this.element[this.name]=t===_?void 0:t}},mt=class extends D{constructor(){super(...arguments),this.type=4}j(t){this.element.toggleAttribute(this.name,!!t&&t!==_)}},_t=class extends D{constructor(t,e,s,i,n){super(t,e,s,i,n),this.type=5}_$AI(t,e=this){if((t=P(this,t,e,0)??_)===E)return;let s=this._$AH,i=t===_&&s!==_||t.capture!==s.capture||t.once!==s.once||t.passive!==s.passive,n=t!==_&&(s===_||i);i&&this.element.removeEventListener(this.name,this,s),n&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){typeof this._$AH=="function"?this._$AH.call(this.options?.host??this.element,t):this._$AH.handleEvent(t)}},ft=class{constructor(t,e,s){this.element=t,this.type=6,this._$AN=void 0,this._$AM=e,this.options=s}get _$AU(){return this._$AM._$AU}_$AI(t){P(this,t)}};var $e=K.litHtmlPolyfillSupport;$e?.(q,Y),(K.litHtmlVersions??(K.litHtmlVersions=[])).push("3.3.2");var Xt=(o,t,e)=>{let s=e?.renderBefore??t,i=s._$litPart$;if(i===void 0){let n=e?.renderBefore??null;s._$litPart$=i=new Y(t.insertBefore(F(),n),n,void 0,e??{})}return i._$AI(o),i};var X=globalThis,v=class extends y{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){var e;let t=super.createRenderRoot();return(e=this.renderOptions).renderBefore??(e.renderBefore=t.firstChild),t}update(t){let e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=Xt(e,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return E}};v._$litElement$=!0,v.finalized=!0,X.litElementHydrateSupport?.({LitElement:v});var we=X.litElementPolyfillSupport;we?.({LitElement:v});(X.litElementVersions??(X.litElementVersions=[])).push("4.2.2");var Jt={ATTRIBUTE:1,CHILD:2,PROPERTY:3,BOOLEAN_ATTRIBUTE:4,EVENT:5,ELEMENT:6},Zt=o=>(...t)=>({_$litDirective$:o,values:t}),nt=class{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,s){this._$Ct=t,this._$AM=e,this._$Ci=s}_$AS(t,e){return this.update(t,e)}update(t,e){return this.render(...e)}};var J=class extends nt{constructor(t){if(super(t),this.it=_,t.type!==Jt.CHILD)throw Error(this.constructor.directiveName+"() can only be used in child bindings")}render(t){if(t===_||t==null)return this._t=void 0,this.it=t;if(t===E)return t;if(typeof t!="string")throw Error(this.constructor.directiveName+"() called with a non-string value");if(t===this.it)return this._t;this.it=t;let e=[t];return e.raw=e,this._t={_$litType$:this.constructor.resultType,strings:e,values:[]}}};J.directiveName="unsafeHTML",J.resultType=1;var c=Zt(J);var S=x`
+var ve=Object.defineProperty;var xe=(a,t,e)=>t in a?ve(a,t,{enumerable:!0,configurable:!0,writable:!0,value:e}):a[t]=e;var st=(a,t,e)=>xe(a,typeof t!="symbol"?t+"":t,e);var it=globalThis,nt=it.ShadowRoot&&(it.ShadyCSS===void 0||it.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,ht=Symbol(),Dt=new WeakMap,G=class{constructor(t,e,s){if(this._$cssResult$=!0,s!==ht)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o,e=this.t;if(nt&&t===void 0){let s=e!==void 0&&e.length===1;s&&(t=Dt.get(e)),t===void 0&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),s&&Dt.set(e,t))}return t}toString(){return this.cssText}},Qt=a=>new G(typeof a=="string"?a:a+"",void 0,ht),k=(a,...t)=>{let e=a.length===1?a[0]:t.reduce((s,i,n)=>s+(o=>{if(o._$cssResult$===!0)return o.cssText;if(typeof o=="number")return o;throw Error("Value passed to 'css' function must be a 'css' function result: "+o+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(i)+a[n+1],a[0]);return new G(e,a,ht)},jt=(a,t)=>{if(nt)a.adoptedStyleSheets=t.map(e=>e instanceof CSSStyleSheet?e:e.styleSheet);else for(let e of t){let s=document.createElement("style"),i=it.litNonce;i!==void 0&&s.setAttribute("nonce",i),s.textContent=e.cssText,a.appendChild(s)}},ut=nt?a=>a:a=>a instanceof CSSStyleSheet?(t=>{let e="";for(let s of t.cssRules)e+=s.cssText;return Qt(e)})(a):a;var{is:ke,defineProperty:we,getOwnPropertyDescriptor:ye,getOwnPropertyNames:$e,getOwnPropertySymbols:Ae,getPrototypeOf:Ce}=Object,C=globalThis,zt=C.trustedTypes,Ee=zt?zt.emptyScript:"",Se=C.reactiveElementPolyfillSupport,V=(a,t)=>a,mt={toAttribute(a,t){switch(t){case Boolean:a=a?Ee:null;break;case Object:case Array:a=a==null?a:JSON.stringify(a)}return a},fromAttribute(a,t){let e=a;switch(t){case Boolean:e=a!==null;break;case Number:e=a===null?null:Number(a);break;case Object:case Array:try{e=JSON.parse(a)}catch{e=null}}return e}},Gt=(a,t)=>!ke(a,t),Bt={attribute:!0,type:String,converter:mt,reflect:!1,useDefault:!1,hasChanged:Gt};Symbol.metadata??(Symbol.metadata=Symbol("metadata")),C.litPropertyMetadata??(C.litPropertyMetadata=new WeakMap);var $=class extends HTMLElement{static addInitializer(t){this._$Ei(),(this.l??(this.l=[])).push(t)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(t,e=Bt){if(e.state&&(e.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(t)&&((e=Object.create(e)).wrapped=!0),this.elementProperties.set(t,e),!e.noAccessor){let s=Symbol(),i=this.getPropertyDescriptor(t,s,e);i!==void 0&&we(this.prototype,t,i)}}static getPropertyDescriptor(t,e,s){let{get:i,set:n}=ye(this.prototype,t)??{get(){return this[e]},set(o){this[e]=o}};return{get:i,set(o){let u=i?.call(this);n?.call(this,o),this.requestUpdate(t,u,s)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)??Bt}static _$Ei(){if(this.hasOwnProperty(V("elementProperties")))return;let t=Ce(this);t.finalize(),t.l!==void 0&&(this.l=[...t.l]),this.elementProperties=new Map(t.elementProperties)}static finalize(){if(this.hasOwnProperty(V("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(V("properties"))){let e=this.properties,s=[...$e(e),...Ae(e)];for(let i of s)this.createProperty(i,e[i])}let t=this[Symbol.metadata];if(t!==null){let e=litPropertyMetadata.get(t);if(e!==void 0)for(let[s,i]of e)this.elementProperties.set(s,i)}this._$Eh=new Map;for(let[e,s]of this.elementProperties){let i=this._$Eu(e,s);i!==void 0&&this._$Eh.set(i,e)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(t){let e=[];if(Array.isArray(t)){let s=new Set(t.flat(1/0).reverse());for(let i of s)e.unshift(ut(i))}else t!==void 0&&e.push(ut(t));return e}static _$Eu(t,e){let s=e.attribute;return s===!1?void 0:typeof s=="string"?s:typeof t=="string"?t.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(t=>this.enableUpdating=t),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(t=>t(this))}addController(t){(this._$EO??(this._$EO=new Set)).add(t),this.renderRoot!==void 0&&this.isConnected&&t.hostConnected?.()}removeController(t){this._$EO?.delete(t)}_$E_(){let t=new Map,e=this.constructor.elementProperties;for(let s of e.keys())this.hasOwnProperty(s)&&(t.set(s,this[s]),delete this[s]);t.size>0&&(this._$Ep=t)}createRenderRoot(){let t=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return jt(t,this.constructor.elementStyles),t}connectedCallback(){this.renderRoot??(this.renderRoot=this.createRenderRoot()),this.enableUpdating(!0),this._$EO?.forEach(t=>t.hostConnected?.())}enableUpdating(t){}disconnectedCallback(){this._$EO?.forEach(t=>t.hostDisconnected?.())}attributeChangedCallback(t,e,s){this._$AK(t,s)}_$ET(t,e){let s=this.constructor.elementProperties.get(t),i=this.constructor._$Eu(t,s);if(i!==void 0&&s.reflect===!0){let n=(s.converter?.toAttribute!==void 0?s.converter:mt).toAttribute(e,s.type);this._$Em=t,n==null?this.removeAttribute(i):this.setAttribute(i,n),this._$Em=null}}_$AK(t,e){let s=this.constructor,i=s._$Eh.get(t);if(i!==void 0&&this._$Em!==i){let n=s.getPropertyOptions(i),o=typeof n.converter=="function"?{fromAttribute:n.converter}:n.converter?.fromAttribute!==void 0?n.converter:mt;this._$Em=i;let u=o.fromAttribute(e,n.type);this[i]=u??this._$Ej?.get(i)??u,this._$Em=null}}requestUpdate(t,e,s,i=!1,n){if(t!==void 0){let o=this.constructor;if(i===!1&&(n=this[t]),s??(s=o.getPropertyOptions(t)),!((s.hasChanged??Gt)(n,e)||s.useDefault&&s.reflect&&n===this._$Ej?.get(t)&&!this.hasAttribute(o._$Eu(t,s))))return;this.C(t,e,s)}this.isUpdatePending===!1&&(this._$ES=this._$EP())}C(t,e,{useDefault:s,reflect:i,wrapped:n},o){s&&!(this._$Ej??(this._$Ej=new Map)).has(t)&&(this._$Ej.set(t,o??e??this[t]),n!==!0||o!==void 0)||(this._$AL.has(t)||(this.hasUpdated||s||(e=void 0),this._$AL.set(t,e)),i===!0&&this._$Em!==t&&(this._$Eq??(this._$Eq=new Set)).add(t))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(e){Promise.reject(e)}let t=this.scheduleUpdate();return t!=null&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??(this.renderRoot=this.createRenderRoot()),this._$Ep){for(let[i,n]of this._$Ep)this[i]=n;this._$Ep=void 0}let s=this.constructor.elementProperties;if(s.size>0)for(let[i,n]of s){let{wrapped:o}=n,u=this[i];o!==!0||this._$AL.has(i)||u===void 0||this.C(i,void 0,n,u)}}let t=!1,e=this._$AL;try{t=this.shouldUpdate(e),t?(this.willUpdate(e),this._$EO?.forEach(s=>s.hostUpdate?.()),this.update(e)):this._$EM()}catch(s){throw t=!1,this._$EM(),s}t&&this._$AE(e)}willUpdate(t){}_$AE(t){this._$EO?.forEach(e=>e.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(t){return!0}update(t){this._$Eq&&(this._$Eq=this._$Eq.forEach(e=>this._$ET(e,this[e]))),this._$EM()}updated(t){}firstUpdated(t){}};$.elementStyles=[],$.shadowRootOptions={mode:"open"},$[V("elementProperties")]=new Map,$[V("finalized")]=new Map,Se?.({ReactiveElement:$}),(C.reactiveElementVersions??(C.reactiveElementVersions=[])).push("2.1.2");var K=globalThis,Vt=a=>a,at=K.trustedTypes,Ft=at?at.createPolicy("lit-html",{createHTML:a=>a}):void 0,Xt="$lit$",E=`lit$${Math.random().toFixed(9).slice(2)}$`,Jt="?"+E,Me=`<${Jt}>`,L=document,Y=()=>L.createComment(""),q=a=>a===null||typeof a!="object"&&typeof a!="function",kt=Array.isArray,Te=a=>kt(a)||typeof a?.[Symbol.iterator]=="function",gt=`[ 	
+\f\r]`,F=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,Kt=/-->/g,Yt=/>/g,O=RegExp(`>|${gt}(?:([^\\s"'>=/]+)(${gt}*=${gt}*(?:[^ 	
+\f\r"'\`<>=]|("|')|))|$)`,"g"),qt=/'/g,Wt=/"/g,te=/^(?:script|style|textarea|title)$/i,wt=a=>(t,...e)=>({_$litType$:a,strings:t,values:e}),c=wt(1),Ve=wt(2),Fe=wt(3),A=Symbol.for("lit-noChange"),f=Symbol.for("lit-nothing"),Zt=new WeakMap,R=L.createTreeWalker(L,129);function ee(a,t){if(!kt(a)||!a.hasOwnProperty("raw"))throw Error("invalid template strings array");return Ft!==void 0?Ft.createHTML(t):t}var Oe=(a,t)=>{let e=a.length-1,s=[],i,n=t===2?"<svg>":t===3?"<math>":"",o=F;for(let u=0;u<e;u++){let d=a[u],g,m,h=-1,b=0;for(;b<d.length&&(o.lastIndex=b,m=o.exec(d),m!==null);)b=o.lastIndex,o===F?m[1]==="!--"?o=Kt:m[1]!==void 0?o=Yt:m[2]!==void 0?(te.test(m[2])&&(i=RegExp("</"+m[2],"g")),o=O):m[3]!==void 0&&(o=O):o===O?m[0]===">"?(o=i??F,h=-1):m[1]===void 0?h=-2:(h=o.lastIndex-m[2].length,g=m[1],o=m[3]===void 0?O:m[3]==='"'?Wt:qt):o===Wt||o===qt?o=O:o===Kt||o===Yt?o=F:(o=O,i=void 0);let _=o===O&&a[u+1].startsWith("/>")?" ":"";n+=o===F?d+Me:h>=0?(s.push(g),d.slice(0,h)+Xt+d.slice(h)+E+_):d+E+(h===-2?u:_)}return[ee(a,n+(a[e]||"<?>")+(t===2?"</svg>":t===3?"</math>":"")),s]},W=class a{constructor({strings:t,_$litType$:e},s){let i;this.parts=[];let n=0,o=0,u=t.length-1,d=this.parts,[g,m]=Oe(t,e);if(this.el=a.createElement(g,s),R.currentNode=this.el.content,e===2||e===3){let h=this.el.content.firstChild;h.replaceWith(...h.childNodes)}for(;(i=R.nextNode())!==null&&d.length<u;){if(i.nodeType===1){if(i.hasAttributes())for(let h of i.getAttributeNames())if(h.endsWith(Xt)){let b=m[o++],_=i.getAttribute(h).split(E),y=/([.?@])?(.*)/.exec(b);d.push({type:1,index:n,name:y[2],strings:_,ctor:y[1]==="."?bt:y[1]==="?"?_t:y[1]==="@"?vt:Q}),i.removeAttribute(h)}else h.startsWith(E)&&(d.push({type:6,index:n}),i.removeAttribute(h));if(te.test(i.tagName)){let h=i.textContent.split(E),b=h.length-1;if(b>0){i.textContent=at?at.emptyScript:"";for(let _=0;_<b;_++)i.append(h[_],Y()),R.nextNode(),d.push({type:2,index:++n});i.append(h[b],Y())}}}else if(i.nodeType===8)if(i.data===Jt)d.push({type:2,index:n});else{let h=-1;for(;(h=i.data.indexOf(E,h+1))!==-1;)d.push({type:7,index:n}),h+=E.length-1}n++}}static createElement(t,e){let s=L.createElement("template");return s.innerHTML=t,s}};function D(a,t,e=a,s){if(t===A)return t;let i=s!==void 0?e._$Co?.[s]:e._$Cl,n=q(t)?void 0:t._$litDirective$;return i?.constructor!==n&&(i?._$AO?.(!1),n===void 0?i=void 0:(i=new n(a),i._$AT(a,e,s)),s!==void 0?(e._$Co??(e._$Co=[]))[s]=i:e._$Cl=i),i!==void 0&&(t=D(a,i._$AS(a,t.values),i,s)),t}var ft=class{constructor(t,e){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){let{el:{content:e},parts:s}=this._$AD,i=(t?.creationScope??L).importNode(e,!0);R.currentNode=i;let n=R.nextNode(),o=0,u=0,d=s[0];for(;d!==void 0;){if(o===d.index){let g;d.type===2?g=new Z(n,n.nextSibling,this,t):d.type===1?g=new d.ctor(n,d.name,d.strings,this,t):d.type===6&&(g=new xt(n,this,t)),this._$AV.push(g),d=s[++u]}o!==d?.index&&(n=R.nextNode(),o++)}return R.currentNode=L,i}p(t){let e=0;for(let s of this._$AV)s!==void 0&&(s.strings!==void 0?(s._$AI(t,s,e),e+=s.strings.length-2):s._$AI(t[e])),e++}},Z=class a{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(t,e,s,i){this.type=2,this._$AH=f,this._$AN=void 0,this._$AA=t,this._$AB=e,this._$AM=s,this.options=i,this._$Cv=i?.isConnected??!0}get parentNode(){let t=this._$AA.parentNode,e=this._$AM;return e!==void 0&&t?.nodeType===11&&(t=e.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,e=this){t=D(this,t,e),q(t)?t===f||t==null||t===""?(this._$AH!==f&&this._$AR(),this._$AH=f):t!==this._$AH&&t!==A&&this._(t):t._$litType$!==void 0?this.$(t):t.nodeType!==void 0?this.T(t):Te(t)?this.k(t):this._(t)}O(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}T(t){this._$AH!==t&&(this._$AR(),this._$AH=this.O(t))}_(t){this._$AH!==f&&q(this._$AH)?this._$AA.nextSibling.data=t:this.T(L.createTextNode(t)),this._$AH=t}$(t){let{values:e,_$litType$:s}=t,i=typeof s=="number"?this._$AC(t):(s.el===void 0&&(s.el=W.createElement(ee(s.h,s.h[0]),this.options)),s);if(this._$AH?._$AD===i)this._$AH.p(e);else{let n=new ft(i,this),o=n.u(this.options);n.p(e),this.T(o),this._$AH=n}}_$AC(t){let e=Zt.get(t.strings);return e===void 0&&Zt.set(t.strings,e=new W(t)),e}k(t){kt(this._$AH)||(this._$AH=[],this._$AR());let e=this._$AH,s,i=0;for(let n of t)i===e.length?e.push(s=new a(this.O(Y()),this.O(Y()),this,this.options)):s=e[i],s._$AI(n),i++;i<e.length&&(this._$AR(s&&s._$AB.nextSibling,i),e.length=i)}_$AR(t=this._$AA.nextSibling,e){for(this._$AP?.(!1,!0,e);t!==this._$AB;){let s=Vt(t).nextSibling;Vt(t).remove(),t=s}}setConnected(t){this._$AM===void 0&&(this._$Cv=t,this._$AP?.(t))}},Q=class{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(t,e,s,i,n){this.type=1,this._$AH=f,this._$AN=void 0,this.element=t,this.name=e,this._$AM=i,this.options=n,s.length>2||s[0]!==""||s[1]!==""?(this._$AH=Array(s.length-1).fill(new String),this.strings=s):this._$AH=f}_$AI(t,e=this,s,i){let n=this.strings,o=!1;if(n===void 0)t=D(this,t,e,0),o=!q(t)||t!==this._$AH&&t!==A,o&&(this._$AH=t);else{let u=t,d,g;for(t=n[0],d=0;d<n.length-1;d++)g=D(this,u[s+d],e,d),g===A&&(g=this._$AH[d]),o||(o=!q(g)||g!==this._$AH[d]),g===f?t=f:t!==f&&(t+=(g??"")+n[d+1]),this._$AH[d]=g}o&&!i&&this.j(t)}j(t){t===f?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,t??"")}},bt=class extends Q{constructor(){super(...arguments),this.type=3}j(t){this.element[this.name]=t===f?void 0:t}},_t=class extends Q{constructor(){super(...arguments),this.type=4}j(t){this.element.toggleAttribute(this.name,!!t&&t!==f)}},vt=class extends Q{constructor(t,e,s,i,n){super(t,e,s,i,n),this.type=5}_$AI(t,e=this){if((t=D(this,t,e,0)??f)===A)return;let s=this._$AH,i=t===f&&s!==f||t.capture!==s.capture||t.once!==s.once||t.passive!==s.passive,n=t!==f&&(s===f||i);i&&this.element.removeEventListener(this.name,this,s),n&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){typeof this._$AH=="function"?this._$AH.call(this.options?.host??this.element,t):this._$AH.handleEvent(t)}},xt=class{constructor(t,e,s){this.element=t,this.type=6,this._$AN=void 0,this._$AM=e,this.options=s}get _$AU(){return this._$AM._$AU}_$AI(t){D(this,t)}};var Re=K.litHtmlPolyfillSupport;Re?.(W,Z),(K.litHtmlVersions??(K.litHtmlVersions=[])).push("3.3.2");var se=(a,t,e)=>{let s=e?.renderBefore??t,i=s._$litPart$;if(i===void 0){let n=e?.renderBefore??null;s._$litPart$=i=new Z(t.insertBefore(Y(),n),n,void 0,e??{})}return i._$AI(a),i};var X=globalThis,v=class extends ${constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){var e;let t=super.createRenderRoot();return(e=this.renderOptions).renderBefore??(e.renderBefore=t.firstChild),t}update(t){let e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=se(e,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return A}};v._$litElement$=!0,v.finalized=!0,X.litElementHydrateSupport?.({LitElement:v});var Le=X.litElementPolyfillSupport;Le?.({LitElement:v});(X.litElementVersions??(X.litElementVersions=[])).push("4.2.2");var ie={ATTRIBUTE:1,CHILD:2,PROPERTY:3,BOOLEAN_ATTRIBUTE:4,EVENT:5,ELEMENT:6},ne=a=>(...t)=>({_$litDirective$:a,values:t}),rt=class{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,s){this._$Ct=t,this._$AM=e,this._$Ci=s}_$AS(t,e){return this.update(t,e)}update(t,e){return this.render(...e)}};var J=class extends rt{constructor(t){if(super(t),this.it=f,t.type!==ie.CHILD)throw Error(this.constructor.directiveName+"() can only be used in child bindings")}render(t){if(t===f||t==null)return this._t=void 0,this.it=t;if(t===A)return t;if(typeof t!="string")throw Error(this.constructor.directiveName+"() called with a non-string value");if(t===this.it)return this._t;this.it=t;let e=[t];return e.raw=e,this._t={_$litType$:this.constructor.resultType,strings:e,values:[]}}};J.directiveName="unsafeHTML",J.resultType=1;var p=ne(J);var S=k`
   :host {
     display: block;
-    font-family: system-ui, -apple-system, sans-serif;
+    font-family: 'Gotham', 'Gill Sans', 'Century Gothic', system-ui, -apple-system, sans-serif;
   }
 
   [hidden] { display: none !important; }
@@ -17,6 +17,7 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     height: 24px;
     flex-shrink: 0;
     pointer-events: none;
+    transition: filter 0.15s ease;
   }
 
   .icon svg {
@@ -24,24 +25,31 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     height: 100%;
   }
 
+  /* SVG button images (loaded via <img>) */
+  .btn-img {
+    transition: filter 0.15s ease;
+  }
+
+  /* Unified hover glow for all icon buttons */
+  button:hover > .btn-img,
+  button:hover > .icon {
+    filter: drop-shadow(0 0 6px rgba(255,255,255,0.4));
+  }
+
   /* Active / lit-up state for stateful icons */
   .icon-on { color: #ffffff; }
 
-  /* ── Colour overlay (CSS mask + blend for body recolouring) ── */
+  /* ── Submenu panel enter animation ──────────────────────── */
 
-  .car-colour-overlay {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    -webkit-mask-size: contain;
-    mask-size: contain;
-    -webkit-mask-position: center;
-    mask-position: center;
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
+  @keyframes panelSlideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .controls-menu,
+  .climate-menu,
+  .charger-menu {
+    animation: panelSlideUp 0.25s ease-out both;
   }
 
   /* ── Panel header (back chevron + centred title) ──────────── */
@@ -68,6 +76,11 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     color: rgba(255,255,255,0.65);
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
+    transition: color 0.15s ease;
+  }
+
+  .panel-back:hover {
+    color: #ffffff;
   }
 
   .panel-back .icon {
@@ -95,7 +108,7 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     font-weight: 400;
     color: rgba(255,255,255,0.4);
   }
-`,Qt=x`
+`,ae=k`
   .charger-menu {
     display: flex;
     flex-direction: column;
@@ -105,7 +118,7 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
   /* Main card: charge limit + slider + amps stepper */
   .chg-card {
     margin: 16px 16px 0;
-    background: #1c1c1e;
+    background: #161719;
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: 14px;
     padding: 18px 18px 0;
@@ -174,7 +187,7 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     align-items: center;
     margin: 0 -18px;
     border-top: 1px solid rgba(255,255,255,0.07);
-    background: #252527;
+    background: #1e1e20;
     padding: 2px 6px;
   }
 
@@ -227,43 +240,80 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
   }
 
   .chg-port-btn:hover { color: rgba(255,255,255,0.85); }
-`,te=x`
+`,re=k`
   .climate-menu {
     display: flex;
     flex-direction: column;
     padding: 0;
   }
 
-  /* Car area — dark slab with seat heat tap zones overlaid */
+  /* ── Car area — outer clips, inner sizes to image ─────────── */
   .clim-car-area {
-    background: #080808;
-    height: 220px;
+    background: #161719;
+    height: 500px;
     position: relative;
     overflow: hidden;
+    transition: height 0.35s ease;
+  }
+
+  .clim-car-area.clim-car-collapsed {
+    height: 260px;
+  }
+
+  /* Inner wrapper takes the image's natural size; seats are
+     positioned as percentages of the image, so they always
+     align regardless of how much the outer container clips. */
+  .clim-car-inner {
+    position: relative;
+    width: 100%;
   }
 
   .clim-car-bg {
-    position: absolute;
-    inset: 0;
     width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-position: center;
+    height: auto;
+    display: block;
     pointer-events: none;
-    opacity: 0.85;
   }
 
-  /* Seat heat tap zones (positioned in the car area) */
+  /* ── Floating back button (overlaid on car image) ────────── */
+  .clim-back-btn {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.65);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: color 0.15s ease;
+  }
+
+  .clim-back-btn:hover {
+    color: #ffffff;
+  }
+
+  .clim-back-btn .icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  /* ── Seat heat tap zones ─────────────────────────────────── */
   .clim-seat-zone {
     position: absolute;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3px;
+    gap: 2px;
     background: transparent;
     border: none;
     cursor: pointer;
-    padding: 10px 14px;
+    padding: 8px 14px;
     border-radius: 10px;
     transform: translate(-50%, -50%);
     transition: background 0.15s ease;
@@ -274,41 +324,50 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
   .clim-seat-zone:active { background: rgba(255,255,255,0.1); }
 
   .clim-seat-zone .icon {
-    width: 28px;
-    height: 28px;
+    width: 29px;
+    height: 29px;
   }
 
-  .clim-seat-zone span {
-    font-size: 0.62em;
+  .clim-seat-zone .btn-img {
+    width: 29px;
+    height: 29px;
+    object-fit: contain;
+    pointer-events: none;
+  }
+
+  .clim-seat-label {
+    font-size: 0.65em;
     font-weight: 500;
-    color: rgba(255,255,255,0.35);
+    color: rgba(255,255,255,0.45);
     letter-spacing: 0.02em;
   }
 
-  /* Seat positions — approximate top-down car layout */
-  .clim-seat-fl { top: 32%; left: 25%; }  /* front driver   */
-  .clim-seat-fr { top: 32%; left: 75%; }  /* front passenger*/
-  .clim-seat-rl { top: 70%; left: 22%; }  /* rear left      */
-  .clim-seat-rc { top: 70%; left: 50%; }  /* rear centre    */
-  .clim-seat-rr { top: 70%; left: 78%; }  /* rear right     */
+  /* Seat positions — percentages of the image dimensions
+     so they track the actual seats regardless of clip height.
+     Based on Model 3 climate-bg.png (551×950). */
+  .clim-seat-fl { top: 30%; left: 35%; }
+  .clim-seat-fr { top: 30%; left: 64%; }
+  .clim-seat-rl { top: 50%; left: 37%; }
+  .clim-seat-rc { top: 50%; left: 50%; }
+  .clim-seat-rr { top: 50%; left: 63%; }
 
-  /* Bottom sheet container — slides up when expanded */
+  /* ── Bottom sheet ────────────────────────────────────────── */
   .clim-sheet {
-    background: #111111;
-    border-radius: 14px 14px 0 0;
-    margin-top: -14px;   /* overlap the car area slightly */
+    background: #161719;
+    border-radius: 16px 16px 0 0;
+    margin-top: -16px;
     position: relative;
     z-index: 1;
     padding-bottom: 4px;
   }
 
-  /* Drag handle row */
+  /* Drag handle */
   .clim-handle {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    padding: 12px 0 8px;
+    padding: 14px 0 10px;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -316,34 +375,33 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
   }
 
   .clim-handle-pill {
-    width: 36px;
+    width: 40px;
     height: 4px;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.18);
     border-radius: 2px;
     transition: background 0.15s ease;
   }
 
-  .clim-handle:hover .clim-handle-pill { background: rgba(255,255,255,0.38); }
+  .clim-handle:hover .clim-handle-pill { background: rgba(255,255,255,0.35); }
 
-  /* Interior / Exterior temp info line */
+  /* Interior / Exterior temp info */
   .clim-temp-info {
     text-align: center;
-    font-size: 0.8em;
+    font-size: 0.82em;
     font-weight: 500;
     color: rgba(255,255,255,0.45);
     letter-spacing: 0.02em;
-    padding: 0 20px 16px;
+    padding: 0 20px 18px;
   }
 
-  /* Main control row: [Power] [← Temp →] [Vent] */
+  /* ── Main control row: [Power] [← Temp →] [Vent] ────────── */
   .clim-main-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 24px 20px;
+    padding: 0 24px 22px;
   }
 
-  /* Power / Vent icon+label buttons */
   .clim-icon-btn {
     display: flex;
     flex-direction: column;
@@ -351,13 +409,13 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     gap: 6px;
     background: transparent;
     border: none;
-    color: rgba(255,255,255,0.45);
+    color: rgba(255,255,255,0.4);
     font-family: inherit;
     font-size: 0.72em;
     font-weight: 500;
     cursor: pointer;
     padding: 8px 10px;
-    min-width: 52px;
+    min-width: 56px;
     border-radius: 10px;
     transition: color 0.15s ease, background 0.15s ease;
     -webkit-tap-highlight-color: transparent;
@@ -369,6 +427,14 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
   .clim-icon-btn .icon {
     width: 28px;
     height: 28px;
+  }
+
+  .clim-icon-btn .btn-img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    pointer-events: none;
   }
 
   /* Temperature ← value → arrows */
@@ -386,7 +452,7 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     justify-content: center;
     background: transparent;
     border: none;
-    color: rgba(255,255,255,0.4);
+    color: rgba(255,255,255,0.35);
     cursor: pointer;
     padding: 10px 8px;
     border-radius: 50%;
@@ -412,7 +478,7 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     text-align: center;
   }
 
-  /* Defrost Car — full-width pill button (always visible) */
+  /* ── Defrost Car — full-width outlined button ────────────── */
   .clim-full-btn {
     display: flex;
     align-items: center;
@@ -420,23 +486,23 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     width: calc(100% - 32px);
     margin: 0 16px 10px;
     padding: 16px 18px;
-    background: #1c1c1e;
-    border: 1px solid rgba(255,255,255,0.08);
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.12);
     border-radius: 12px;
-    color: rgba(255,255,255,0.85);
+    color: rgba(255,255,255,0.75);
     font-family: inherit;
     font-size: 0.9em;
     font-weight: 500;
     cursor: pointer;
     text-align: left;
     -webkit-tap-highlight-color: transparent;
-    transition: background 0.15s ease;
+    transition: background 0.15s ease, border-color 0.15s ease;
   }
 
-  .clim-full-btn:hover { background: #252528; }
+  .clim-full-btn:hover { background: rgba(255,255,255,0.04); }
 
   .clim-full-btn.active {
-    background: rgba(232,33,39,0.15);
+    background: rgba(232,33,39,0.12);
     border-color: rgba(232,33,39,0.3);
     color: #ff7070;
   }
@@ -444,12 +510,18 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
   .clim-full-btn .icon {
     width: 22px;
     height: 22px;
-    color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.45);
   }
 
   .clim-full-btn.active .icon { color: #e82127; }
 
-  /* Expandable heated seat section */
+  .clim-full-btn .btn-img-wide {
+    height: 24px;
+    object-fit: contain;
+    pointer-events: none;
+  }
+
+  /* ── Expandable section ──────────────────────────────────── */
   .clim-expanded-content {
     overflow: hidden;
     max-height: 0;
@@ -460,18 +532,17 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     max-height: 520px;
   }
 
-  /* List group container — matches Tesla app Camp Mode / Dog Mode style */
+  /* List group */
   .clim-list-group {
     margin: 0 16px 10px;
-    background: #1c1c1e;
-    border: 1px solid rgba(255,255,255,0.08);
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.1);
     border-radius: 12px;
     overflow: hidden;
   }
 
   .clim-list-group--last { margin-bottom: 16px; }
 
-  /* Each row in the list group */
   .clim-list-item {
     display: flex;
     align-items: center;
@@ -495,9 +566,7 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
   .clim-list-item:hover  { background: rgba(255,255,255,0.04); }
   .clim-list-item:active { background: rgba(255,255,255,0.08); }
 
-  .clim-list-item.hot {
-    color: rgba(255,255,255,0.9);
-  }
+  .clim-list-item.hot { color: rgba(255,255,255,0.9); }
 
   .clim-list-icon {
     width: 22px;
@@ -519,7 +588,6 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     font-weight: 600;
   }
 
-  /* Section title — matches "Cabin Overheat Protection" bold white heading */
   .clim-section-title {
     font-size: 0.9em;
     font-weight: 700;
@@ -527,21 +595,19 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     padding: 12px 16px 8px;
   }
 
-  /* Horizontal separator between Camp/Dog group and Overheat section */
   .clim-separator {
     height: 1px;
     background: rgba(255,255,255,0.1);
     margin: 8px 16px;
   }
 
-  /* Segmented control container — extends .clim-list-group */
+  /* Segmented control */
   .clim-segment-group {
     display: flex;
     padding: 4px;
     gap: 2px;
   }
 
-  /* Each segment option button */
   .clim-segment-btn {
     flex: 1;
     padding: 14px 6px;
@@ -565,7 +631,112 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     color: rgba(255,255,255,0.9);
     font-weight: 600;
   }
-`,ee=x`
+
+  /* ── Landscape layout ─────────────────────────────────── */
+
+  .climate-menu.landscape {
+    flex-direction: row;
+  }
+
+  /* Car area: left side, height driven by image aspect ratio */
+  .landscape .clim-car-area {
+    flex: 0 0 50%;
+    max-width: 50%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Ignore collapse in landscape — always show full car */
+  .landscape .clim-car-area.clim-car-collapsed {
+    height: auto;
+  }
+
+  .landscape .clim-car-inner {
+    width: 100%;
+    position: relative;
+  }
+
+  /* Right panel: no scrollbar, content flows naturally */
+  .landscape .clim-sheet {
+    flex: 1;
+    margin-top: 0;
+    border-radius: 0;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-left: 1px solid rgba(255,255,255,0.06);
+    padding-bottom: 8px;
+  }
+
+  /* Hide drag handle in landscape — not needed */
+  .landscape .clim-handle {
+    display: none;
+  }
+
+  /* Auto-expand the extra content in landscape */
+  .landscape .clim-expanded-content {
+    max-height: none;
+  }
+
+  /* Temp info: left-aligned, compact */
+  .landscape .clim-temp-info {
+    padding: 12px 16px 10px;
+    text-align: left;
+  }
+
+  /* Main row: tighter for side panel */
+  .landscape .clim-main-row {
+    padding: 0 16px 12px;
+  }
+
+  /* Temperature value: scale down for narrower panel */
+  .landscape .clim-temp-value {
+    font-size: 2.2em;
+  }
+
+  /* Power/Vent buttons: tighter */
+  .landscape .clim-icon-btn {
+    padding: 6px 8px;
+    min-width: 48px;
+  }
+
+  /* Defrost button: compact */
+  .landscape .clim-full-btn {
+    width: calc(100% - 28px);
+    margin: 0 14px 6px;
+    padding: 12px 14px;
+  }
+
+  /* List groups: compact margins */
+  .landscape .clim-list-group {
+    margin: 0 14px 6px;
+  }
+
+  .landscape .clim-list-item {
+    padding: 12px 14px;
+  }
+
+  .landscape .clim-section-title {
+    padding: 8px 14px 4px;
+    font-size: 0.85em;
+  }
+
+  .landscape .clim-separator {
+    margin: 4px 14px;
+  }
+
+  .landscape .clim-segment-group {
+    padding: 3px;
+  }
+
+  .landscape .clim-segment-btn {
+    padding: 10px 6px;
+    font-size: 0.8em;
+  }
+`,oe=k`
   .controls-menu {
     display: flex;
     flex-direction: column;
@@ -575,8 +746,8 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
   /* Controls: car interaction area */
   .ctrl-car-area {
     position: relative;
-    background: #080808;
-    height: 300px;
+    background: #161719;
+    height: 400px;
     width: 100%;
     overflow: hidden;
   }
@@ -600,68 +771,76 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     justify-content: center;
     background: transparent;
     border: none;
-    color: rgba(255,255,255,0.88);
+    color: rgba(255,255,255,0.75);
     font-family: inherit;
     font-size: 1.1em;
     font-weight: 400;
+    letter-spacing: 0.02em;
     cursor: pointer;
-    padding: 14px 28px;
+    padding: 12px 24px;
     -webkit-tap-highlight-color: transparent;
-    transition: color 0.12s ease;
+    transition: color 0.15s ease;
     user-select: none;
   }
 
+  .ctrl-zone:hover  { color: rgba(255,255,255,1); }
   .ctrl-zone:active { color: rgba(255,255,255,0.5); }
 
-  /* Frunk: upper area, text only */
+  /* Frunk: on the hood */
   .ctrl-frunk {
     top: 14%;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  /* Lock: car centre, icon only — larger icon */
-  .ctrl-lock {
-    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
 
-  .ctrl-lock .icon {
-    width: 34px;
-    height: 34px;
-  }
-
-  /* Trunk: lower area, text only */
-  .ctrl-trunk {
-    bottom: 10%;
+  /* Lock: on glass roof — 50% (center) */
+  .ctrl-lock {
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
+    color: rgba(255,255,255,0.48);
+    padding: 10px;
   }
 
-  /* Charge port: bottom-left — small icon, highlights when open */
-  .ctrl-port {
-    bottom: 16%;
-    left: 5%;
-    padding: 10px 12px;
-    color: rgba(255,255,255,0.35);
-    font-size: 1em;
+  .ctrl-lock:hover { color: rgba(255,255,255,0.8); }
+
+  .ctrl-lock .icon {
+    width: 24px;
+    height: 24px;
   }
+
+  /* Trunk: rear deck */
+  .ctrl-trunk {
+    top: 78%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* Charge port: rear-left tail */
+  .ctrl-port {
+    top: 82%;
+    left: 20%;
+    transform: translate(-50%, -50%);
+    padding: 8px 10px;
+    color: rgba(255,255,255,0.28);
+  }
+
+  .ctrl-port:hover { color: rgba(255,255,255,0.6); }
 
   .ctrl-port .icon {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
   }
 
-  .ctrl-port.port-open { color: #ffffff; }
+  .ctrl-port.port-open { color: rgba(255,255,255,0.75); }
 
   /* Controls: bottom action bar */
   .ctrl-actions {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 14px 8px 18px;
-    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 16px 12px 20px;
+    border-top: 1px solid rgba(255,255,255,0.05);
   }
 
   .ctrl-action-btn {
@@ -672,32 +851,111 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     flex: 1;
     background: transparent;
     border: none;
-    color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.45);
     font-family: inherit;
-    font-size: 0.72em;
+    font-size: 0.7em;
+    font-weight: 400;
     cursor: pointer;
     padding: 6px 4px;
     -webkit-tap-highlight-color: transparent;
     transition: color 0.15s ease;
   }
 
-  .ctrl-action-btn:hover  { color: rgba(255,255,255,0.85); }
+  .ctrl-action-btn:hover  { color: rgba(255,255,255,0.8); }
   .ctrl-action-btn:active { color: #ffffff; }
 
   .ctrl-action-btn .icon {
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
   }
-`,se=x`
+
+  /* ── Landscape layout ─────────────────────────────────── */
+
+  .controls-menu.landscape {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  /* Header spans full width */
+  .landscape .panel-header {
+    flex: 0 0 100%;
+  }
+
+  /* Car area: left side */
+  .landscape .ctrl-car-area {
+    flex: 0 0 55%;
+    max-width: 55%;
+    height: auto;
+    min-height: 340px;
+  }
+
+  /* Action bar: right column, vertically centred */
+  .landscape .ctrl-actions {
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    padding: 24px 20px;
+    gap: 6px;
+    border-top: none;
+    border-left: 1px solid rgba(255,255,255,0.05);
+  }
+
+  /* Action buttons: horizontal row style in the vertical column */
+  .landscape .ctrl-action-btn {
+    flex-direction: row;
+    gap: 14px;
+    padding: 16px 20px;
+    font-size: 0.82em;
+    border-radius: 12px;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .landscape .ctrl-action-btn:hover {
+    background: rgba(255,255,255,0.04);
+  }
+
+  .landscape .ctrl-action-btn .icon {
+    width: 22px;
+    height: 22px;
+  }
+
+`,le=k`
   ha-card {
     display: block;
-    background: var(--ha-card-background, #0d0d0d);
+    background: var(--ha-card-background, #161719);
     color: #ffffff;
     overflow: hidden;
     position: relative;
     border-radius: 12px;
     padding: 0;
   }
+
+  /* ── Staggered panel transitions ─────────────────────────── */
+
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .header {
+    animation: fadeSlideIn 0.25s ease-out both;
+  }
+
+  .car-image-area {
+    animation: fadeSlideIn 0.3s ease-out 0.05s both;
+  }
+
+  .quick-actions {
+    animation: fadeSlideIn 0.3s ease-out 0.1s both;
+  }
+
+  .nav-row:nth-child(1) { animation: fadeSlideIn 0.3s ease-out 0.12s both; }
+  .nav-row:nth-child(2) { animation: fadeSlideIn 0.3s ease-out 0.16s both; }
+  .nav-row:nth-child(3) { animation: fadeSlideIn 0.3s ease-out 0.20s both; }
+  .nav-row:nth-child(4) { animation: fadeSlideIn 0.3s ease-out 0.24s both; }
+  .nav-row:nth-child(5) { animation: fadeSlideIn 0.3s ease-out 0.28s both; }
+  .nav-row:nth-child(6) { animation: fadeSlideIn 0.3s ease-out 0.32s both; }
 
   /* ── Header ──────────────────────────────────────────────── */
 
@@ -792,27 +1050,6 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     padding-top: 2px;
   }
 
-  .online-badge {
-    font-size: 0.68em;
-    padding: 3px 8px;
-    border-radius: 12px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-
-  .online-badge.online {
-    background: rgba(39,174,96,0.15);
-    color: #2ecc71;
-    border: 1px solid rgba(46,204,113,0.3);
-  }
-
-  .online-badge.offline {
-    background: rgba(192,57,43,0.15);
-    color: #e74c3c;
-    border: 1px solid rgba(231,76,60,0.3);
-  }
-
   .icon-btn {
     display: flex;
     align-items: center;
@@ -828,7 +1065,7 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     -webkit-tap-highlight-color: transparent;
   }
 
-  .icon-btn:hover { color: rgba(255,255,255,0.75); }
+  .icon-btn:hover { color: rgba(255,255,255,0.8); }
 
   .icon-btn .icon {
     width: 20px;
@@ -840,17 +1077,16 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
   .car-image-area {
     position: relative;
     width: 100%;
-    background: #0d0d0d;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 160px;
+    aspect-ratio: 417 / 262;
+    background: #161719;
     overflow: hidden;
   }
 
   .car-image {
+    position: absolute;
+    inset: 0;
     width: 100%;
-    max-height: 260px;
+    height: 100%;
     object-fit: contain;
     object-position: center;
     display: block;
@@ -882,7 +1118,7 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     align-items: center;
     gap: 32px;
     padding: 16px 0 14px;
-    background: #0d0d0d;
+    background: #161719;
     border-bottom: 1px solid rgba(255,255,255,0.07);
   }
 
@@ -907,10 +1143,20 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
 
   .quick-btn.q-locked   { color: #ffffff; }    /* locked state */
   .quick-btn.q-unlocked { color: rgba(255,255,255,0.4); }
+  .quick-btn.q-active   { color: #ffffff; }    /* on state (charging, climate) */
 
   .quick-btn .icon {
     width: 26px;
     height: 26px;
+  }
+
+  /* Official Tesla SVG button images in quick actions */
+  .quick-btn .btn-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    pointer-events: none;
   }
 
   /* ── Nav rows ─────────────────────────────────────────────── */
@@ -938,7 +1184,14 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
   }
 
   .nav-row:hover  { background: rgba(255,255,255,0.03); }
+  .nav-row:hover .nav-icon { color: rgba(255,255,255,0.8); }
   .nav-row:last-child { border-bottom: none; }
+
+  .nav-row:disabled {
+    opacity: 1;
+    pointer-events: none;
+    cursor: default;
+  }
 
   .nav-row.active {
     background: rgba(232,33,39,0.06);
@@ -948,9 +1201,20 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     width: 22px;
     height: 22px;
     color: rgba(255,255,255,0.38);
+    transition: color 0.15s ease;
   }
 
   .nav-row.active .nav-icon { color: #e82127; }
+
+  /* Official Tesla SVG button images in nav rows */
+  .nav-btn-img {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    pointer-events: none;
+  }
 
   .nav-text {
     flex: 1;
@@ -1022,7 +1286,7 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
 
   .settings-panel {
     width: 100%;
-    background: #1c1c1e;
+    background: #161719;
     border-radius: 16px 16px 0 0;
     padding: 0 0 20px;
     animation: settingsSlideUp 0.2s ease-out;
@@ -1091,20 +1355,21 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
 
   .settings-row:last-child { border-bottom: none; }
   .settings-row:hover { background: rgba(255,255,255,0.03); }
+
+  .settings-row:nth-child(1) { animation: fadeSlideIn 0.25s ease-out 0.1s both; }
+  .settings-row:nth-child(2) { animation: fadeSlideIn 0.25s ease-out 0.16s both; }
+  .settings-row:nth-child(3) { animation: fadeSlideIn 0.25s ease-out 0.22s both; }
+
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
   .settings-row:active { background: rgba(255,255,255,0.06); }
 
   .settings-row-icon {
     width: 22px;
     height: 22px;
     color: rgba(255,255,255,0.45);
-  }
-
-  .settings-swatch {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.15);
-    flex-shrink: 0;
   }
 
   .settings-row-text {
@@ -1130,16 +1395,71 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     height: 18px;
     color: rgba(255,255,255,0.2);
   }
-`;var r={BATTERY_LEVEL:"sensor.{car_name}_battery",BATTERY_RANGE:"sensor.{car_name}_battery_range",CHARGE_RATE:"sensor.{car_name}_charge_rate",CHARGE_LIMIT:"sensor.{car_name}_charge_limit",CHARGING_STATE:"sensor.{car_name}_charging_state",TEMPERATURE_INSIDE:"sensor.{car_name}_temperature_inside",TEMPERATURE_OUTSIDE:"sensor.{car_name}_temperature_outside",SPEED:"sensor.{car_name}_speed",ODOMETER:"sensor.{car_name}_odometer",CHARGING:"binary_sensor.{car_name}_charging",PLUGGED_IN:"binary_sensor.{car_name}_plugged_in",PARKING_BRAKE:"binary_sensor.{car_name}_parking_brake",FRUNK:"binary_sensor.{car_name}_frunk",TRUNK:"binary_sensor.{car_name}_trunk",DOORS:"binary_sensor.{car_name}_doors",WINDOWS:"binary_sensor.{car_name}_windows",LOCKED:"binary_sensor.{car_name}_locked",ONLINE:"binary_sensor.{car_name}_online",SENTRY_MODE:"binary_sensor.{car_name}_sentry_mode",DOOR_LOCK:"lock.{car_name}_doors",CHARGER_SWITCH:"switch.{car_name}_charger",SENTRY_MODE_SWITCH:"switch.{car_name}_sentry_mode",DEFROST_SWITCH:"switch.{car_name}_defrost",CAMP_MODE:"switch.{car_name}_camp_mode",DOG_MODE:"switch.{car_name}_dog_mode",CABIN_OVERHEAT:"select.{car_name}_cabin_overheat_protection",HEATED_SEAT_LEFT:"select.{car_name}_heated_seat_left",HEATED_SEAT_RIGHT:"select.{car_name}_heated_seat_right",HEATED_SEAT_REAR_LEFT:"select.{car_name}_heated_seat_rear_left",HEATED_SEAT_REAR_CENTER:"select.{car_name}_heated_seat_rear_center",HEATED_SEAT_REAR_RIGHT:"select.{car_name}_heated_seat_rear_right",CLIMATE:"climate.{car_name}_hvac_climate_system",CHARGE_LIMIT_NUMBER:"number.{car_name}_charge_limit",CHARGING_AMPS_NUMBER:"number.{car_name}_charging_amps",CHARGE_PORT_OPEN:"button.{car_name}_charge_port_open",CHARGE_PORT_CLOSE:"button.{car_name}_charge_port_close",VENT_WINDOWS:"button.{car_name}_vent_windows",CLOSE_WINDOWS:"button.{car_name}_close_windows",HORN:"button.{car_name}_horn",FLASH_LIGHTS:"button.{car_name}_flash_lights",REMOTE_START:"button.{car_name}_remote_start",OPEN_FRUNK:"button.{car_name}_frunk",OPEN_TRUNK:"button.{car_name}_trunk",FORCE_UPDATE:"button.{car_name}_force_data_update",WINDOWS_COVER:"cover.{car_name}_windows",FRUNK_COVER:"cover.{car_name}_frunk",CHARGER_DOOR:"cover.{car_name}_charger_door",ENERGY_ADDED:"sensor.{car_name}_energy_added",LOCATION:"device_tracker.{car_name}_location_tracker"};function rt(o,t){return o.replace("{car_name}",t)}var h={lock:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6" />
-    <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
-    <path d="M8 11v-4a4 4 0 1 1 8 0v4" />
-  </svg>`,unlock:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2l0 -6" />
-    <path d="M11 16a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-    <path d="M8 11v-5a4 4 0 0 1 8 0" />
+
+  /* ── Landing body (portrait = vertical stack, landscape = side-by-side) ── */
+
+  .landing-body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .landing-left {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Landscape layout ──────────────────────────────────── */
+
+  ha-card.landscape {
+    width: 150%;
+    margin-left: -25%;
+  }
+
+  ha-card.landscape .landing-body {
+    flex-direction: row;
+  }
+
+  ha-card.landscape .landing-left {
+    flex: 0 0 55%;
+    max-width: 55%;
+    border-right: 1px solid rgba(255,255,255,0.06);
+  }
+
+  ha-card.landscape .car-image-area {
+    aspect-ratio: auto;
+    flex: 1;
+    min-height: 200px;
+  }
+
+  ha-card.landscape .quick-actions {
+    border-bottom: none;
+    padding: 12px 0 10px;
+    gap: 24px;
+  }
+
+  ha-card.landscape .nav-rows {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  ha-card.landscape .nav-row {
+    padding: 14px 18px;
+  }
+
+  ha-card.landscape .nav-row .nav-label {
+    font-size: 0.92em;
+  }
+
+  ha-card.landscape .nav-row .nav-sublabel {
+    font-size: 0.72em;
+  }
+`;var r={BATTERY_LEVEL:"sensor.{car_name}_battery",BATTERY_RANGE:"sensor.{car_name}_battery_range",CHARGE_RATE:"sensor.{car_name}_charge_rate",CHARGE_LIMIT:"sensor.{car_name}_charge_limit",CHARGING_STATE:"sensor.{car_name}_charging_state",TEMPERATURE_INSIDE:"sensor.{car_name}_temperature_inside",TEMPERATURE_OUTSIDE:"sensor.{car_name}_temperature_outside",SPEED:"sensor.{car_name}_speed",ODOMETER:"sensor.{car_name}_odometer",CHARGING:"binary_sensor.{car_name}_charging",PLUGGED_IN:"binary_sensor.{car_name}_plugged_in",PARKING_BRAKE:"binary_sensor.{car_name}_parking_brake",FRUNK:"binary_sensor.{car_name}_frunk",TRUNK:"binary_sensor.{car_name}_trunk",DOORS:"binary_sensor.{car_name}_doors",WINDOWS:"binary_sensor.{car_name}_windows",LOCKED:"binary_sensor.{car_name}_locked",ONLINE:"binary_sensor.{car_name}_online",SENTRY_MODE:"binary_sensor.{car_name}_sentry_mode",DOOR_LOCK:"lock.{car_name}_doors",CHARGER_SWITCH:"switch.{car_name}_charger",SENTRY_MODE_SWITCH:"switch.{car_name}_sentry_mode",DEFROST_SWITCH:"switch.{car_name}_defrost",CAMP_MODE:"switch.{car_name}_camp_mode",DOG_MODE:"switch.{car_name}_dog_mode",CABIN_OVERHEAT:"select.{car_name}_cabin_overheat_protection",HEATED_SEAT_LEFT:"select.{car_name}_heated_seat_left",HEATED_SEAT_RIGHT:"select.{car_name}_heated_seat_right",HEATED_SEAT_REAR_LEFT:"select.{car_name}_heated_seat_rear_left",HEATED_SEAT_REAR_CENTER:"select.{car_name}_heated_seat_rear_center",HEATED_SEAT_REAR_RIGHT:"select.{car_name}_heated_seat_rear_right",CLIMATE:"climate.{car_name}_hvac_climate_system",CHARGE_LIMIT_NUMBER:"number.{car_name}_charge_limit",CHARGING_AMPS_NUMBER:"number.{car_name}_charging_amps",CHARGE_PORT_OPEN:"button.{car_name}_charge_port_open",CHARGE_PORT_CLOSE:"button.{car_name}_charge_port_close",VENT_WINDOWS:"button.{car_name}_vent_windows",CLOSE_WINDOWS:"button.{car_name}_close_windows",HORN:"button.{car_name}_horn",FLASH_LIGHTS:"button.{car_name}_flash_lights",REMOTE_START:"button.{car_name}_remote_start",OPEN_FRUNK:"button.{car_name}_frunk",OPEN_TRUNK:"button.{car_name}_trunk",FORCE_UPDATE:"button.{car_name}_force_data_update",WINDOWS_COVER:"cover.{car_name}_windows",FRUNK_COVER:"cover.{car_name}_frunk",CHARGER_DOOR:"cover.{car_name}_charger_door",ENERGY_ADDED:"sensor.{car_name}_energy_added",LOCATION:"device_tracker.{car_name}_location_tracker"};function ot(a,t){return a.replace("{car_name}",t)}var l={lock:`<svg viewBox="24 13 54 67" fill="currentColor" stroke="none">
+    <path fill-rule="evenodd" d="
+      M 51.01 15.62 C 60.29 15.63 67.36 22.81 67.39 32.00 Q 67.40 35.66 67.40 38.23 A 0.67 0.67 0.0 0 0 67.91 38.89 C 71.02 39.64 73.19 39.67 74.78 42.99 Q 75.53 44.58 75.53 49.12 Q 75.51 69.54 75.50 69.97 Q 75.34 74.60 72.13 76.54 Q 70.63 77.45 64.65 77.48 Q 57.83 77.51 50.99 77.50 Q 44.15 77.50 37.32 77.47 Q 31.35 77.44 29.85 76.52 Q 26.64 74.58 26.48 69.95 Q 26.47 69.52 26.47 49.10 Q 26.47 44.56 27.22 42.97 C 28.81 39.65 30.98 39.63 34.09 38.88 A 0.67 0.67 0.0 0 0 34.60 38.22 Q 34.61 35.65 34.62 31.99 C 34.65 22.80 41.74 15.62 51.01 15.62 Z
+      M 39.95 39.00 L 62.05 39.00 A 0.57 0.57 0.0 0 0 62.62 38.43 L 62.62 32.80 A 12.30 11.49 90.0 0 0 51.13 20.50 L 50.87 20.50 A 12.30 11.49 -90.0 0 0 39.38 32.80 L 39.38 38.43 A 0.57 0.57 0.0 0 0 39.95 39.00 Z"/>
+  </svg>`,unlock:`<svg viewBox="9 8 70 72" fill="currentColor" stroke="none">
+    <path d="
+      M 40.40 38.59 A 0.39 0.39 0.0 0 0 40.79 38.98 Q 65.09 39.02 66.45 38.97 C 71.80 38.79 76.50 40.38 76.49 46.01 Q 76.48 65.49 76.54 67.41 C 76.72 72.91 75.03 77.57 69.25 77.49 Q 67.64 77.47 37.81 77.54 Q 32.31 77.55 30.42 76.22 Q 27.43 74.12 27.49 69.49 Q 27.53 65.87 27.45 49.16 C 27.42 43.04 28.68 39.34 35.06 38.93 A 0.61 0.61 0.0 0 0 35.64 38.32 C 35.62 35.47 35.55 33.00 35.58 31.01 C 35.69 23.94 29.36 18.67 22.61 21.05 C 14.37 23.96 16.11 32.12 16.00 38.84 A 2.49 2.47 -0.7 0 1 13.62 41.27 L 13.48 41.28 A 2.32 2.32 0.0 0 1 11.06 39.05 Q 10.72 30.40 11.12 28.42 C 14.89 9.87 40.59 12.29 40.40 30.78 Q 40.36 34.85 40.40 38.59 Z"/>
   </svg>`,charging:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11" />
@@ -1151,8 +1471,9 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     <path d="M18.5 5.5l2.5 -2.5" />
     <path d="M10 11l-2 2" />
     <path d="M13 14l-2 2" />
-  </svg>`,"charge-bolt":`<svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
-    <path d="M13.5 2L5 13h5.5L8.5 22l10-11h-5.5z"/>
+  </svg>`,"charge-bolt":`<svg viewBox="27 16 50 74" fill="currentColor" stroke="none">
+    <path d="
+      M 51.98 87.97 C 51.08 88.15 50.36 87.55 50.36 86.67 Q 50.37 72.26 50.37 60.68 A 1.31 1.30 89.8 0 0 49.06 59.37 Q 32.91 59.40 29.75 59.36 Q 29.31 59.35 29.04 59.19 A 1.38 1.33 -59.7 0 1 28.59 57.33 Q 45.64 28.16 51.20 18.63 A 1.30 1.30 0.0 0 1 53.25 18.38 Q 53.71 18.85 53.69 20.00 Q 53.62 23.82 53.66 45.35 A 1.30 1.30 0.0 0 0 54.96 46.65 C 62.96 46.63 74.04 46.21 75.11 46.91 A 1.25 1.19 -58.3 0 1 75.46 48.55 Q 60.94 73.71 52.68 87.48 A 1.05 1.05 0.0 0 1 51.98 87.97 Z"/>
   </svg>`,battery:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M16 7h1a2 2 0 0 1 2 2v.5a.5 .5 0 0 0 .5 .5a.5 .5 0 0 1 .5 .5v3a.5 .5 0 0 1 -.5 .5a.5 .5 0 0 0 -.5 .5v.5a2 2 0 0 1 -2 2h-2" />
@@ -1171,12 +1492,47 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     <path d="M14.167 10.5c.722 -1.538 1.156 -3.043 1.303 -4.514c.22 -1.63 -.762 -2.986 -3.47 -2.986s-3.69 1.357 -3.47 2.986c.147 1.471 .581 2.976 1.303 4.514" />
     <path d="M13.169 16.751c.97 1.395 2.057 2.523 3.257 3.386c1.3 1 2.967 .833 4.321 -1.512c1.354 -2.345 .67 -3.874 -.85 -4.498c-1.348 -.608 -2.868 -.985 -4.562 -1.128" />
     <path d="M8.664 13c-1.693 .143 -3.213 .52 -4.56 1.128c-1.522 .623 -2.206 2.153 -.852 4.498s3.02 2.517 4.321 1.512c1.2 -.863 2.287 -1.991 3.258 -3.386" />
-  </svg>`,"climate-fan":`<svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
-    <circle cx="12" cy="12" r="1.5"/>
-    <path d="M12 12C12 8 11 5 8 4 5 3 5 7 7 10 8 11 10 12 12 12Z"/>
-    <path d="M12 12C16 12 19 11 20 8 21 5 17 5 14 7 13 8 12 10 12 12Z"/>
-    <path d="M12 12C12 16 13 19 16 20 19 21 19 17 17 14 16 13 14 12 12 12Z"/>
-    <path d="M12 12C8 12 5 13 4 16 3 19 7 19 10 17 11 16 12 14 12 12Z"/>
+  </svg>`,"climate-fan":`<svg viewBox="17 14 74 74" fill="currentColor" stroke="none">
+    <path d="
+      M 52.28 46.51
+      A 2.65 2.65 0.0 0 1 49.64 49.17
+      L 49.42 49.17
+      A 16.41 16.35 89.9 0 1 33.04 32.79
+      L 33.04 32.53
+      A 16.41 16.35 89.9 0 1 49.36 16.09
+      L 49.58 16.09
+      A 2.65 2.65 0.0 0 1 52.24 18.73
+      L 52.28 46.51 Z"/>
+    <path d="
+      M 58.31 49.25
+      A 2.46 2.46 0.0 0 1 55.85 46.79
+      L 55.85 46.36
+      A 16.41 16.33 0.0 0 1 72.26 30.03
+      L 72.48 30.03
+      A 16.41 16.33 0.0 0 1 88.89 46.36
+      L 88.89 46.79
+      A 2.46 2.46 0.0 0 1 86.43 49.25
+      L 58.31 49.25 Z"/>
+    <path d="
+      M 49.59 52.73
+      A 2.55 2.55 0.0 0 1 52.15 55.27
+      L 52.15 55.59
+      A 16.42 16.35 -0.1 0 1 35.76 71.97
+      L 35.54 71.97
+      A 16.42 16.35 -0.1 0 1 19.09 55.65
+      L 19.09 55.33
+      A 2.55 2.55 0.0 0 1 21.63 52.77
+      L 49.59 52.73 Z"/>
+    <path d="
+      M 55.72 55.47
+      A 2.62 2.62 0.0 0 1 58.33 52.84
+      L 58.55 52.84
+      A 16.45 16.38 89.9 0 1 74.96 69.26
+      L 74.96 69.46
+      A 16.45 16.38 89.9 0 1 58.61 85.94
+      L 58.39 85.94
+      A 2.62 2.62 0.0 0 1 55.76 83.33
+      L 55.72 55.47 Z"/>
   </svg>`,"windows-vent":`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M12 12c2.76 0 5 -2.01 5 -4.5s-2.24 -4.5 -5 -4.5v9" />
@@ -1209,10 +1565,74 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     <path d="M6 19v-2H5a2 2 0 0 1-2-2v-5c0-1.1.9-2 2-2h2.5L9 6c.5-1.5 1-3 3-3"/>
     <path d="M6 19h12"/>
     <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/>
-  </svg>`,car:`<svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
-    <path d="M8 6h8a2 2 0 0 1 2 2v2l2 2a1 1 0 0 1 1 1v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a1 1 0 0 1 1-1l2-2V8a2 2 0 0 1 2-2z"/>
-    <rect x="1.5" y="12.5" width="1.5" height="1.5" rx=".75"/>
-    <rect x="21" y="12.5" width="1.5" height="1.5" rx=".75"/>
+  </svg>`,car:`<svg viewBox="20 28 64 50" fill="currentColor" stroke="none">
+    <path fill-rule="evenodd" d="
+      M 52.02 30.01
+      Q 57.38 30.01 64.78 30.63
+      C 72.36 31.27 73.45 37.79 75.24 43.81
+      A 0.51 0.50 -53.5 0 0 76.23 43.66
+      L 76.23 41.98
+      A 0.81 0.81 0.0 0 1 76.99 41.17
+      Q 80.66 40.97 81.97 43.63
+      A 1.43 1.42 -17.4 0 1 80.91 45.66
+      L 76.92 46.30
+      A 0.34 0.34 0.0 0 0 76.80 46.92
+      C 82.37 50.39 81.99 53.82 82.04 60.70
+      Q 82.08 67.25 81.69 73.05
+      A 2.13 2.12 -88.0 0 1 79.57 75.03
+      L 74.22 75.03
+      A 1.80 1.79 89.7 0 1 72.43 73.25
+      Q 72.41 71.54 71.99 70.73
+      A 0.46 0.45 -12.4 0 0 71.61 70.49
+      Q 71.17 70.47 52.01 70.47
+      Q 32.85 70.46 32.41 70.48
+      A 0.46 0.45 12.4 0 0 32.03 70.72
+      Q 31.61 71.53 31.59 73.24
+      A 1.80 1.79 -89.7 0 1 29.80 75.02
+      L 24.45 75.02
+      A 2.13 2.12 88.0 0 1 22.33 73.04
+      Q 21.94 67.24 21.98 60.69
+      C 22.03 53.81 21.66 50.38 27.23 46.91
+      A 0.34 0.34 0.0 0 0 27.11 46.29
+      L 23.12 45.65
+      A 1.43 1.42 17.5 0 1 22.06 43.62
+      Q 23.37 40.96 27.04 41.16
+      A 0.81 0.81 0.0 0 1 27.80 41.97
+      L 27.80 43.65
+      A 0.51 0.50 53.5 0 0 28.79 43.80
+      C 30.58 37.78 31.67 31.26 39.25 30.63
+      Q 46.65 30.01 52.02 30.01
+      Z
+      M 32.28 44.72
+      L 71.72 44.72
+      A 0.23 0.23 0.0 0 0 71.95 44.49
+      L 71.95 44.14
+      A 11.00 10.20 -90.0 0 0 61.75 33.14
+      L 42.25 33.14
+      A 11.00 10.20 -90.0 0 0 32.05 44.14
+      L 32.05 44.49
+      A 0.23 0.23 0.0 0 0 32.28 44.72
+      Z
+      M 25.82 51.04
+      L 24.81 54.26
+      A 1.15 1.15 0.0 0 0 25.56 55.70
+      L 25.72 55.75
+      A 9.72 2.81 17.4 0 0 35.84 55.98
+      L 35.86 55.92
+      A 9.72 2.81 17.4 0 0 27.42 50.33
+      L 27.26 50.28
+      A 1.15 1.15 0.0 0 0 25.82 51.04
+      Z
+      M 79.19 54.25
+      L 78.18 51.05
+      A 1.14 1.14 0.0 0 0 76.75 50.30
+      L 76.57 50.36
+      A 9.77 2.80 -17.4 0 0 68.09 55.95
+      L 68.10 55.99
+      A 9.77 2.80 -17.4 0 0 78.26 55.74
+      L 78.44 55.68
+      A 1.14 1.14 0.0 0 0 79.19 54.25
+      Z"/>
   </svg>`,frunk:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M2 16h20"/>
@@ -1231,27 +1651,34 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
   </svg>`,sentry:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1 -8.5 15a12 12 0 0 1 -8.5 -15a12 12 0 0 0 8.5 -3" />
-  </svg>`,"flash-lights":`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M9 6h-2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2l3-3V9L9 6z"/>
-    <path d="M15 8h4"/>
-    <path d="M15 12h5"/>
-    <path d="M15 16h4"/>
-  </svg>`,horn:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M18 8a6 6 0 0 1 0 8"/>
-    <path d="M21 5a10 10 0 0 1 0 14"/>
-    <path d="M3 10v4a1 1 0 0 0 1 1h2l4 4V5L6 9H4a1 1 0 0 0-1 1z"/>
-  </svg>`,"remote-start":`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="8" cy="12" r="4"/>
-    <path d="M12 12h8"/>
-    <path d="M17 9v3"/>
-    <path d="M20 9v3"/>
+  </svg>`,"flash-lights":`<svg viewBox="55 15 75 58" fill="currentColor" stroke="none">
+    <rect x="-13.17" y="-2.62" transform="translate(70.12,20.94) rotate(7.2)" width="26.34" height="5.24" rx="2.56"/>
+    <path d="M 88.50 29.24 A 8.62 8.62 0.0 0 1 97.12 20.62 L 101.77 20.62 A 25.21 23.14 0 0 1 126.98 43.76 L 126.98 44.48 A 25.21 23.14 0 0 1 101.77 67.62 L 97.12 67.62 A 8.62 8.62 0.0 0 1 88.50 59.00 L 88.50 29.24 Z"/>
+    <rect x="-13.09" y="-2.62" transform="translate(70.14,36.69) rotate(2.4)" width="26.18" height="5.24" rx="2.55"/>
+    <rect x="-13.09" y="-2.61" transform="translate(70.12,52.44) rotate(-2.4)" width="26.18" height="5.22" rx="2.55"/>
+    <rect x="-13.16" y="-2.62" transform="translate(70.13,67.31) rotate(-7.1)" width="26.32" height="5.24" rx="2.55"/>
+  </svg>`,horn:`<svg viewBox="45 18 78 55" fill="currentColor" stroke="none">
+    <path fill-rule="evenodd" d="
+      M 77.79 49.43 Q 66.93 52.07 61.08 62.13 C 59.21 65.34 58.43 71.35 53.06 70.37 Q 49.13 69.65 49.08 65.49 Q 48.90 51.71 49.05 26.80 Q 49.08 22.95 53.42 21.67 Q 56.68 20.71 59.59 24.40 C 60.54 25.60 61.39 28.68 62.40 30.32 Q 67.61 38.78 76.45 41.98 Q 80.81 43.56 90.70 43.42 Q 100.17 43.29 113.18 43.40 A 0.47 0.47 0.0 0 0 113.66 42.96 C 113.83 40.19 116.61 38.61 118.55 41.04 A 1.64 1.60 -66.7 0 1 118.90 41.96 Q 119.11 46.14 118.93 49.78 A 2.59 2.47 5.4 0 1 116.01 52.08 Q 114.00 51.82 113.74 49.21 A 0.68 0.67 87.2 0 0 113.07 48.60 L 109.06 48.60 A 0.45 0.44 77.1 0 0 108.66 49.24 Q 111.67 55.41 108.89 60.60 C 106.19 65.64 101.89 67.15 96.06 67.02 C 90.87 66.90 84.78 68.09 80.33 63.35 Q 75.04 57.72 78.22 49.92 A 0.37 0.37 0.0 0 0 77.79 49.43 Z
+      M 104.89 54.83 A 6.14 6.14 0.0 0 0 98.75 48.69 L 88.51 48.69 A 6.14 6.14 0.0 0 0 82.37 54.83 L 82.37 55.55 A 6.14 6.14 0.0 0 0 88.51 61.69 L 98.75 61.69 A 6.14 6.14 0.0 0 0 104.89 55.55 L 104.89 54.83 Z"/>
+  </svg>`,"remote-start":`<svg viewBox="64 8 45 76" fill="currentColor" stroke="none">
+    <path d="M 86.31 11.03 Q 94.51 10.77 104.02 15.38 A 2.62 2.61 22.9 0 1 105.34 18.62 L 105.27 18.83 A 2.30 2.30 0.0 0 1 102.33 20.21 Q 99.65 19.24 97.10 18.19 Q 92.40 16.26 86.31 16.26 Q 80.23 16.26 75.53 18.18 Q 72.98 19.23 70.29 20.20 A 2.30 2.30 0.0 0 1 67.36 18.82 L 67.29 18.61 A 2.62 2.61 -22.9 0 1 68.61 15.37 Q 78.12 10.77 86.31 11.03 Z"/>
+    <path d="M 86.30 23.29 C 88.52 23.29 95.45 23.85 97.24 25.92 A 2.51 2.23 -47.5 0 1 97.19 28.91 Q 96.12 30.33 94.31 29.84 Q 89.50 28.53 86.30 28.54 Q 83.10 28.54 78.30 29.85 Q 76.48 30.34 75.41 28.92 A 2.51 2.23 47.4 0 1 75.36 25.93 C 77.14 23.86 84.07 23.29 86.30 23.29 Z"/>
+    <path fill-rule="evenodd" d="M 103.81 72.17 A 8.83 8.83 0.0 0 1 94.98 81.00 L 77.64 81.00 A 8.83 8.83 0.0 0 1 68.81 72.17 L 68.81 44.33 A 8.83 8.83 0.0 0 1 77.64 35.50 L 94.98 35.50 A 8.83 8.83 0.0 0 1 103.81 44.33 L 103.81 72.17 Z M 89.79 49.50 A 3.49 3.49 0.0 0 0 86.30 46.01 A 3.49 3.49 0.0 0 0 82.81 49.50 A 3.49 3.49 0.0 0 0 86.30 52.99 A 3.49 3.49 0.0 0 0 89.79 49.50 Z"/>
   </svg>`,location:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
     <circle cx="12" cy="9" r="2.5"/>
+  </svg>`,"vent-open":`<svg viewBox="50 17 68 68" fill="currentColor" stroke="none">
+    <path fill-rule="evenodd" d="
+      M 111.29 78.91 Q 109.12 81.07 106.78 81.11 Q 84.93 81.43 63.26 81.17 Q 57.61 81.10 55.36 77.39 Q 53.93 75.02 54.26 68.48 Q 54.44 64.89 54.20 51.46 C 54.07 44.34 56.72 42.29 61.54 37.51 Q 63.93 35.14 65.81 33.26 Q 67.70 31.38 70.08 29.00 C 74.87 24.20 76.93 21.56 84.05 21.72 Q 97.48 22.00 101.07 21.84 Q 107.61 21.53 109.98 22.97 Q 113.68 25.23 113.73 30.88 Q 113.91 52.55 113.51 74.40 Q 113.46 76.74 111.29 78.91 Z
+      M 61.34 48.48 L 67.38 48.48 A 3.49 3.47 -67.2 0 0 69.83 47.47 Q 74.97 42.31 80.72 36.06 C 82.54 34.08 84.50 34.92 86.70 34.89 Q 99.59 34.75 105.63 35.02 A 1.85 1.85 0.0 0 0 107.57 33.17 L 107.57 30.38 A 2.45 2.44 -89.8 0 0 105.15 27.93 Q 97.41 27.86 84.51 27.92 Q 80.41 27.94 77.29 31.04 Q 75.92 32.39 75.24 33.02 Q 68.45 39.25 60.85 47.36 A 0.67 0.67 0.0 0 0 61.34 48.48 Z
+      M 61.06 54.54 A 0.56 0.55 2.5 0 0 60.46 55.08 Q 60.33 62.00 60.43 72.54 Q 60.45 75.04 63.26 75.04 Q 101.67 74.98 104.77 74.96 Q 107.52 74.94 107.47 71.82 Q 107.38 65.56 107.50 55.49 A 0.58 0.57 89.5 0 0 106.92 54.91 Q 85.20 55.17 67.10 55.13 C 64.99 55.12 62.97 54.66 61.06 54.54 Z"/>
+  </svg>`,"vent-close":`<svg viewBox="50 17 68 68" fill="currentColor" stroke="none">
+    <path fill-rule="evenodd" d="
+      M 111.27 78.92 Q 109.11 81.07 106.78 81.13 Q 95.78 81.41 65.02 81.23 C 59.91 81.20 56.97 80.63 54.89 76.43 Q 54.16 74.97 54.19 71.59 Q 54.24 66.54 54.30 49.50 Q 54.32 44.66 57.67 41.19 Q 61.57 37.15 63.93 34.86 Q 64.80 34.02 65.67 33.15 Q 66.55 32.28 67.39 31.41 Q 69.69 29.06 73.75 25.18 Q 77.23 21.84 82.07 21.84 Q 99.11 21.85 104.16 21.82 Q 107.54 21.80 109.00 22.54 C 113.19 24.63 113.75 27.58 113.76 32.69 Q 113.82 63.45 113.49 74.45 Q 113.43 76.78 111.27 78.92 Z
+      M 83.75 27.99 C 81.05 28.02 79.19 28.89 76.51 31.54 Q 69.41 38.56 63.00 45.00 Q 61.41 46.60 60.75 47.69 A 0.52 0.51 -74.3 0 0 61.18 48.47 L 67.86 48.47 A 2.12 2.10 -67.3 0 0 69.35 47.85 L 80.69 36.52 A 5.50 5.45 -67.4 0 1 84.57 34.90 L 106.11 34.90 A 1.35 1.34 -0.0 0 0 107.46 33.56 L 107.46 29.95 A 1.95 1.95 0.0 0 0 105.53 28.00 Q 93.62 27.86 83.75 27.99 Z
+      M 107.26 54.95 L 60.62 54.87 A 0.23 0.23 0.0 0 0 60.39 55.10 L 60.36 72.14 A 3.11 2.81 0.1 0 0 63.46 74.95 L 104.34 75.03 A 3.11 2.81 0.1 0 0 107.46 72.22 L 107.49 55.18 A 0.23 0.23 0.0 0 0 107.26 54.95 Z"/>
   </svg>`,"chevron-left":`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M15 6l-6 6l6 6" />
@@ -1275,6 +1702,23 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065" />
     <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+  </svg>`,layout:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+    <path d="M15 4v16" />
+  </svg>`,power:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M7 6a7.75 7.75 0 1 0 10 0" />
+    <path d="M12 2v6" />
+  </svg>`,schedule:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20.984 12.535a9 9 0 1 0 -5.249 7.47" />
+    <path d="M12 7v5l2 2" />
+    <path d="M19 16l-2 3h4l-2 3" />
+  </svg>`,security:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M11.46 20.846a12 12 0 0 1 -7.96 -14.846a12 12 0 0 0 8.5 -3a12 12 0 0 0 8.5 3a12 12 0 0 1 -.09 7.06" />
+    <path d="M15 19l2 2l4 -4" />
   </svg>`,driving:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
@@ -1286,7 +1730,7 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14" />
     <path d="M10 16v-8h2.667c.736 0 1.333 .895 1.333 2s-.597 2 -1.333 2h-2.667" />
-  </svg>`};var M=[{id:"3",name:"Model 3",variants:[{id:"3.1",label:"2017\u20132023",source:"red"},{id:"3.2",label:"2024+ Highland",source:null}]},{id:"Y",name:"Model Y",variants:[{id:"Y.1",label:"2020\u20132024",source:"white"},{id:"Y.2",label:"2025+ Juniper",source:null}]},{id:"S",name:"Model S",variants:[{id:"S.1",label:"2012\u20132021",source:"white"},{id:"S.2",label:"2021+ Refresh",source:null}]},{id:"X",name:"Model X",variants:[{id:"X.1",label:"2015\u20132021",source:null},{id:"X.2",label:"2021+ Refresh",source:null}]},{id:"CT",name:"Cybertruck",variants:[{id:"CT.1",label:"2024+",source:null}]}];function ot(o,t){let e=M.find(i=>i.id===o);return e?e.variants.find(i=>i.id===t)?.source??null:null}function xt(o){return M.find(e=>e.id===o)?.variants??[]}var kt=class extends v{static get properties(){return{hass:{type:Object},config:{type:Object}}}setConfig(t){this.config=t}_valueChanged(t){if(!this.config||!this.hass)return;let e=t.target,s={...this.config,[e.name]:e.value};this.dispatchEvent(new CustomEvent("config-changed",{detail:{config:s}}))}_modelChanged(t){if(!this.config||!this.hass)return;let e=t.target.value,i=xt(e)[0]?.id??"",n={...this.config,car_model:e,car_variant:i};this.dispatchEvent(new CustomEvent("config-changed",{detail:{config:n}}))}render(){if(!this.config)return l``;let t=this.config.car_model??"3",e=xt(t);return l`
+  </svg>`};var lt=[{name:"Pearl White",dir:"white",swatch:"#f2f2f2"},{name:"Midnight Grey",dir:"neutral",swatch:"#71757a"},{name:"Solid Black",dir:"black",swatch:"#141414"},{name:"Ultra Red",dir:"red",swatch:"#c41e28"},{name:"Quicksilver",dir:"quicksilver",swatch:"#9e9a91"},{name:"Deep Blue Metallic",dir:"blue",swatch:"#223873"}];var M=[{id:"3",name:"Model 3",variants:[{id:"3.1",label:"2017\u20132023",colours:["neutral","red","blue"]},{id:"3.2",label:"2024+ Highland",colours:["neutral"]}]},{id:"Y",name:"Model Y",variants:[{id:"Y.1",label:"2020\u20132024",colours:["neutral","white"]},{id:"Y.2",label:"2025+ Juniper",colours:["neutral"]}]},{id:"S",name:"Model S",variants:[{id:"S.1",label:"2012\u20132021",colours:["neutral","white"]},{id:"S.2",label:"2021+ Refresh",colours:["neutral"]}]},{id:"X",name:"Model X",variants:[{id:"X.1",label:"2015\u20132021",colours:["neutral"]},{id:"X.2",label:"2021+ Refresh",colours:["neutral"]}]},{id:"CT",name:"Cybertruck",variants:[{id:"CT.1",label:"2024+",colours:["neutral"]}]}];function yt(a,t){let e=M.find(i=>i.id===a);return e?e.variants.find(i=>i.id===t)?.colours??["neutral"]:["neutral"]}function $t(a){return M.find(e=>e.id===a)?.variants??[]}var At=class extends v{static get properties(){return{hass:{type:Object},config:{type:Object}}}setConfig(t){this.config=t}_valueChanged(t){if(!this.config||!this.hass)return;let e=t.target,s={...this.config,[e.name]:e.value};this.dispatchEvent(new CustomEvent("config-changed",{detail:{config:s}}))}_modelChanged(t){if(!this.config||!this.hass)return;let e=t.target.value,i=$t(e)[0]?.id??"",n={...this.config,car_model:e,car_variant:i};this.dispatchEvent(new CustomEvent("config-changed",{detail:{config:n}}))}render(){if(!this.config)return c``;let t=this.config.car_model??"3",e=$t(t);return c`
       <div class="editor">
         <label>
           Car Name (entity prefix) *
@@ -1300,7 +1744,7 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
         <label>
           Model
           <select name="car_model" .value=${t} @change=${this._modelChanged}>
-            ${M.map(s=>l`
+            ${M.map(s=>c`
               <option value="${s.id}" ?selected=${s.id===t}>${s.name}</option>
             `)}
           </select>
@@ -1308,7 +1752,7 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
         <label>
           Variant
           <select name="car_variant" .value=${this.config.car_variant??""} @change=${this._valueChanged}>
-            ${e.map(s=>l`
+            ${e.map(s=>c`
               <option value="${s.id}" ?selected=${s.id===this.config.car_variant}>${s.label}</option>
             `)}
           </select>
@@ -1332,7 +1776,7 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
           />
         </label>
       </div>
-    `}static get styles(){return x`
+    `}static get styles(){return k`
       .editor {
         display: flex;
         flex-direction: column;
@@ -1354,17 +1798,17 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
         color: var(--primary-text-color, #000);
         font-size: 1em;
       }
-    `}};customElements.define("tesla-card-editor",kt);var T=class extends v{static get properties(){return{hass:{type:Object},config:{type:Object},carColour:{type:Object}}}_eid(t){return rt(t,this.config.car_name)}_state(t){return this.hass?.states[this._eid(t)]}_val(t){return this._state(t)?.state}_attr(t,e){return this._state(t)?.attributes?.[e]}_nattr(t,e){let s=this._attr(t,e);return s!=null?Number(s):null}_imgUrl(t){let{image_path:e,car_model:s,car_variant:i,car_color:n}=this.config;return`${e}/${s}/${i}/${n}/${t}`}_bgUrl(t){let{image_path:e,car_model:s,car_variant:i}=this.config;return`${e}/${s}/${i}/neutral/${t}`}_maskUrl(t){let e=t.replace(/\.(png|jpg)$/i,"-mask.png"),{image_path:s,car_model:i,car_variant:n}=this.config;return`${s}/${i}/${n}/neutral/${e}`}_sourceUrl(t){let e=ot(this.config.car_model,this.config.car_variant);if(!e)return null;let{image_path:s,car_model:i,car_variant:n}=this.config;return`${s}/${i}/${n}/${e}/${t}`}get _hasOverlay(){let t=this.carColour;return!!t&&(t.s>0||!!(t.blend&&t.bg)||!!t.filter)}_overlayStyle(t){let e=this.carColour;if(!e)return"";let s=this._maskUrl(t),i=`-webkit-mask-image:url(${s});mask-image:url(${s});`,n=this._sourceUrl(t);return n&&e.filter?`background-image:url(${n});filter:${e.filter};${i}`:e.s>0?`background:hsl(${e.h},${e.s}%,50%);mix-blend-mode:color;${i}`:e.blend&&e.bg?`background:${e.bg};mix-blend-mode:${e.blend};${i}`:""}async _svc(t,e,s,i={}){try{await this.hass.callService(t,e,{entity_id:this._eid(s),...i})}catch(n){console.error("[tesla-card] service error",t,e,n)}}_close(){this.dispatchEvent(new CustomEvent("close-menu",{bubbles:!0,composed:!0}))}};var $t=class extends T{static get properties(){return{...super.properties,_pendingLimit:{state:!0},_pendingAmps:{state:!0}}}static get styles(){return[S,Qt]}constructor(){super(),this._pendingLimit=null,this._pendingAmps=null}_pct(t,e,s){return Math.round((t-e)/(s-e)*100)}_onLimitInput(t){t.target.style.setProperty("--pct",`${this._pct(+t.target.value,+t.target.min,+t.target.max)}%`),this._pendingLimit=+t.target.value}_onLimitChange(t){this._pendingLimit=null,this._svc("number","set_value",r.CHARGE_LIMIT_NUMBER,{value:+t.target.value})}_onAmpsInput(t){t.target.style.setProperty("--pct",`${this._pct(+t.target.value,+t.target.min,+t.target.max)}%`),this._pendingAmps=+t.target.value}_onAmpsChange(t){this._pendingAmps=null,this._svc("number","set_value",r.CHARGING_AMPS_NUMBER,{value:+t.target.value})}_adjustAmps(t){let e=this._nattr(r.CHARGING_AMPS_NUMBER,"step")??1,s=this._nattr(r.CHARGING_AMPS_NUMBER,"min")??5,i=this._nattr(r.CHARGING_AMPS_NUMBER,"max")??32,n=this._pendingAmps??Number(this._val(r.CHARGING_AMPS_NUMBER)??16);this._pendingAmps=Math.max(s,Math.min(i,n+t*e)),clearTimeout(this._ampsTimer),this._ampsTimer=setTimeout(()=>{this._svc("number","set_value",r.CHARGING_AMPS_NUMBER,{value:this._pendingAmps}),this._pendingAmps=null},800)}render(){if(!this.config||!this.hass)return l``;let t=this._val(r.BATTERY_RANGE),e=this._attr(r.BATTERY_RANGE,"unit_of_measurement")??"km",s=t!=null?`${Math.round(Number(t))} ${e}`:null,i=this._val(r.CHARGER_DOOR)==="open"||this._val(r.PLUGGED_IN)==="on",n=this._pendingLimit??Number(this._val(r.CHARGE_LIMIT_NUMBER)??80),a=this._nattr(r.CHARGE_LIMIT_NUMBER,"min")??50,u=this._nattr(r.CHARGE_LIMIT_NUMBER,"max")??100,p=this._nattr(r.CHARGE_LIMIT_NUMBER,"step")??1,g=this._pct(n,a,u),m=this._pendingAmps??Number(this._val(r.CHARGING_AMPS_NUMBER)??16),d=this._nattr(r.CHARGING_AMPS_NUMBER,"min")??5,f=this._nattr(r.CHARGING_AMPS_NUMBER,"max")??32,b=this._attr(r.ENERGY_ADDED,"added_range");return l`
-      <div class="charger-menu">
+    `}};customElements.define("tesla-card-editor",At);var j=class j extends v{static get properties(){return{hass:{type:Object},config:{type:Object},customColour:{type:Object},layout:{type:String}}}_eid(t){return ot(t,this.config.car_name)}_state(t){return this.hass?.states[this._eid(t)]}_val(t){return this._state(t)?.state}_attr(t,e){return this._state(t)?.attributes?.[e]}_nattr(t,e){let s=this._attr(t,e);return s!=null?Number(s):null}_imgUrl(t){let{image_path:e,car_model:s,car_variant:i,car_color:n}=this.config;return`${e}/${s}/${i}/${n}/${t}?v=${j._imgVer}`}_btnUrl(t){return`${this.config.image_path}/buttons/${t}?v=${j._imgVer}`}_maskUrl(t){let{image_path:e,car_model:s,car_variant:i}=this.config,n=t.replace(".png","-mask.png");return`${e}/${s}/${i}/neutral/${n}?v=${j._imgVer}`}get _hasCustomOverlay(){return!!this.customColour&&this.customColour.s>0}_customOverlayStyleFor(t){let e=this.customColour;if(!e||e.s===0)return"";let s=this._maskUrl(t);return`position:absolute;inset:0;pointer-events:none;background:hsl(${e.h},${e.s}%,50%);mix-blend-mode:color;-webkit-mask-image:url(${s});mask-image:url(${s});-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;`}async _svc(t,e,s,i={}){try{await this.hass.callService(t,e,{entity_id:this._eid(s),...i})}catch(n){console.error("[tesla-card] service error",t,e,n)}}_close(){this.dispatchEvent(new CustomEvent("close-menu",{bubbles:!0,composed:!0}))}};st(j,"_imgVer",Date.now());var T=j;var Ct=class extends T{static get properties(){return{...super.properties,_pendingLimit:{state:!0},_pendingAmps:{state:!0}}}static get styles(){return[S,ae]}constructor(){super(),this._pendingLimit=null,this._pendingAmps=null}_pct(t,e,s){return Math.round((t-e)/(s-e)*100)}_onLimitInput(t){t.target.style.setProperty("--pct",`${this._pct(+t.target.value,+t.target.min,+t.target.max)}%`),this._pendingLimit=+t.target.value}_onLimitChange(t){this._pendingLimit=null,this._svc("number","set_value",r.CHARGE_LIMIT_NUMBER,{value:+t.target.value})}_onAmpsInput(t){t.target.style.setProperty("--pct",`${this._pct(+t.target.value,+t.target.min,+t.target.max)}%`),this._pendingAmps=+t.target.value}_onAmpsChange(t){this._pendingAmps=null,this._svc("number","set_value",r.CHARGING_AMPS_NUMBER,{value:+t.target.value})}_adjustAmps(t){let e=this._nattr(r.CHARGING_AMPS_NUMBER,"step")??1,s=this._nattr(r.CHARGING_AMPS_NUMBER,"min")??5,i=this._nattr(r.CHARGING_AMPS_NUMBER,"max")??32,n=this._pendingAmps??Number(this._val(r.CHARGING_AMPS_NUMBER)??16);this._pendingAmps=Math.max(s,Math.min(i,n+t*e)),clearTimeout(this._ampsTimer),this._ampsTimer=setTimeout(()=>{this._svc("number","set_value",r.CHARGING_AMPS_NUMBER,{value:this._pendingAmps}),this._pendingAmps=null},800)}render(){if(!this.config||!this.hass)return c``;let t=this._val(r.BATTERY_RANGE),e=this._attr(r.BATTERY_RANGE,"unit_of_measurement")??"km",s=t!=null?`${Math.round(Number(t))} ${e}`:null,i=this._val(r.CHARGER_DOOR)==="open"||this._val(r.PLUGGED_IN)==="on",n=this._pendingLimit??Number(this._val(r.CHARGE_LIMIT_NUMBER)??80),o=this._nattr(r.CHARGE_LIMIT_NUMBER,"min")??50,u=this._nattr(r.CHARGE_LIMIT_NUMBER,"max")??100,d=this._nattr(r.CHARGE_LIMIT_NUMBER,"step")??1,g=this._pct(n,o,u),m=this._pendingAmps??Number(this._val(r.CHARGING_AMPS_NUMBER)??16),h=this._nattr(r.CHARGING_AMPS_NUMBER,"min")??5,b=this._nattr(r.CHARGING_AMPS_NUMBER,"max")??32,_=this._attr(r.ENERGY_ADDED,"added_range");return c`
+      <div class="charger-menu${this.layout==="landscape"?" landscape":""}">
 
         <!-- Header: "Charging" + range subtitle -->
         <div class="panel-header">
           <button class="panel-back" @click=${this._close}>
-            <span class="icon">${c(h["chevron-left"])}</span>
+            <span class="icon">${p(l["chevron-left"])}</span>
           </button>
           <div class="panel-title-block">
             <span class="panel-title">Charging</span>
-            ${s?l`<span class="panel-subtitle">${s}</span>`:""}
+            ${s?c`<span class="panel-subtitle">${s}</span>`:""}
           </div>
         </div>
 
@@ -1372,28 +1816,28 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
         <div class="chg-card">
           <div class="chg-limit-header">
             <span class="chg-limit-title">Charge limit: ${n}%</span>
-            ${b?l`
-              <p class="chg-limit-sub">${b} km added during last charging session</p>`:""}
+            ${_?c`
+              <p class="chg-limit-sub">${_} km added during last charging session</p>`:""}
           </div>
 
           <!-- Green pill slider for charge limit -->
           <input type="range" class="chg-slider" style="--pct:${g}%"
-            min=${a} max=${u} step=${p}
+            min=${o} max=${u} step=${d}
             .value=${String(n)}
             @input=${this._onLimitInput} @change=${this._onLimitChange}/>
 
           <!-- Amps stepper row -->
           <div class="chg-amps-row">
             <button class="chg-amps-btn"
-              ?disabled=${m<=d}
+              ?disabled=${m<=h}
               @click=${()=>this._adjustAmps(-1)}>
-              <span class="icon">${c(h["chevron-left"])}</span>
+              <span class="icon">${p(l["chevron-left"])}</span>
             </button>
             <span class="chg-amps-value">${m} A</span>
             <button class="chg-amps-btn"
-              ?disabled=${m>=f}
+              ?disabled=${m>=b}
               @click=${()=>this._adjustAmps(1)}>
-              <span class="icon">${c(h["chevron-right"])}</span>
+              <span class="icon">${p(l["chevron-right"])}</span>
             </button>
           </div>
         </div>
@@ -1405,49 +1849,50 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
         </button>
 
       </div>
-    `}};customElements.define("tesla-menu-charger",$t);var wt=class extends T{static get properties(){return{...super.properties,_pendingTemp:{state:!0},_climExpanded:{state:!0}}}static get styles(){return[S,te]}constructor(){super(),this._pendingTemp=null,this._climExpanded=!1}_adjustTemp(t){let e=Number(this._attr(r.CLIMATE,"target_temp_step")??.5),s=Number(this._attr(r.CLIMATE,"min_temp")??15),i=Number(this._attr(r.CLIMATE,"max_temp")??28),n=this._pendingTemp??(this._attr(r.CLIMATE,"temperature")!=null?Number(this._attr(r.CLIMATE,"temperature")):22);this._pendingTemp=Math.max(s,Math.min(i,Math.round((n+t*e)/e)*e)),clearTimeout(this._tempTimer),this._tempTimer=setTimeout(()=>{this._svc("climate","set_temperature",r.CLIMATE,{temperature:this._pendingTemp}),this._pendingTemp=null},800)}_seatHeatSvg(t){let e=t==="High"?3:t==="Medium"?2:t==="Low"?1:0,s="#e82127",i="rgba(255,255,255,0.25)",n=(a,u)=>`<path d="M${a} 5c-2 2.5 2 5 0 7c-2 2.5 2 5 0 7" stroke="${u?s:i}" fill="none"/>`;return`<svg viewBox="0 0 24 24" stroke-width="2.8" stroke-linecap="round">${n(6,e>=1)}${n(12,e>=2)}${n(18,e>=3)}</svg>`}_close(){this._climExpanded=!1,super._close()}render(){if(!this.config||!this.hass)return l``;let t=this._val(r.CLIMATE),e=t!=null&&t!=="off"&&t!=="unavailable",s=this._attr(r.CLIMATE,"temperature"),i=s!=null?Number(s):null,n=this._pendingTemp??i,a=this._attr(r.CLIMATE,"temperature_unit")??"\xB0C",u=n!=null?n.toFixed(1):"\u2014",p=this._val(r.DEFROST_SWITCH)==="on",g=this._val(r.HEATED_SEAT_LEFT),m=this._val(r.HEATED_SEAT_RIGHT),d=this._val(r.HEATED_SEAT_REAR_LEFT),f=this._val(r.HEATED_SEAT_REAR_CENTER),b=this._val(r.HEATED_SEAT_REAR_RIGHT),k=this._val(r.TEMPERATURE_INSIDE),at=this._attr(r.TEMPERATURE_INSIDE,"unit_of_measurement")??"\xB0C",$=k!=null?`${Math.round(Number(k))}${at}`:null,H=this._val(r.TEMPERATURE_OUTSIDE),R=this._attr(r.TEMPERATURE_OUTSIDE,"unit_of_measurement")??"\xB0C",U=H!=null?`${Math.round(Number(H))}${R}`:null,j=this._val(r.WINDOWS_COVER)==="open",Z=this._val(r.CAMP_MODE)==="on",Q=this._val(r.DOG_MODE)==="on",B=this._val(r.CABIN_OVERHEAT)??"Off";return l`
-      <div class="climate-menu">
-        <div class="panel-header">
-          <button class="panel-back" @click=${this._close}>
-            <span class="icon">${c(h["chevron-left"])}</span>
-          </button>
-          <span class="panel-title">Climate</span>
-        </div>
+    `}};customElements.define("tesla-menu-charger",Ct);var Et=class extends T{static get properties(){return{...super.properties,_pendingTemp:{state:!0},_climExpanded:{state:!0}}}static get styles(){return[S,re]}constructor(){super(),this._pendingTemp=null,this._climExpanded=!1}_adjustTemp(t){let e=Number(this._attr(r.CLIMATE,"target_temp_step")??.5),s=Number(this._attr(r.CLIMATE,"min_temp")??15),i=Number(this._attr(r.CLIMATE,"max_temp")??28),n=this._pendingTemp??(this._attr(r.CLIMATE,"temperature")!=null?Number(this._attr(r.CLIMATE,"temperature")):22);this._pendingTemp=Math.max(s,Math.min(i,Math.round((n+t*e)/e)*e)),clearTimeout(this._tempTimer),this._tempTimer=setTimeout(()=>{this._svc("climate","set_temperature",r.CLIMATE,{temperature:this._pendingTemp}),this._pendingTemp=null},800)}_seatHeatFile(t){if(!t||t==="Off")return"Tesla_Heated_Seat_Off.svg";let e=parseInt(t);return!isNaN(e)&&e>=1&&e<=3?`Tesla_Heated_Seat_${e}.svg`:t==="Low"?"Tesla_Heated_Seat_1.svg":t==="Medium"?"Tesla_Heated_Seat_2.svg":t==="High"?"Tesla_Heated_Seat_3.svg":"Tesla_Heated_Seat_Off.svg"}_close(){this._climExpanded=!1,super._close()}render(){if(!this.config||!this.hass)return c``;let t=this._val(r.CLIMATE),e=t!=null&&t!=="off"&&t!=="unavailable",s=this._attr(r.CLIMATE,"temperature"),i=s!=null?Number(s):null,n=this._pendingTemp??i,o=this._attr(r.CLIMATE,"temperature_unit")??"\xB0C",u=n!=null?n.toFixed(1):"\u2014",d=this._val(r.DEFROST_SWITCH)==="on",g=this._val(r.HEATED_SEAT_LEFT),m=this._val(r.HEATED_SEAT_RIGHT),h=this._val(r.HEATED_SEAT_REAR_LEFT),b=this._val(r.HEATED_SEAT_REAR_CENTER),_=this._val(r.HEATED_SEAT_REAR_RIGHT),y=this._val(r.TEMPERATURE_INSIDE),ct=this._attr(r.TEMPERATURE_INSIDE,"unit_of_measurement")??"\xB0C",w=y!=null?`${Math.round(Number(y))}${ct}`:null,N=this._val(r.TEMPERATURE_OUTSIDE),I=this._attr(r.TEMPERATURE_OUTSIDE,"unit_of_measurement")??"\xB0C",H=N!=null?`${Math.round(Number(N))}${I}`:null,U=this._val(r.WINDOWS_COVER)==="open",tt=this._val(r.CAMP_MODE)==="on",et=this._val(r.DOG_MODE)==="on",B=this._val(r.CABIN_OVERHEAT)??"Off";return c`
+      <div class="climate-menu${this.layout==="landscape"?" landscape":""}">
 
-        <!-- Car area: seat heat tap zones overlaid on interior image -->
-        <div class="clim-car-area">
-          <img class="clim-car-bg"
-            src="${this._bgUrl("climate-bg.png")}"
-            alt="Car interior view" />
-          ${this._hasOverlay?l`
-            <div class="car-colour-overlay"
-              style="${this._overlayStyle("climate-bg.png")}"></div>`:""}
-          <!-- Front seats -->
-          <button class="clim-seat-zone clim-seat-fl"
-            @click=${()=>this._svc("select","select_next",r.HEATED_SEAT_LEFT,{cycle:!0})}>
-            <span class="icon">${c(this._seatHeatSvg(g??"Off"))}</span>
-            <span>${g??"Off"}</span>
-          </button>
-          <button class="clim-seat-zone clim-seat-fr"
-            @click=${()=>this._svc("select","select_next",r.HEATED_SEAT_RIGHT,{cycle:!0})}>
-            <span class="icon">${c(this._seatHeatSvg(m??"Off"))}</span>
-            <span>${m??"Off"}</span>
-          </button>
-          <!-- Rear seats -->
-          <button class="clim-seat-zone clim-seat-rl"
-            @click=${()=>this._svc("select","select_next",r.HEATED_SEAT_REAR_LEFT,{cycle:!0})}>
-            <span class="icon">${c(this._seatHeatSvg(d??"Off"))}</span>
-            <span>${d??"Off"}</span>
-          </button>
-          <button class="clim-seat-zone clim-seat-rc"
-            @click=${()=>this._svc("select","select_next",r.HEATED_SEAT_REAR_CENTER,{cycle:!0})}>
-            <span class="icon">${c(this._seatHeatSvg(f??"Off"))}</span>
-            <span>${f??"Off"}</span>
-          </button>
-          <button class="clim-seat-zone clim-seat-rr"
-            @click=${()=>this._svc("select","select_next",r.HEATED_SEAT_REAR_RIGHT,{cycle:!0})}>
-            <span class="icon">${c(this._seatHeatSvg(b??"Off"))}</span>
-            <span>${b??"Off"}</span>
+        <!-- Car area: outer clips, inner sizes to image, seats overlay image -->
+        <div class="clim-car-area${this._climExpanded?" clim-car-collapsed":""}">
+          <div class="clim-car-inner">
+            <img class="clim-car-bg"
+              src="${this._imgUrl("climate-bg.png")}"
+              alt="Car interior view" />
+            ${this._hasCustomOverlay?c`
+              <div style="${this._customOverlayStyleFor("climate-bg.png")}"></div>`:""}
+
+            <!-- Front seats -->
+            <button class="clim-seat-zone clim-seat-fl"
+              @click=${()=>this._svc("select","select_next",r.HEATED_SEAT_LEFT,{cycle:!0})}>
+              <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(g??"Off"))}" alt="" />
+              <span class="clim-seat-label">${g??"Off"}</span>
+            </button>
+            <button class="clim-seat-zone clim-seat-fr"
+              @click=${()=>this._svc("select","select_next",r.HEATED_SEAT_RIGHT,{cycle:!0})}>
+              <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(m??"Off"))}" alt="" />
+              <span class="clim-seat-label">${m??"Off"}</span>
+            </button>
+            <!-- Rear seats -->
+            <button class="clim-seat-zone clim-seat-rl"
+              @click=${()=>this._svc("select","select_next",r.HEATED_SEAT_REAR_LEFT,{cycle:!0})}>
+              <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(h??"Off"))}" alt="" />
+              <span class="clim-seat-label">${h??"Off"}</span>
+            </button>
+            <button class="clim-seat-zone clim-seat-rc"
+              @click=${()=>this._svc("select","select_next",r.HEATED_SEAT_REAR_CENTER,{cycle:!0})}>
+              <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(b??"Off"))}" alt="" />
+              <span class="clim-seat-label">${b??"Off"}</span>
+            </button>
+            <button class="clim-seat-zone clim-seat-rr"
+              @click=${()=>this._svc("select","select_next",r.HEATED_SEAT_REAR_RIGHT,{cycle:!0})}>
+              <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(_??"Off"))}" alt="" />
+              <span class="clim-seat-label">${_??"Off"}</span>
+            </button>
+          </div>
+
+          <!-- Floating back button (positioned in outer container) -->
+          <button class="clim-back-btn" @click=${this._close}>
+            <span class="icon">${p(l["chevron-left"])}</span>
           </button>
         </div>
 
@@ -1461,42 +1906,42 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
           </button>
 
           <!-- Interior · Exterior temps -->
-          ${$||U?l`
+          ${w||H?c`
             <div class="clim-temp-info">
-              ${$?l`Interior ${$}`:""}
-              ${$&&U?" \xB7 ":""}
-              ${U?l`Exterior ${U}`:""}
+              ${w?c`Interior ${w}`:""}
+              ${w&&H?" \xB7 ":""}
+              ${H?c`Exterior ${H}`:""}
             </div>`:""}
 
           <!-- Main control row: [Power/Off] [← 20.0° →] [Vent] -->
           <div class="clim-main-row">
             <button class="clim-icon-btn${e?" clim-active":""}"
               @click=${()=>this._svc("climate",e?"turn_off":"turn_on",r.CLIMATE)}>
-              <span class="icon">${c(h["climate-fan"])}</span>
+              <span class="icon">${p(l.power)}</span>
               <span>${e?"On":"Off"}</span>
             </button>
 
             <div class="clim-temp-control">
               <button class="clim-arrow-btn" @click=${()=>this._adjustTemp(-1)}>
-                <span class="icon">${c(h["chevron-left"])}</span>
+                <span class="icon">${p(l["chevron-left"])}</span>
               </button>
               <span class="clim-temp-value">${u}°</span>
               <button class="clim-arrow-btn" @click=${()=>this._adjustTemp(1)}>
-                <span class="icon">${c(h["chevron-right"])}</span>
+                <span class="icon">${p(l["chevron-right"])}</span>
               </button>
             </div>
 
-            <button class="clim-icon-btn${j?" clim-active":""}"
-              @click=${()=>this._svc("cover",j?"close_cover":"open_cover",r.WINDOWS_COVER)}>
-              <span class="icon">${c(h["windows-vent"])}</span>
-              <span>${j?"Close":"Vent"}</span>
+            <button class="clim-icon-btn${U?" clim-active":""}"
+              @click=${()=>this._svc("cover",U?"close_cover":"open_cover",r.WINDOWS_COVER)}>
+              <span class="icon">${p(U?l["vent-close"]:l["vent-open"])}</span>
+              <span>${U?"Close":"Vent"}</span>
             </button>
           </div>
 
           <!-- Always-visible: Defrost Car -->
-          <button class="clim-full-btn${p?" active":""}"
-            @click=${()=>this._svc("switch",p?"turn_off":"turn_on",r.DEFROST_SWITCH)}>
-            <span class="icon">${c(h.defrost)}</span>
+          <button class="clim-full-btn${d?" active":""}"
+            @click=${()=>this._svc("switch",d?"turn_off":"turn_on",r.DEFROST_SWITCH)}>
+            <span class="icon">${p(l.defrost)}</span>
             <span>Defrost Car</span>
           </button>
 
@@ -1505,14 +1950,14 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
 
             <!-- Camp Mode + Dog Mode in one grouped container -->
             <div class="clim-list-group">
-              <button class="clim-list-item${Z?" hot":""}"
-                @click=${()=>this._svc("switch",Z?"turn_off":"turn_on",r.CAMP_MODE)}>
-                <span class="icon clim-list-icon">${c(h.tent)}</span>
+              <button class="clim-list-item${tt?" hot":""}"
+                @click=${()=>this._svc("switch",tt?"turn_off":"turn_on",r.CAMP_MODE)}>
+                <span class="icon clim-list-icon">${p(l.tent)}</span>
                 <span class="clim-list-label">Camp Mode</span>
               </button>
-              <button class="clim-list-item${Q?" hot":""}"
-                @click=${()=>this._svc("switch",Q?"turn_off":"turn_on",r.DOG_MODE)}>
-                <span class="icon clim-list-icon">${c(h.dog)}</span>
+              <button class="clim-list-item${et?" hot":""}"
+                @click=${()=>this._svc("switch",et?"turn_off":"turn_on",r.DOG_MODE)}>
+                <span class="icon clim-list-icon">${p(l.dog)}</span>
                 <span class="clim-list-label">Dog Mode</span>
               </button>
             </div>
@@ -1523,10 +1968,10 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
             <!-- Cabin Overheat Protection -->
             <div class="clim-section-title">Cabin Overheat Protection</div>
             <div class="clim-list-group clim-segment-group clim-list-group--last">
-              ${["Off","No A/C","On"].map(O=>l`
-                <button class="clim-segment-btn${B===O?" selected":""}"
-                  @click=${()=>this._svc("select","select_option",r.CABIN_OVERHEAT,{option:O})}>
-                  ${O}
+              ${["Off","No A/C","On"].map(P=>c`
+                <button class="clim-segment-btn${B===P?" selected":""}"
+                  @click=${()=>this._svc("select","select_option",r.CABIN_OVERHEAT,{option:P})}>
+                  ${P}
                 </button>`)}
             </div>
 
@@ -1534,21 +1979,20 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
 
         </div><!-- /clim-sheet -->
       </div>
-    `}};customElements.define("tesla-menu-climate",wt);var yt=class extends T{static get styles(){return[S,ee]}render(){if(!this.config||!this.hass)return l``;let e=this._val(r.DOOR_LOCK)==="locked",s=this._val(r.FRUNK_COVER)==="open"||this._val(r.FRUNK)==="on",i=this._val(r.TRUNK)==="on",n=this._val(r.CHARGER_DOOR)==="open"||this._val(r.PLUGGED_IN)==="on",a=this._val(r.WINDOWS_COVER)==="open";return l`
-      <div class="controls-menu">
+    `}};customElements.define("tesla-menu-climate",Et);var St=class extends T{static get styles(){return[S,oe]}render(){if(!this.config||!this.hass)return c``;let e=this._val(r.DOOR_LOCK)==="locked",s=this._val(r.FRUNK_COVER)==="open"||this._val(r.FRUNK)==="on",i=this._val(r.TRUNK)==="on",n=this._val(r.CHARGER_DOOR)==="open"||this._val(r.PLUGGED_IN)==="on",o=this._val(r.WINDOWS_COVER)==="open";return c`
+      <div class="controls-menu${this.layout==="landscape"?" landscape":""}">
         <div class="panel-header">
           <button class="panel-back" @click=${this._close}>
-            <span class="icon">${c(h["chevron-left"])}</span>
+            <span class="icon">${p(l["chevron-left"])}</span>
           </button>
           <span class="panel-title">Controls</span>
         </div>
         <div class="ctrl-car-area">
           <img class="ctrl-car-bg"
-            src="${this._bgUrl("controls-bg.png")}"
+            src="${this._imgUrl("controls-bg.png")}"
             alt="Car top view" />
-          ${this._hasOverlay?l`
-            <div class="car-colour-overlay"
-              style="${this._overlayStyle("controls-bg.png")}"></div>`:""}
+          ${this._hasCustomOverlay?c`
+            <div style="${this._customOverlayStyleFor("controls-bg.png")}"></div>`:""}
           <!-- Frunk — text only, top centre -->
           <button class="ctrl-zone ctrl-frunk"
             @click=${()=>this._svc("cover","toggle_cover",r.FRUNK_COVER)}>
@@ -1557,7 +2001,7 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
           <!-- Lock — icon only, car centre -->
           <button class="ctrl-zone ctrl-lock"
             @click=${()=>this._svc("lock",e?"unlock":"lock",r.DOOR_LOCK)}>
-            <span class="icon">${c(e?h.lock:h.unlock)}</span>
+            <span class="icon">${p(e?l.lock:l.unlock)}</span>
           </button>
           <!-- Trunk — text only, bottom centre -->
           <button class="ctrl-zone ctrl-trunk"
@@ -1567,33 +2011,33 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
           <!-- Charge port — icon only, bottom left -->
           <button class="ctrl-zone ctrl-port ${n?"port-open":""}"
             @click=${()=>this._svc("button","press",n?r.CHARGE_PORT_CLOSE:r.CHARGE_PORT_OPEN)}>
-            <span class="icon">${c(h["charge-bolt"])}</span>
+            <span class="icon">${p(l["charge-bolt"])}</span>
           </button>
         </div>
         <div class="ctrl-actions">
           <button class="ctrl-action-btn"
             @click=${()=>this._svc("button","press",r.FLASH_LIGHTS)}>
-            <span class="icon">${c(h["flash-lights"])}</span>
+            <span class="icon">${p(l["flash-lights"])}</span>
             <span>Flash</span>
           </button>
           <button class="ctrl-action-btn"
             @click=${()=>this._svc("button","press",r.HORN)}>
-            <span class="icon">${c(h.horn)}</span>
+            <span class="icon">${p(l.horn)}</span>
             <span>Horn</span>
           </button>
           <button class="ctrl-action-btn"
             @click=${()=>this._svc("button","press",r.REMOTE_START)}>
-            <span class="icon">${c(h["remote-start"])}</span>
+            <span class="icon">${p(l["remote-start"])}</span>
             <span>Start</span>
           </button>
           <button class="ctrl-action-btn"
-            @click=${()=>this._svc("cover",a?"close_cover":"open_cover",r.WINDOWS_COVER)}>
-            <span class="icon${a?" icon-on":""}">${c(h["windows-vent"])}</span>
-            <span>${a?"Close":"Vent"}</span>
+            @click=${()=>this._svc("cover",o?"close_cover":"open_cover",r.WINDOWS_COVER)}>
+            <span class="icon">${p(o?l["vent-close"]:l["vent-open"])}</span>
+            <span>${o?"Close":"Vent"}</span>
           </button>
         </div>
       </div>
-    `}};customElements.define("tesla-menu-controls",yt);var ie=[{name:"Pearl White",h:0,s:0,swatch:"#f2f2f2",blend:"soft-light",bg:"#ffffff",filter:"saturate(0) brightness(1.5) contrast(0.9)"},{name:"Midnight Silver",h:0,s:0,swatch:"#71757a"},{name:"Solid Black",h:0,s:0,swatch:"#141414",blend:"soft-light",bg:"#000000",filter:"saturate(0) brightness(0.25) contrast(1.2)"},{name:"Ultra Red",h:355,s:85,swatch:"#c41e28",filter:"hue-rotate(355deg) saturate(1)"},{name:"Quicksilver",h:40,s:8,swatch:"#9e9a91",filter:`hue-rotate(40deg) saturate(${.09411764705882353})`},{name:"Deep Blue Metallic",h:220,s:75,swatch:"#223873",filter:`hue-rotate(220deg) saturate(${.8823529411764706})`}];var Et=class extends v{static get properties(){return{colour:{type:Object},showBack:{type:Boolean},_hue:{state:!0},_sat:{state:!0}}}static get styles(){return x`
+    `}};customElements.define("tesla-menu-controls",St);var Mt=class extends v{static get properties(){return{selected:{type:String},available:{type:Array},showBack:{type:Boolean},customH:{type:Number},customS:{type:Number},slideFrom:{type:String,reflect:!0,attribute:"slide-from"},_showCustom:{state:!0},_hue:{state:!0},_sat:{state:!0}}}static get styles(){return k`
       :host {
         display: block;
         font-family: system-ui, -apple-system, sans-serif;
@@ -1614,12 +2058,30 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
         background: #1c1c1e;
         border-radius: 16px 16px 0 0;
         padding: 0 0 20px;
-        animation: slideUp 0.2s ease-out;
+        animation: slideUp 0.25s ease-out;
       }
 
       @keyframes slideUp {
-        from { transform: translateY(100%); }
-        to   { transform: translateY(0); }
+        from { transform: translateY(100%); opacity: 0; }
+        to   { transform: translateY(0); opacity: 1; }
+      }
+
+      @keyframes slideFromRight {
+        from { transform: translateX(30%); opacity: 0; }
+        to   { transform: translateX(0); opacity: 1; }
+      }
+
+      @keyframes slideFromLeft {
+        from { transform: translateX(-30%); opacity: 0; }
+        to   { transform: translateX(0); opacity: 1; }
+      }
+
+      :host([slide-from="right"]) .picker-panel {
+        animation: slideFromRight 0.25s ease-out;
+      }
+
+      :host([slide-from="left"]) .picker-panel {
+        animation: slideFromLeft 0.25s ease-out;
       }
 
       .picker-header {
@@ -1691,7 +2153,7 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
         display: flex;
         justify-content: center;
         gap: 12px;
-        padding: 20px 16px 8px;
+        padding: 24px 16px 16px;
         flex-wrap: wrap;
       }
 
@@ -1712,6 +2174,7 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
         height: 40px;
         border-radius: 50%;
         border: 2px solid transparent;
+        position: relative;
         transition: border-color 0.15s ease, transform 0.15s ease;
         box-shadow: 0 2px 8px rgba(0,0,0,0.4);
       }
@@ -1728,6 +2191,43 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+      }
+
+      /* ── Rainbow gradient for custom swatch ─────── */
+
+      .swatch-rainbow {
+        background: conic-gradient(
+          hsl(0,85%,55%), hsl(60,85%,55%), hsl(120,85%,55%),
+          hsl(180,85%,55%), hsl(240,85%,55%), hsl(300,85%,55%), hsl(360,85%,55%)
+        );
+      }
+
+      /* ── Unavailable state ──────────────────────────── */
+
+      .swatch-btn.unavailable {
+        pointer-events: none;
+        cursor: default;
+      }
+
+      .swatch-btn.unavailable .swatch-circle {
+        opacity: 0.25;
+      }
+
+      .swatch-btn.unavailable .swatch-circle::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: -3px;
+        right: -3px;
+        height: 2px;
+        background: rgba(255,255,255,0.6);
+        transform: rotate(-45deg);
+        border-radius: 1px;
+      }
+
+      .swatch-btn.unavailable .swatch-name {
+        text-decoration: line-through;
+        opacity: 0.25;
       }
 
       /* ── Custom sliders ───────────────────────────── */
@@ -1819,43 +2319,50 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
       }
 
       .picker-reset:hover { color: rgba(255,255,255,0.7); }
-    `}constructor(){super(),this.colour=null,this.showBack=!1,this._hue=0,this._sat=0}willUpdate(t){t.has("colour")&&this.colour&&(this._hue=this.colour.h,this._sat=this.colour.s)}_selectSwatch(t){let e={h:t.h,s:t.s,name:t.name};t.blend&&(e.blend=t.blend),t.bg&&(e.bg=t.bg),t.filter&&(e.filter=t.filter),this.dispatchEvent(new CustomEvent("colour-changed",{detail:e,bubbles:!0,composed:!0})),this._close()}_onHueInput(t){this._hue=Number(t.target.value),this._fireSliderChange()}_onSatInput(t){this._sat=Number(t.target.value),this._fireSliderChange()}_fireSliderChange(){let t=this._sat>0?`hue-rotate(${this._hue}deg) saturate(${this._sat/85})`:"saturate(0) brightness(0.8)";this.dispatchEvent(new CustomEvent("colour-changed",{detail:{h:this._hue,s:this._sat,name:"Custom",filter:t},bubbles:!0,composed:!0}))}_reset(){this.dispatchEvent(new CustomEvent("colour-changed",{detail:null,bubbles:!0,composed:!0})),this._close()}_back(){this.dispatchEvent(new CustomEvent("picker-back",{bubbles:!0,composed:!0}))}_close(){this.dispatchEvent(new CustomEvent("picker-close",{bubbles:!0,composed:!0}))}_onOverlayClick(t){t.target===t.currentTarget&&this._close()}render(){let t=this.colour?.name??null;return l`
+    `}constructor(){super(),this.selected="neutral",this.available=["neutral"],this.showBack=!1,this.customH=0,this.customS=80,this._showCustom=!1,this._hue=0,this._sat=80}willUpdate(t){(t.has("selected")||t.has("customH")||t.has("customS"))&&this.selected==="custom"&&(this._showCustom=!0,this._hue=this.customH??0,this._sat=this.customS??80)}_selectColour(t){this._showCustom=!1,this.dispatchEvent(new CustomEvent("colour-changed",{detail:{dir:t.dir,name:t.name},bubbles:!0,composed:!0})),this._close()}_openCustom(){this._showCustom=!0}_onHueInput(t){this._hue=Number(t.target.value),this._fireCustomChange()}_onSatInput(t){this._sat=Number(t.target.value),this._fireCustomChange()}_fireCustomChange(){this.dispatchEvent(new CustomEvent("colour-changed",{detail:{dir:"custom",name:"Custom",h:this._hue,s:this._sat},bubbles:!0,composed:!0}))}_reset(){this._showCustom=!1,this.dispatchEvent(new CustomEvent("colour-changed",{detail:null,bubbles:!0,composed:!0})),this._close()}_back(){this.dispatchEvent(new CustomEvent("picker-back",{bubbles:!0,composed:!0}))}_close(){this.dispatchEvent(new CustomEvent("picker-close",{bubbles:!0,composed:!0}))}_onOverlayClick(t){t.target===t.currentTarget&&this._close()}render(){let t=this.available??["neutral"],e=this.selected==="custom";return c`
       <div class="picker-overlay" @click=${this._onOverlayClick}>
         <div class="picker-panel">
 
           <div class="picker-header">
-            ${this.showBack?l`
+            ${this.showBack?c`
               <button class="picker-back" @click=${this._back}>
-                <span class="icon">${c(h["chevron-left"])}</span>
+                <span class="icon">${p(l["chevron-left"])}</span>
               </button>`:""}
             <span class="picker-title">Colour</span>
             <button class="picker-close" @click=${this._close}>&times;</button>
           </div>
 
           <div class="picker-swatches">
-            ${ie.map(e=>l`
-              <button class="swatch-btn" @click=${()=>this._selectSwatch(e)}>
-                <div class="swatch-circle${t===e.name?" selected":""}"
-                  style="background:${e.swatch}"></div>
-                <span class="swatch-name">${e.name}</span>
-              </button>
-            `)}
+            ${lt.map(s=>{let i=t.includes(s.dir),n=this.selected===s.dir;return c`
+                <button
+                  class="swatch-btn${i?"":" unavailable"}"
+                  @click=${i?()=>this._selectColour(s):null}>
+                  <div class="swatch-circle${n?" selected":""}"
+                    style="background:${s.swatch}"></div>
+                  <span class="swatch-name">${s.name}</span>
+                </button>`})}
+            <button class="swatch-btn" @click=${()=>this._openCustom()}>
+              <div class="swatch-circle swatch-rainbow${e?" selected":""}"></div>
+              <span class="swatch-name">Custom</span>
+            </button>
           </div>
 
-          <div class="picker-custom" style="--picker-hue:${this._hue}">
-            <div class="slider-row">
-              <span class="slider-label">Hue</span>
-              <input type="range" class="hue-slider" min="0" max="360"
-                .value=${String(this._hue)}
-                @input=${this._onHueInput} />
+          ${this._showCustom?c`
+            <div class="picker-custom" style="--picker-hue:${this._hue}">
+              <div class="slider-row">
+                <span class="slider-label">Hue</span>
+                <input type="range" class="hue-slider" min="0" max="360"
+                  .value=${String(this._hue)}
+                  @input=${this._onHueInput} />
+              </div>
+              <div class="slider-row">
+                <span class="slider-label">Saturation</span>
+                <input type="range" class="sat-slider" min="0" max="100"
+                  .value=${String(this._sat)}
+                  @input=${this._onSatInput} />
+              </div>
             </div>
-            <div class="slider-row">
-              <span class="slider-label">Saturation</span>
-              <input type="range" class="sat-slider" min="0" max="100"
-                .value=${String(this._sat)}
-                @input=${this._onSatInput} />
-            </div>
-          </div>
+          `:""}
 
           <button class="picker-reset" @click=${this._reset}>
             Reset to Default
@@ -1863,7 +2370,7 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
 
         </div>
       </div>
-    `}};customElements.define("tesla-colour-picker",Et);var Ct=class extends v{static get properties(){return{model:{type:String},variant:{type:String}}}static get styles(){return x`
+    `}};customElements.define("tesla-colour-picker",Mt);var Tt=class extends v{static get properties(){return{model:{type:String},variant:{type:String},slideFrom:{type:String,reflect:!0,attribute:"slide-from"}}}static get styles(){return k`
       :host {
         display: block;
         font-family: system-ui, -apple-system, sans-serif;
@@ -1884,15 +2391,32 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
         background: #1c1c1e;
         border-radius: 16px 16px 0 0;
         padding: 0 0 20px;
-        animation: slideUp 0.2s ease-out;
-        max-height: 80%;
+        animation: slideUp 0.25s ease-out;
         display: flex;
         flex-direction: column;
       }
 
       @keyframes slideUp {
-        from { transform: translateY(100%); }
-        to   { transform: translateY(0); }
+        from { transform: translateY(100%); opacity: 0; }
+        to   { transform: translateY(0); opacity: 1; }
+      }
+
+      @keyframes slideFromRight {
+        from { transform: translateX(30%); opacity: 0; }
+        to   { transform: translateX(0); opacity: 1; }
+      }
+
+      @keyframes slideFromLeft {
+        from { transform: translateX(-30%); opacity: 0; }
+        to   { transform: translateX(0); opacity: 1; }
+      }
+
+      :host([slide-from="right"]) .picker-panel {
+        animation: slideFromRight 0.25s ease-out;
+      }
+
+      :host([slide-from="left"]) .picker-panel {
+        animation: slideFromLeft 0.25s ease-out;
       }
 
       .picker-header {
@@ -1962,8 +2486,6 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
 
       .model-list {
         padding: 8px 0 0;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
       }
 
       .model-section {
@@ -1989,6 +2511,7 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
       .model-item {
         display: flex;
         align-items: center;
+        gap: 12px;
         width: 100%;
         padding: 14px 16px;
         background: transparent;
@@ -2004,6 +2527,20 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
         transition: background 0.12s ease;
       }
 
+      .model-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        flex-shrink: 0;
+        opacity: 0.45;
+      }
+
+      .model-icon .icon { width: 28px; height: 28px; }
+
+      .model-item.selected .model-icon { opacity: 0.9; }
+
       .model-item:last-child { border-bottom: none; }
       .model-item:hover  { background: rgba(255,255,255,0.04); }
       .model-item:active { background: rgba(255,255,255,0.08); }
@@ -2012,6 +2549,20 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
         color: #ffffff;
         font-weight: 500;
       }
+
+      /* ── Unavailable state ─────────────────── */
+
+      .model-item.unavailable {
+        pointer-events: none;
+        cursor: default;
+        color: rgba(255,255,255,0.2);
+      }
+
+      .model-item.unavailable .model-label {
+        text-decoration: line-through;
+      }
+
+      .model-item.unavailable:hover { background: transparent; }
 
       .model-label { flex: 1; }
 
@@ -2025,28 +2576,39 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
       }
 
       .model-check .icon { width: 20px; height: 20px; }
-    `}_select(t,e){this.dispatchEvent(new CustomEvent("model-changed",{detail:{model:t,variant:e},bubbles:!0,composed:!0}))}_back(){this.dispatchEvent(new CustomEvent("picker-back",{bubbles:!0,composed:!0}))}_close(){this.dispatchEvent(new CustomEvent("picker-close",{bubbles:!0,composed:!0}))}_onOverlayClick(t){t.target===t.currentTarget&&this._close()}render(){return l`
+
+      .model-no-images {
+        font-size: 0.72em;
+        color: rgba(255,255,255,0.2);
+        font-style: italic;
+        margin-left: 8px;
+      }
+    `}_select(t,e){this.dispatchEvent(new CustomEvent("model-changed",{detail:{model:t,variant:e},bubbles:!0,composed:!0}))}_back(){this.dispatchEvent(new CustomEvent("picker-back",{bubbles:!0,composed:!0}))}_close(){this.dispatchEvent(new CustomEvent("picker-close",{bubbles:!0,composed:!0}))}_onOverlayClick(t){t.target===t.currentTarget&&this._close()}render(){return c`
       <div class="picker-overlay" @click=${this._onOverlayClick}>
         <div class="picker-panel">
           <div class="picker-header">
             <button class="picker-back" @click=${this._back}>
-              <span class="icon">${c(h["chevron-left"])}</span>
+              <span class="icon">${p(l["chevron-left"])}</span>
             </button>
             <span class="picker-title">Model</span>
             <button class="picker-close" @click=${this._close}>&times;</button>
           </div>
           <div class="model-list">
-            ${M.map(t=>l`
+            ${M.map(t=>c`
               <div class="model-section">
                 <div class="model-section-title">${t.name}</div>
                 <div class="model-group">
-                  ${t.variants.map(e=>{let s=e.id===this.variant;return l`
-                      <button class="model-item${s?" selected":""}"
-                        @click=${()=>this._select(t.id,e.id)}>
+                  ${t.variants.map(e=>{let s=e.id===this.variant,n=e.colours.length>1||e.colours[0]!=="neutral"||s;return c`
+                      <button class="model-item${s?" selected":""}${n?"":" unavailable"}"
+                        @click=${n?()=>this._select(t.id,e.id):null}>
+                        <span class="model-icon">
+                          <span class="icon">${p(l.car)}</span>
+                        </span>
                         <span class="model-label">${e.label}</span>
-                        ${s?l`
+                        ${n?"":c`<span class="model-no-images">no images</span>`}
+                        ${s?c`
                           <span class="model-check">
-                            <span class="icon">${c(h.check)}</span>
+                            <span class="icon">${p(l.check)}</span>
                           </span>`:""}
                       </button>`})}
                 </div>
@@ -2055,146 +2617,163 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
           </div>
         </div>
       </div>
-    `}};customElements.define("tesla-model-picker",Ct);var ye="base.png",Ee="chargeport-open.png",Ce="frunk-open.png",Ae="tesla-card-colour-",Se="tesla-card-model-",At=class extends v{static get properties(){return{hass:{type:Object},config:{type:Object},_menu:{state:!0},_imageError:{state:!0},_settingsView:{state:!0},_carColour:{state:!0},_modelOverride:{state:!0}}}static get styles(){return[S,se]}constructor(){super(),this._menu=null,this._imageError=!1,this._settingsView=null,this._carColour=null,this._modelOverride=null,this._baseConfig=null,this._toggleCharger=()=>this._toggle("charger"),this._toggleClimate=()=>this._toggle("climate"),this._toggleControls=()=>this._toggle("controls"),this._handleCloseMenu=()=>{this._menu=null},this._handleColourChanged=t=>this._onColourChanged(t),this._handleModelChanged=t=>this._onModelChanged(t),this._handlePickerBack=()=>{this._settingsView="main"},this._handlePickerClose=()=>{this._settingsView=null}}setConfig(t){if(!t.car_name)throw new Error("car_name is required");this._baseConfig={car_model:"3",car_variant:"3.1",car_color:"neutral",image_path:"/local/Tesla",show_speed:!0,...t},this._applyConfig()}_applyConfig(){let t=this._modelOverride;this.config=t?{...this._baseConfig,car_model:t.model,car_variant:t.variant}:this._baseConfig}static getConfigElement(){return document.createElement("tesla-card-editor")}static getStubConfig(){return{car_name:"",car_model:"3",car_variant:"3.1",car_color:"neutral",image_path:"/local/Tesla"}}connectedCallback(){super.connectedCallback(),this._baseConfig&&(this._restoreModel(),this._restoreColour())}_colourLsKey(){return Ae+(this._baseConfig?.car_name??"default")}_restoreColour(){try{let t=localStorage.getItem(this._colourLsKey());t&&(this._carColour=JSON.parse(t))}catch{}}_persistColour(){try{this._carColour?localStorage.setItem(this._colourLsKey(),JSON.stringify(this._carColour)):localStorage.removeItem(this._colourLsKey())}catch{}}_onColourChanged(t){let e=t.detail;if(!e)this._carColour=null;else{let s={h:e.h,s:e.s,name:e.name};e.blend&&(s.blend=e.blend),e.bg&&(s.bg=e.bg),e.filter&&(s.filter=e.filter),this._carColour=s}this._persistColour()}_modelLsKey(){return Se+(this._baseConfig?.car_name??"default")}_restoreModel(){try{let t=localStorage.getItem(this._modelLsKey());t&&(this._modelOverride=JSON.parse(t),this._applyConfig())}catch{}}_persistModel(){try{this._modelOverride?localStorage.setItem(this._modelLsKey(),JSON.stringify(this._modelOverride)):localStorage.removeItem(this._modelLsKey())}catch{}}_onModelChanged(t){let{model:e,variant:s}=t.detail;this._modelOverride={model:e,variant:s},this._applyConfig(),this._persistModel(),this._imageError=!1}_imgUrl(t){let{image_path:e,car_model:s,car_variant:i,car_color:n}=this.config;return`${e}/${s}/${i}/${n}/${t}`}_maskUrl(t){let e=t.replace(/\.(png|jpg)$/i,"-mask.png"),{image_path:s,car_model:i,car_variant:n}=this.config;return`${s}/${i}/${n}/neutral/${e}`}_sourceUrl(t){let e=ot(this.config.car_model,this.config.car_variant);if(!e)return null;let{image_path:s,car_model:i,car_variant:n}=this.config;return`${s}/${i}/${n}/${e}/${t}`}_overlayStyle(t){let e=this._carColour;if(!e)return"";let s=this._maskUrl(t),i=`-webkit-mask-image:url(${s});mask-image:url(${s});`,n=this._sourceUrl(t);return n&&e.filter?`background-image:url(${n});filter:${e.filter};${i}`:e.s>0?`background:hsl(${e.h},${e.s}%,50%);mix-blend-mode:color;${i}`:e.blend&&e.bg?`background:${e.bg};mix-blend-mode:${e.blend};${i}`:""}_eid(t){return rt(t,this.config.car_name)}_state(t){return this.hass?.states[this._eid(t)]}_val(t){return this._state(t)?.state}_attr(t,e){return this._state(t)?.attributes?.[e]}async _svc(t,e,s,i={}){try{await this.hass.callService(t,e,{entity_id:this._eid(s),...i})}catch(n){console.error("[tesla-card] service error",t,e,n)}}_toggle(t){this._menu=this._menu===t?null:t}_openSettings(){this._settingsView="main"}_openModelPicker(){this._settingsView="model"}_openColourPicker(){this._settingsView="colour"}_closeSettings(){this._settingsView=null}_onSettingsOverlayClick(t){t.target===t.currentTarget&&this._closeSettings()}render(){if(!this.config||!this.hass)return l``;let t=this._menu,e=this._carColour,s=!!e&&(e.s>0||!!(e.blend&&e.bg)||!!e.filter),i=this._val(r.BATTERY_LEVEL),n=i!=null?Math.round(Number(i)):null,a=n!=null?Math.max(0,Math.min(100,n)):0,u=a>=50?"high":a>=20?"medium":"low",p=this._val(r.BATTERY_RANGE),g=this._attr(r.BATTERY_RANGE,"unit_of_measurement")??"km",m=p!=null?`${Math.round(Number(p))} ${g}`:null,d=this._val(r.CHARGING)==="on",f=this._val(r.ONLINE)==="on",b=this._state(r.ONLINE),k=this._val(r.FRUNK_COVER)==="open"||this._val(r.FRUNK)==="on",at=this._val(r.CHARGER_DOOR)==="open"||this._val(r.PLUGGED_IN)==="on",$=ye;k?$=Ce:at&&($=Ee);let H=this._val(r.DOOR_LOCK),R=H==="locked",U=this._val(r.PLUGGED_IN)==="on",j=this._val(r.CHARGING_STATE)??"\u2014",Z=this._val(r.CHARGE_RATE),Q=this._attr(r.CHARGE_RATE,"unit_of_measurement")??"kW",B=this._val(r.CLIMATE),O=B!=null&&B!=="off"&&B!=="unavailable",St=this._attr(r.CLIMATE,"temperature"),ne=this._attr(r.CLIMATE,"temperature_unit")??"\xB0C",re=St!=null?Number(St).toFixed(1):"\u2014",Mt=!f&&b?"Offline":this._val(r.PARKING_BRAKE)==="on"?"Parked":(()=>{if(!this.config.show_speed)return null;let w=this._attr(r.LOCATION,"speed");return w!=null&&Number(w)>0?`${Math.round(Number(w))} km/h`:null})(),oe=d?`Charging \xB7 ${Z??"\u2014"} ${Q}`:U?"Plugged in":j,ae=O?`${re}${ne}`:"Off",Tt=H?R?"Locked":"Unlocked":null,tt=this._val(r.LOCATION),Rt=tt?tt.charAt(0).toUpperCase()+tt.slice(1).replace(/_/g," "):null,lt=M.find(w=>w.id===this.config.car_model),Ot=lt?.variants.find(w=>w.id===this.config.car_variant),le=lt&&Ot?`${lt.name} \xB7 ${Ot.label}`:this.config.car_model,ce=e?.name??"Default",he=e?e.s>0?`hsl(${e.h},${e.s}%,50%)`:e.bg??"#71757a":"#71757a";return l`
-      <ha-card>
+    `}};customElements.define("tesla-model-picker",Tt);var Ot="base.png",Ne="chargeport-open.png",Ie="frunk-open.png",He="trunk-open.png",Ue="tesla-card-colour-",Pe="tesla-card-model-",De="tesla-card-layout-",z=class z extends v{static get properties(){return{hass:{type:Object},config:{type:Object},_menu:{state:!0},_imageError:{state:!0},_settingsView:{state:!0},_modelOverride:{state:!0},_colourOverride:{state:!0},_layout:{state:!0},_settingsSlide:{state:!0}}}static get styles(){return[S,le]}constructor(){super(),this._menu=null,this._imageError=!1,this._settingsView=null,this._modelOverride=null,this._colourOverride=null,this._layout="portrait",this._settingsSlide=null,this._baseConfig=null,this._toggleCharger=()=>this._toggle("charger"),this._toggleClimate=()=>this._toggle("climate"),this._toggleControls=()=>this._toggle("controls"),this._handleCloseMenu=()=>{this._menu=null},this._handleColourChanged=t=>this._onColourChanged(t),this._handleModelChanged=t=>this._onModelChanged(t),this._handleModelBack=()=>{this._settingsSlide=null,this._settingsView="main"},this._handleColourBack=()=>{this._settingsSlide="left",this._settingsView="model"},this._handlePickerClose=()=>{this._settingsView=null,this._settingsSlide=null}}setConfig(t){if(!t.car_name)throw new Error("car_name is required");this._baseConfig={car_model:"3",car_variant:"3.1",car_color:"neutral",image_path:"/local/Tesla",show_speed:!0,...t},this._applyConfig()}_applyConfig(){let t={...this._baseConfig};this._modelOverride&&(t.car_model=this._modelOverride.model,t.car_variant=this._modelOverride.variant);let e=this._colourOverride;e&&(t.car_color=e.dir==="custom"?"neutral":e.dir),this.config=t}static getConfigElement(){return document.createElement("tesla-card-editor")}static getStubConfig(){return{car_name:"",car_model:"3",car_variant:"3.1",car_color:"neutral",image_path:"/local/Tesla"}}connectedCallback(){super.connectedCallback(),this._baseConfig&&(this._restoreModel(),this._restoreColour()),this._restoreLayout()}_colourLsKey(){return Ue+(this._baseConfig?.car_name??"default")}_restoreColour(){try{let t=localStorage.getItem(this._colourLsKey());if(!t)return;try{this._colourOverride=JSON.parse(t)}catch{this._colourOverride={dir:t}}this._applyConfig()}catch{}}_persistColour(){try{this._colourOverride?localStorage.setItem(this._colourLsKey(),JSON.stringify(this._colourOverride)):localStorage.removeItem(this._colourLsKey())}catch{}}_onColourChanged(t){let e=t.detail;e?e.dir==="custom"?this._colourOverride={dir:"custom",h:e.h,s:e.s}:this._colourOverride={dir:e.dir}:this._colourOverride=null,this._applyConfig(),this._persistColour(),this._imageError=!1}_modelLsKey(){return Pe+(this._baseConfig?.car_name??"default")}_restoreModel(){try{let t=localStorage.getItem(this._modelLsKey());t&&(this._modelOverride=JSON.parse(t),this._applyConfig())}catch{}}_persistModel(){try{this._modelOverride?localStorage.setItem(this._modelLsKey(),JSON.stringify(this._modelOverride)):localStorage.removeItem(this._modelLsKey())}catch{}}_onModelChanged(t){let{model:e,variant:s}=t.detail;this._modelOverride={model:e,variant:s};let i=this._colourOverride;i&&i.dir!=="custom"&&(yt(e,s).includes(i.dir)||(this._colourOverride=null,this._persistColour())),this._applyConfig(),this._persistModel(),this._imageError=!1,this._settingsSlide="right",this._settingsView="colour"}_layoutLsKey(){return De+(this._baseConfig?.car_name??"default")}_restoreLayout(){try{localStorage.getItem(this._layoutLsKey())==="landscape"&&(this._layout="landscape")}catch{}}_persistLayout(){try{localStorage.setItem(this._layoutLsKey(),this._layout)}catch{}}_toggleLayout(){this._layout=this._layout==="landscape"?"portrait":"landscape",this._persistLayout()}_imgUrl(t){let{image_path:e,car_model:s,car_variant:i,car_color:n}=this.config;return`${e}/${s}/${i}/${n}/${t}?v=${z._imgVer}`}_btnUrl(t){return`${this.config.image_path}/buttons/${t}?v=${z._imgVer}`}get _customColour(){let t=this._colourOverride;return!t||t.dir!=="custom"?null:{h:t.h,s:t.s}}get _hasCustomOverlay(){let t=this._customColour;return!!t&&t.s>0}_maskUrl(t){let{image_path:e,car_model:s,car_variant:i}=this.config,n=t.replace(".png","-mask.png");return`${e}/${s}/${i}/neutral/${n}?v=${z._imgVer}`}_customOverlayStyleFor(t){let e=this._customColour;if(!e||e.s===0)return"";let s=this._maskUrl(t);return`position:absolute;inset:0;pointer-events:none;background:hsl(${e.h},${e.s}%,50%);mix-blend-mode:color;-webkit-mask-image:url(${s});mask-image:url(${s});-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;`}_eid(t){return ot(t,this.config.car_name)}_state(t){return this.hass?.states[this._eid(t)]}_val(t){return this._state(t)?.state}_attr(t,e){return this._state(t)?.attributes?.[e]}async _svc(t,e,s,i={}){try{await this.hass.callService(t,e,{entity_id:this._eid(s),...i})}catch(n){console.error("[tesla-card] service error",t,e,n)}}_toggle(t){this._menu=this._menu===t?null:t}_openSettings(){this._settingsView="main",this._settingsSlide=null}_openModelPicker(){this._settingsView="model",this._settingsSlide=null}_closeSettings(){this._settingsView=null,this._settingsSlide=null}_onSettingsOverlayClick(t){t.target===t.currentTarget&&this._closeSettings()}render(){if(!this.config||!this.hass)return c``;let t=this._menu,e=this._colourOverride,s=this._val(r.BATTERY_LEVEL),i=s!=null?Math.round(Number(s)):null,n=i!=null?Math.max(0,Math.min(100,i)):0,o=n>=50?"high":n>=20?"medium":"low",u=this._val(r.BATTERY_RANGE),d=this._attr(r.BATTERY_RANGE,"unit_of_measurement")??"km",g=u!=null?`${Math.round(Number(u))} ${d}`:null,m=this._val(r.CHARGING)==="on",h=this._val(r.ONLINE)==="on",b=this._state(r.ONLINE),_=this._val(r.FRUNK_COVER)==="open"||this._val(r.FRUNK)==="on",y=this._val(r.TRUNK)==="on",ct=this._val(r.CHARGER_DOOR)==="open"||this._val(r.PLUGGED_IN)==="on",w=Ot;_?w=Ie:y?w=He:ct&&(w=Ne);let N=this._val(r.DOOR_LOCK),I=N==="locked",H=this._val(r.PLUGGED_IN)==="on",U=this._val(r.CHARGING_STATE)??"\u2014",tt=this._val(r.CHARGE_RATE),et=this._attr(r.CHARGE_RATE,"unit_of_measurement")??"kW",B=this._val(r.CLIMATE),P=B!=null&&B!=="off"&&B!=="unavailable",Lt=this._attr(r.CLIMATE,"temperature"),ce=this._attr(r.CLIMATE,"temperature_unit")??"\xB0C",pe=Lt!=null?Number(Lt).toFixed(1):"\u2014",Nt=!h&&b?"Asleep":this._val(r.PARKING_BRAKE)==="on"?"Parked":(()=>{if(!this.config.show_speed)return null;let x=this._attr(r.LOCATION,"speed");return x!=null&&Number(x)>0?`${Math.round(Number(x))} km/h`:null})(),de=m?`Charging \xB7 ${tt??"\u2014"} ${et}`:H?"Plugged in":U,he=P?`${pe}${ce}`:"Off",It=N?I?"Locked":"Unlocked":null,pt=this._val(r.LOCATION),Ht=pt?pt.charAt(0).toUpperCase()+pt.slice(1).replace(/_/g," "):null,ue=this._val(r.SENTRY_MODE)==="on",dt=M.find(x=>x.id===this.config.car_model),Ut=dt?.variants.find(x=>x.id===this.config.car_variant),me=dt&&Ut?`${dt.name} \xB7 ${Ut.label}`:this.config.car_model,Pt=e?.dir==="custom",ge=Pt?null:lt.find(x=>x.dir===this.config.car_color),fe=Pt?"Custom":ge?.name??this.config.car_color,be=yt(this.config.car_model,this.config.car_variant),_e=this._layout==="landscape";return c`
+      <ha-card class="${_e?"landscape":""}">
 
-        <!-- ── Header ─────────────────────────────────────── -->
-        <div class="header">
-          <div class="header-left">
-            <div class="car-name-row">
-              <span class="car-name">${this.config.name??this.config.car_name}</span>
-              <span class="icon name-chevron">${c(h["chevron-down"])}</span>
+        <!-- ── Header (hidden when a submenu is open) ─────── -->
+        ${t?"":c`
+          <div class="header">
+            <div class="header-left">
+              <div class="car-name-row">
+                <span class="car-name">${this.config.name??this.config.car_name}</span>
+                <span class="icon name-chevron">${p(l["chevron-down"])}</span>
+              </div>
+              <div class="battery-summary">
+                ${i!=null?c`
+                  <div class="battery-bar-small">
+                    <div class="battery-fill-small ${o}" style="width:${n}%"></div>
+                  </div>
+                  <span class="range-text">${g??"\u2014"}</span>`:""}
+              </div>
+              ${Nt?c`<span class="status-text">${Nt}</span>`:""}
             </div>
-            <div class="battery-summary">
-              ${n!=null?l`
-                <div class="battery-bar-small">
-                  <div class="battery-fill-small ${u}" style="width:${a}%"></div>
+            <div class="header-right">
+              <button class="icon-btn" title="Settings"
+                @click=${()=>this._openSettings()}>
+                <span class="icon">${p(l.settings)}</span>
+              </button>
+              <button class="icon-btn" title="Refresh"
+                @click=${()=>this._svc("button","press",r.FORCE_UPDATE)}>
+                <span class="icon">${p(l.refresh)}</span>
+              </button>
+            </div>
+          </div>
+        `}
+
+        <!-- ── Landing body (car + nav side-by-side in landscape) ── -->
+        ${t?"":c`
+          <div class="landing-body">
+            <div class="landing-left">
+              <div class="car-image-area">
+                ${this._imageError?c`
+                  <div class="car-image-placeholder">
+                    <span class="icon">${p(l.car)}</span>
+                    <span>Image not found</span>
+                  </div>`:c`
+                  <img class="car-image"
+                    src="${this._imgUrl(w)}"
+                    alt="Tesla ${this.config.car_model}"
+                    @error=${x=>{w!==Ot?x.target.src=this._imgUrl(Ot):this._imageError=!0}}
+                    @load=${()=>{this._imageError=!1}}
+                  />`}
+                ${this._hasCustomOverlay?c`
+                  <div class="car-colour-overlay"
+                    style="${this._customOverlayStyleFor(w)}"></div>`:""}
+              </div>
+              <!-- Quick action icons: lock, controls, charge, climate -->
+              <div class="quick-actions">
+                ${N?c`
+                  <button class="quick-btn ${I?"q-locked":"q-unlocked"}"
+                    @click=${()=>this._svc("lock",I?"unlock":"lock",r.DOOR_LOCK)}>
+                    <span class="icon">${p(I?l.lock:l.unlock)}</span>
+                  </button>`:c`<span style="width:48px"></span>`}
+                <button class="quick-btn" @click=${this._toggleControls}>
+                  <span class="icon">${p(l.car)}</span>
+                </button>
+                <button class="quick-btn ${m?"q-active":""}" @click=${this._toggleCharger}>
+                  <span class="icon">${p(l["charge-bolt"])}</span>
+                </button>
+                <button class="quick-btn ${P?"q-active":""}" @click=${this._toggleClimate}>
+                  <span class="icon">${p(l["climate-fan"])}</span>
+                </button>
+              </div>
+            </div>
+            <div class="nav-rows">
+              <button class="nav-row"
+                @click=${this._toggleControls}>
+                <span class="icon nav-icon">${p(l.car)}</span>
+                <div class="nav-text">
+                  <span class="nav-label">Controls</span>
+                  ${It?c`<span class="nav-sublabel">${It}</span>`:""}
                 </div>
-                <span class="range-text">${m??"\u2014"}</span>`:""}
-            </div>
-            ${Mt?l`<span class="status-text">${Mt}</span>`:""}
-          </div>
-          <div class="header-right">
-            <button class="icon-btn" title="Settings"
-              @click=${()=>this._openSettings()}>
-              <span class="icon">${c(h.settings)}</span>
-            </button>
-            <button class="icon-btn" title="Refresh"
-              @click=${()=>this._svc("button","press",r.FORCE_UPDATE)}>
-              <span class="icon">${c(h.refresh)}</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- ── Default view: car image + colour overlay + quick icons ─── -->
-        ${t?"":l`
-          <div>
-            <div class="car-image-area">
-              ${this._imageError?l`
-                <div class="car-image-placeholder">
-                  <span class="icon">${c(h.car)}</span>
-                  <span>Image not found</span>
-                </div>`:l`
-                <img class="car-image"
-                  src="${this._imgUrl($)}"
-                  alt="Tesla ${this.config.car_model}"
-                  @error=${()=>{this._imageError=!0}}
-                  @load=${()=>{this._imageError=!1}}
-                />`}
-              ${s?l`
-                <div class="car-colour-overlay"
-                  style="${this._overlayStyle($)}"></div>`:""}
-            </div>
-            <!-- Quick action icons: lock, controls, charge, climate -->
-            <div class="quick-actions">
-              ${H?l`
-                <button class="quick-btn ${R?"q-locked":"q-unlocked"}"
-                  @click=${()=>this._svc("lock",R?"unlock":"lock",r.DOOR_LOCK)}>
-                  <span class="icon">${c(R?h.lock:h.unlock)}</span>
-                </button>`:l`<span style="width:48px"></span>`}
-              <button class="quick-btn" @click=${this._toggleControls}>
-                <span class="icon">${c(h.car)}</span>
+                <span class="icon nav-chevron">${p(l["chevron-right"])}</span>
               </button>
-              <button class="quick-btn" @click=${this._toggleCharger}>
-                <span class="icon${d?" icon-on":""}">${c(h["charge-bolt"])}</span>
+              <button class="nav-row"
+                @click=${this._toggleClimate}>
+                <span class="icon nav-icon">${p(l["climate-fan"])}</span>
+                <div class="nav-text">
+                  <span class="nav-label">Climate</span>
+                  <span class="nav-sublabel">${he}</span>
+                </div>
+                <span class="icon nav-chevron">${p(l["chevron-right"])}</span>
               </button>
-              <button class="quick-btn" @click=${this._toggleClimate}>
-                <span class="icon${O?" icon-on":""}">${c(h["climate-fan"])}</span>
+              <button class="nav-row" disabled>
+                <span class="icon nav-icon">${p(l.location)}</span>
+                <div class="nav-text">
+                  <span class="nav-label">Location</span>
+                  ${Ht?c`<span class="nav-sublabel">${Ht}</span>`:""}
+                </div>
+                <span class="icon nav-chevron">${p(l["chevron-right"])}</span>
+              </button>
+              <button class="nav-row"
+                @click=${this._toggleCharger}>
+                <span class="icon nav-icon">${p(l["charge-bolt"])}</span>
+                <div class="nav-text">
+                  <span class="nav-label">Charging</span>
+                  <span class="nav-sublabel">${de}</span>
+                </div>
+                <span class="icon nav-chevron">${p(l["chevron-right"])}</span>
+              </button>
+              <button class="nav-row" disabled>
+                <span class="icon nav-icon">${p(l.schedule)}</span>
+                <div class="nav-text">
+                  <span class="nav-label">Set Schedules</span>
+                </div>
+                <span class="icon nav-chevron">${p(l["chevron-right"])}</span>
+              </button>
+              <button class="nav-row" disabled>
+                <span class="icon nav-icon">${p(l.security)}</span>
+                <div class="nav-text">
+                  <span class="nav-label">Security & Drivers</span>
+                  <span class="nav-sublabel">${ue?"Sentry Mode active":"Phone key disconnected"}</span>
+                </div>
+                <span class="icon nav-chevron">${p(l["chevron-right"])}</span>
               </button>
             </div>
           </div>
         `}
 
         <!-- ── Submenu panels ─────────────────────────────── -->
-        ${t==="charger"?l`
+        ${t==="charger"?c`
           <tesla-menu-charger
             .hass=${this.hass}
             .config=${this.config}
+            .layout=${this._layout}
             @close-menu=${this._handleCloseMenu}>
           </tesla-menu-charger>`:""}
 
-        ${t==="climate"?l`
+        ${t==="climate"?c`
           <tesla-menu-climate
             .hass=${this.hass}
             .config=${this.config}
-            .carColour=${this._carColour}
+            .customColour=${this._customColour}
+            .layout=${this._layout}
             @close-menu=${this._handleCloseMenu}>
           </tesla-menu-climate>`:""}
 
-        ${t==="controls"?l`
+        ${t==="controls"?c`
           <tesla-menu-controls
             .hass=${this.hass}
             .config=${this.config}
-            .carColour=${this._carColour}
+            .customColour=${this._customColour}
+            .layout=${this._layout}
             @close-menu=${this._handleCloseMenu}>
           </tesla-menu-controls>`:""}
 
-        <!-- ── Nav rows (hidden when a submenu is open) ──── -->
-        ${t?"":l`
-          <div class="nav-rows">
-            <button class="nav-row"
-              @click=${this._toggleControls}>
-              <span class="icon nav-icon${R?"":" icon-on"}">${c(h.car)}</span>
-              <div class="nav-text">
-                <span class="nav-label">Controls</span>
-                ${Tt?l`<span class="nav-sublabel">${Tt}</span>`:""}
-              </div>
-              <span class="icon nav-chevron">${c(h["chevron-right"])}</span>
-            </button>
-            <button class="nav-row"
-              @click=${this._toggleClimate}>
-              <span class="icon nav-icon${O?" icon-on":""}">${c(h["climate-fan"])}</span>
-              <div class="nav-text">
-                <span class="nav-label">Climate</span>
-                <span class="nav-sublabel">${ae}</span>
-              </div>
-              <span class="icon nav-chevron">${c(h["chevron-right"])}</span>
-            </button>
-            ${tt!=null?l`
-            <button class="nav-row" disabled>
-              <span class="icon nav-icon">${c(h.location)}</span>
-              <div class="nav-text">
-                <span class="nav-label">Location</span>
-                ${Rt?l`<span class="nav-sublabel">${Rt}</span>`:""}
-              </div>
-              <span class="icon nav-chevron">${c(h["chevron-right"])}</span>
-            </button>`:""}
-            <button class="nav-row"
-              @click=${this._toggleCharger}>
-              <span class="icon nav-icon${d?" icon-on":""}">${c(h["charge-bolt"])}</span>
-              <div class="nav-text">
-                <span class="nav-label">Charging</span>
-                <span class="nav-sublabel">${oe}</span>
-              </div>
-              <span class="icon nav-chevron">${c(h["chevron-right"])}</span>
-            </button>
-          </div>
-        `}
-
         <!-- ── Settings: main menu ─────────────────────────── -->
-        ${this._settingsView==="main"?l`
+        ${this._settingsView==="main"?c`
           <div class="settings-overlay"
-            @click=${w=>this._onSettingsOverlayClick(w)}>
+            @click=${x=>this._onSettingsOverlayClick(x)}>
             <div class="settings-panel">
               <div class="settings-header">
                 <span class="settings-title">Settings</span>
@@ -2204,21 +2783,21 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
               <div class="settings-rows">
                 <button class="settings-row"
                   @click=${()=>this._openModelPicker()}>
-                  <span class="icon settings-row-icon">${c(h.car)}</span>
+                  <span class="icon settings-row-icon">${p(l.car)}</span>
                   <div class="settings-row-text">
-                    <span class="settings-row-label">Model</span>
-                    <span class="settings-row-sub">${le}</span>
+                    <span class="settings-row-label">Model & Colour</span>
+                    <span class="settings-row-sub">${me} · ${fe}</span>
                   </div>
-                  <span class="icon settings-row-chevron">${c(h["chevron-right"])}</span>
+                  <span class="icon settings-row-chevron">${p(l["chevron-right"])}</span>
                 </button>
                 <button class="settings-row"
-                  @click=${()=>this._openColourPicker()}>
-                  <div class="settings-swatch" style="background:${he}"></div>
+                  @click=${()=>this._toggleLayout()}>
+                  <span class="icon settings-row-icon">${p(l.layout)}</span>
                   <div class="settings-row-text">
-                    <span class="settings-row-label">Colour</span>
-                    <span class="settings-row-sub">${ce}</span>
+                    <span class="settings-row-label">Layout</span>
+                    <span class="settings-row-sub">${this._layout==="landscape"?"Landscape":"Portrait"}</span>
                   </div>
-                  <span class="icon settings-row-chevron">${c(h["chevron-right"])}</span>
+                  <span class="icon settings-row-chevron">${p(l["chevron-right"])}</span>
                 </button>
               </div>
             </div>
@@ -2226,27 +2805,32 @@ var et=globalThis,st=et.ShadowRoot&&(et.ShadyCSS===void 0||et.ShadyCSS.nativeSha
         `:""}
 
         <!-- ── Settings: model picker ──────────────────────── -->
-        ${this._settingsView==="model"?l`
+        ${this._settingsView==="model"?c`
           <tesla-model-picker
             .model=${this.config.car_model}
             .variant=${this.config.car_variant}
+            slide-from=${this._settingsSlide??"up"}
             @model-changed=${this._handleModelChanged}
-            @picker-back=${this._handlePickerBack}
+            @picker-back=${this._handleModelBack}
             @picker-close=${this._handlePickerClose}>
           </tesla-model-picker>`:""}
 
         <!-- ── Settings: colour picker ─────────────────────── -->
-        ${this._settingsView==="colour"?l`
+        ${this._settingsView==="colour"?c`
           <tesla-colour-picker
-            .colour=${this._carColour}
+            .selected=${e?.dir??this.config.car_color}
+            .available=${be}
+            .customH=${e?.dir==="custom"?e.h:0}
+            .customS=${e?.dir==="custom"?e.s:80}
             showBack
+            slide-from=${this._settingsSlide??"up"}
             @colour-changed=${this._handleColourChanged}
-            @picker-back=${this._handlePickerBack}
+            @picker-back=${this._handleColourBack}
             @picker-close=${this._handlePickerClose}>
           </tesla-colour-picker>`:""}
 
       </ha-card>
-    `}getCardSize(){return 5}};customElements.define("tesla-card",At);window.customCards=window.customCards||[];window.customCards.push({type:"tesla-card",name:"Tesla Card",description:"A Lovelace card for the alandtse/tesla Home Assistant integration",preview:!1});
+    `}getCardSize(){return 5}};st(z,"_imgVer",Date.now());var Rt=z;customElements.define("tesla-card",Rt);window.customCards=window.customCards||[];window.customCards.push({type:"tesla-card",name:"Tesla Card",description:"A Lovelace card for the alandtse/tesla Home Assistant integration",preview:!1});
 /*! Bundled license information:
 
 @lit/reactive-element/css-tag.js:

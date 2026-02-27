@@ -1,6 +1,5 @@
 import { LitElement } from 'lit';
 import { entityId } from './entity-config.js';
-import { getModelSource } from './models.js';
 
 /**
  * Shared base class for tesla-card submenu components.
@@ -8,11 +7,14 @@ import { getModelSource } from './models.js';
  */
 export class TeslaBase extends LitElement {
 
+  static _imgVer = Date.now();
+
   static get properties() {
     return {
-      hass:      { type: Object },
-      config:    { type: Object },
-      carColour: { type: Object },  // { h, s, name, filter? } | null
+      hass:         { type: Object },
+      config:       { type: Object },
+      customColour: { type: Object },  // { h, s } | null — for custom CSS overlay
+      layout:       { type: String },  // 'portrait' | 'landscape'
     };
   }
 
@@ -28,63 +30,39 @@ export class TeslaBase extends LitElement {
 
   _imgUrl(f) {
     const { image_path, car_model, car_variant, car_color } = this.config;
-    return `${image_path}/${car_model}/${car_variant}/${car_color}/${f}`;
+    return `${image_path}/${car_model}/${car_variant}/${car_color}/${f}?v=${TeslaBase._imgVer}`;
   }
 
-  /** Panel background images — always neutral, never colour-tinted. */
-  _bgUrl(f) {
-    const { image_path, car_model, car_variant } = this.config;
-    return `${image_path}/${car_model}/${car_variant}/neutral/${f}`;
+  // ── Button image URL builder ──────────────────────────────────────────────
+
+  _btnUrl(f) {
+    return `${this.config.image_path}/buttons/${f}?v=${TeslaBase._imgVer}`;
   }
 
-  /** Body mask URL for a given image filename: base.png → base-mask.png */
+  // ── Mask URL — always from neutral directory ─────────────────────────────
+
   _maskUrl(f) {
-    const maskName = f.replace(/\.(png|jpg)$/i, '-mask.png');
     const { image_path, car_model, car_variant } = this.config;
-    return `${image_path}/${car_model}/${car_variant}/neutral/${maskName}`;
+    const maskFile = f.replace('.png', '-mask.png');
+    return `${image_path}/${car_model}/${car_variant}/neutral/${maskFile}?v=${TeslaBase._imgVer}`;
   }
 
-  /** Coloured source image URL (e.g. red/base.png or white/base.png). Null if no source. */
-  _sourceUrl(f) {
-    const source = getModelSource(this.config.car_model, this.config.car_variant);
-    if (!source) return null;
-    const { image_path, car_model, car_variant } = this.config;
-    return `${image_path}/${car_model}/${car_variant}/${source}/${f}`;
+  // ── Custom colour overlay style ───────────────────────────────────────────
+
+  get _hasCustomOverlay() {
+    return !!this.customColour && this.customColour.s > 0;
   }
 
-  /** True when the current carColour needs a visible overlay. */
-  get _hasOverlay() {
-    const c = this.carColour;
-    return !!c && (c.s > 0 || !!(c.blend && c.bg) || !!c.filter);
-  }
-
-  /**
-   * CSS style string for the colour overlay div.
-   *
-   * Two rendering paths:
-   *   1. Source available + filter: background-image with CSS filter (hue-rotate preserves depth)
-   *   2. No source: flat CSS background with mix-blend-mode (current fallback)
-   */
-  _overlayStyle(f) {
-    const c = this.carColour;
-    if (!c) return '';
-    const m = this._maskUrl(f);
-    const mask = `-webkit-mask-image:url(${m});mask-image:url(${m});`;
-    const src = this._sourceUrl(f);
-
-    // Path 1: hue-rotate on coloured source image
-    if (src && c.filter) {
-      return `background-image:url(${src});filter:${c.filter};${mask}`;
-    }
-
-    // Path 2: flat overlay fallback
-    if (c.s > 0) {
-      return `background:hsl(${c.h},${c.s}%,50%);mix-blend-mode:color;${mask}`;
-    }
-    if (c.blend && c.bg) {
-      return `background:${c.bg};mix-blend-mode:${c.blend};${mask}`;
-    }
-    return '';
+  _customOverlayStyleFor(imageFile) {
+    const c = this.customColour;
+    if (!c || c.s === 0) return '';
+    const mask = this._maskUrl(imageFile);
+    return `position:absolute;inset:0;pointer-events:none;`
+      + `background:hsl(${c.h},${c.s}%,50%);mix-blend-mode:color;`
+      + `-webkit-mask-image:url(${mask});mask-image:url(${mask});`
+      + `-webkit-mask-size:contain;mask-size:contain;`
+      + `-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;`
+      + `-webkit-mask-position:center;mask-position:center;`;
   }
 
   // ── Service call ────────────────────────────────────────────────────────────

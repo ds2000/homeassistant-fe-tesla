@@ -7,8 +7,9 @@ class TeslaModelPicker extends LitElement {
 
   static get properties() {
     return {
-      model:   { type: String },   // current model ID e.g. '3'
-      variant: { type: String },   // current variant ID e.g. '3.1'
+      model:     { type: String },   // current model ID e.g. '3'
+      variant:   { type: String },   // current variant ID e.g. '3.1'
+      slideFrom: { type: String, reflect: true, attribute: 'slide-from' },
     };
   }
 
@@ -34,15 +35,32 @@ class TeslaModelPicker extends LitElement {
         background: #1c1c1e;
         border-radius: 16px 16px 0 0;
         padding: 0 0 20px;
-        animation: slideUp 0.2s ease-out;
-        max-height: 80%;
+        animation: slideUp 0.25s ease-out;
         display: flex;
         flex-direction: column;
       }
 
       @keyframes slideUp {
-        from { transform: translateY(100%); }
-        to   { transform: translateY(0); }
+        from { transform: translateY(100%); opacity: 0; }
+        to   { transform: translateY(0); opacity: 1; }
+      }
+
+      @keyframes slideFromRight {
+        from { transform: translateX(30%); opacity: 0; }
+        to   { transform: translateX(0); opacity: 1; }
+      }
+
+      @keyframes slideFromLeft {
+        from { transform: translateX(-30%); opacity: 0; }
+        to   { transform: translateX(0); opacity: 1; }
+      }
+
+      :host([slide-from="right"]) .picker-panel {
+        animation: slideFromRight 0.25s ease-out;
+      }
+
+      :host([slide-from="left"]) .picker-panel {
+        animation: slideFromLeft 0.25s ease-out;
       }
 
       .picker-header {
@@ -112,8 +130,6 @@ class TeslaModelPicker extends LitElement {
 
       .model-list {
         padding: 8px 0 0;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
       }
 
       .model-section {
@@ -139,6 +155,7 @@ class TeslaModelPicker extends LitElement {
       .model-item {
         display: flex;
         align-items: center;
+        gap: 12px;
         width: 100%;
         padding: 14px 16px;
         background: transparent;
@@ -154,6 +171,20 @@ class TeslaModelPicker extends LitElement {
         transition: background 0.12s ease;
       }
 
+      .model-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        flex-shrink: 0;
+        opacity: 0.45;
+      }
+
+      .model-icon .icon { width: 28px; height: 28px; }
+
+      .model-item.selected .model-icon { opacity: 0.9; }
+
       .model-item:last-child { border-bottom: none; }
       .model-item:hover  { background: rgba(255,255,255,0.04); }
       .model-item:active { background: rgba(255,255,255,0.08); }
@@ -162,6 +193,20 @@ class TeslaModelPicker extends LitElement {
         color: #ffffff;
         font-weight: 500;
       }
+
+      /* ── Unavailable state ─────────────────── */
+
+      .model-item.unavailable {
+        pointer-events: none;
+        cursor: default;
+        color: rgba(255,255,255,0.2);
+      }
+
+      .model-item.unavailable .model-label {
+        text-decoration: line-through;
+      }
+
+      .model-item.unavailable:hover { background: transparent; }
 
       .model-label { flex: 1; }
 
@@ -175,6 +220,13 @@ class TeslaModelPicker extends LitElement {
       }
 
       .model-check .icon { width: 20px; height: 20px; }
+
+      .model-no-images {
+        font-size: 0.72em;
+        color: rgba(255,255,255,0.2);
+        font-style: italic;
+        margin-left: 8px;
+      }
     `;
   }
 
@@ -219,10 +271,16 @@ class TeslaModelPicker extends LitElement {
                 <div class="model-group">
                   ${m.variants.map(v => {
                     const sel = v.id === this.variant;
+                    const hasImages = v.colours.length > 1 || v.colours[0] !== 'neutral';
+                    const avail = hasImages || sel;
                     return html`
-                      <button class="model-item${sel ? ' selected' : ''}"
-                        @click=${() => this._select(m.id, v.id)}>
+                      <button class="model-item${sel ? ' selected' : ''}${avail ? '' : ' unavailable'}"
+                        @click=${avail ? () => this._select(m.id, v.id) : null}>
+                        <span class="model-icon">
+                          <span class="icon">${unsafeHTML(ICONS.car)}</span>
+                        </span>
                         <span class="model-label">${v.label}</span>
+                        ${!avail ? html`<span class="model-no-images">no images</span>` : ''}
                         ${sel ? html`
                           <span class="model-check">
                             <span class="icon">${unsafeHTML(ICONS.check)}</span>

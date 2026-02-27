@@ -18,11 +18,34 @@
     }
     h1 { color: rgba(255,255,255,0.4); font-size: 0.8em; letter-spacing: 0.1em; text-transform: uppercase; }
     #card-container { width: 100%; max-width: 380px; }
-    .toolbar { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
-    .toolbar button {
-      padding: 6px 14px; border-radius: 6px;
+    .toolbar {
+      display: flex; gap: 6px; flex-wrap: wrap; justify-content: center;
+      max-width: 420px;
+    }
+    .toolbar-section {
+      display: flex; gap: 6px; flex-wrap: wrap; justify-content: center;
+      width: 100%; max-width: 420px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 8px; margin-top: 2px;
+    }
+    .toolbar-section:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+    .toolbar-label {
+      width: 100%; text-align: center;
+      font-size: 0.62em; color: rgba(255,255,255,0.25);
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .toolbar button, .toolbar-section button {
+      padding: 5px 10px; border-radius: 6px;
       border: 1px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.07); color: #fff; font-size: 0.78em; cursor: pointer;
+      background: rgba(255,255,255,0.07); color: #fff;
+      font-size: 0.7em; cursor: pointer;
+      transition: background 0.1s ease;
+    }
+    .toolbar button:hover, .toolbar-section button:hover {
+      background: rgba(255,255,255,0.15);
+    }
+    .toolbar button:active, .toolbar-section button:active {
+      background: rgba(255,255,255,0.25);
     }
     #log {
       width: 100%; max-width: 380px;
@@ -38,11 +61,51 @@
 
 <h1>Tesla Card — Dev Preview</h1>
 
+<!-- ── Core toggles ── -->
 <div class="toolbar">
-  <button onclick="toggle('charging')">Toggle Charging</button>
-  <button onclick="toggle('locked')">Toggle Lock</button>
-  <button onclick="toggle('online')">Toggle Online</button>
+  <button onclick="toggle('charging')">Charging</button>
+  <button onclick="toggle('locked')">Lock</button>
+  <button onclick="toggle('online')">Online</button>
+  <button onclick="toggle('plugged')">Plugged In</button>
   <button onclick="location.reload()">Reload</button>
+</div>
+
+<!-- ── Doors / openings ── -->
+<div class="toolbar-section">
+  <span class="toolbar-label">Openings</span>
+  <button onclick="toggle('frunk')">Frunk</button>
+  <button onclick="toggle('trunk')">Trunk</button>
+  <button onclick="toggle('charger_door')">Charger Door</button>
+  <button onclick="toggle('windows')">Windows</button>
+</div>
+
+<!-- ── Climate ── -->
+<div class="toolbar-section">
+  <span class="toolbar-label">Climate</span>
+  <button onclick="toggle('hvac')">HVAC On/Off</button>
+  <button onclick="toggle('defrost')">Defrost</button>
+  <button onclick="toggle('camp')">Camp Mode</button>
+  <button onclick="toggle('dog')">Dog Mode</button>
+</div>
+
+<!-- ── Seat warmers ── -->
+<div class="toolbar-section">
+  <span class="toolbar-label">Seat Warmers (cycles Off → Low → Med → High)</span>
+  <button onclick="cycleSeat('left')">Driver</button>
+  <button onclick="cycleSeat('right')">Passenger</button>
+  <button onclick="cycleSeat('rear_left')">Rear L</button>
+  <button onclick="cycleSeat('rear_center')">Rear C</button>
+  <button onclick="cycleSeat('rear_right')">Rear R</button>
+</div>
+
+<!-- ── Misc ── -->
+<div class="toolbar-section">
+  <span class="toolbar-label">Other</span>
+  <button onclick="toggle('sentry')">Sentry</button>
+  <button onclick="toggle('parking')">Parking Brake</button>
+  <button onclick="setBattery(95)">Bat 95%</button>
+  <button onclick="setBattery(50)">Bat 50%</button>
+  <button onclick="setBattery(15)">Bat 15%</button>
 </div>
 
 <div id="log"></div>
@@ -73,7 +136,6 @@
     _r() {
       const name = (this.getAttribute('icon') || '').replace(/^mdi:/, '');
       this.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;';
-      // Fallback text glyph if Iconify not loaded yet
       this.textContent = name ? `[${name}]` : '';
     }
   }
@@ -97,7 +159,7 @@
 
   try {
     await import('../dist/tesla-card.js');
-    L('dist/tesla-card.js imported ✓', 'ok');
+    L('dist/tesla-card.js imported', 'ok');
   } catch (e) {
     L('FAILED to import dist/tesla-card.js: ' + (e.stack || e.message), 'err');
     throw e;
@@ -107,7 +169,7 @@
 
   const states = {
     [`binary_sensor.${CAR}_charging`]:         { state: 'off',          attributes: {} },
-    [`binary_sensor.${CAR}_plugged_in`]:        { state: 'on',           attributes: {} },
+    [`binary_sensor.${CAR}_plugged_in`]:        { state: 'off',          attributes: {} },
     [`binary_sensor.${CAR}_parking_brake`]:     { state: 'on',           attributes: {} },
     [`binary_sensor.${CAR}_frunk`]:             { state: 'off',          attributes: {} },
     [`binary_sensor.${CAR}_trunk`]:             { state: 'off',          attributes: {} },
@@ -134,30 +196,103 @@
     [`select.${CAR}_cabin_overheat_protection`]:{ state: 'Off',          attributes: { options: ['Off', 'No A/C', 'On'] } },
     [`number.${CAR}_charge_limit`]:             { state: '90',           attributes: { min: 50, max: 100, step: 1 } },
     [`number.${CAR}_charging_amps`]:            { state: '16',           attributes: { min: 5,  max: 32,  step: 1 } },
-    [`select.${CAR}_heated_seat_left`]:         { state: 'Off',          attributes: {} },
-    [`select.${CAR}_heated_seat_right`]:        { state: 'Low',          attributes: {} },
-    [`select.${CAR}_heated_seat_rear_left`]:    { state: 'Off',          attributes: {} },
-    [`select.${CAR}_heated_seat_rear_center`]:  { state: 'Off',          attributes: {} },
-    [`select.${CAR}_heated_seat_rear_right`]:   { state: 'Off',          attributes: {} },
+    [`select.${CAR}_heated_seat_left`]:         { state: 'Off',          attributes: { options: ['Off', 'Low', 'Medium', 'High'] } },
+    [`select.${CAR}_heated_seat_right`]:        { state: 'Off',          attributes: { options: ['Off', 'Low', 'Medium', 'High'] } },
+    [`select.${CAR}_heated_seat_rear_left`]:    { state: 'Off',          attributes: { options: ['Off', 'Low', 'Medium', 'High'] } },
+    [`select.${CAR}_heated_seat_rear_center`]:  { state: 'Off',          attributes: { options: ['Off', 'Low', 'Medium', 'High'] } },
+    [`select.${CAR}_heated_seat_rear_right`]:   { state: 'Off',          attributes: { options: ['Off', 'Low', 'Medium', 'High'] } },
     [`climate.${CAR}_hvac_climate_system`]:     { state: 'off',          attributes: { temperature: 21.5, temperature_unit: '°C', min_temp: 15, max_temp: 28, target_temp_step: 0.5 } },
     [`cover.${CAR}_windows`]:                   { state: 'closed',       attributes: {} },
     [`cover.${CAR}_frunk`]:                     { state: 'closed',       attributes: {} },
-    [`cover.${CAR}_charger_door`]:              { state: 'open',         attributes: {} },
+    [`cover.${CAR}_charger_door`]:              { state: 'closed',       attributes: {} },
     [`device_tracker.${CAR}_location_tracker`]: { state: 'home',         attributes: { speed: 0 } },
   };
+
+  const SEAT_CYCLE = ['Off', 'Low', 'Medium', 'High'];
 
   const hass = {
     states,
     async callService(domain, service, data) {
-      L(`callService: ${domain}.${service} ${JSON.stringify(data)}`, 'ok');
-      alert(`${domain}.${service}\n${JSON.stringify(data, null, 2)}`);
+      L(`svc: ${domain}.${service} ${JSON.stringify(data)}`, 'ok');
+
+      // ── Handle select.select_next for seat heaters ──
+      if (domain === 'select' && service === 'select_next') {
+        const eid = data.entity_id;
+        if (eid && states[eid]) {
+          const cur = states[eid].state;
+          const idx = SEAT_CYCLE.indexOf(cur);
+          states[eid].state = SEAT_CYCLE[(idx + 1) % SEAT_CYCLE.length];
+          L(`  → ${eid} = ${states[eid].state}`, 'info');
+          pushHass();
+          return;
+        }
+      }
+
+      // ── Handle climate.turn_on / turn_off ──
+      if (domain === 'climate') {
+        const climKey = `climate.${CAR}_hvac_climate_system`;
+        if (service === 'turn_on') {
+          states[climKey].state = 'heat_cool';
+          pushHass(); return;
+        }
+        if (service === 'turn_off') {
+          states[climKey].state = 'off';
+          pushHass(); return;
+        }
+        if (service === 'set_temperature' && data.temperature != null) {
+          states[climKey].attributes.temperature = data.temperature;
+          pushHass(); return;
+        }
+      }
+
+      // ── Handle lock/unlock ──
+      if (domain === 'lock') {
+        const lockKey = `lock.${CAR}_doors`;
+        states[lockKey].state = service === 'lock' ? 'locked' : 'unlocked';
+        pushHass(); return;
+      }
+
+      // ── Handle switch on/off ──
+      if (domain === 'switch') {
+        const eid = data.entity_id;
+        if (eid && states[eid]) {
+          states[eid].state = service === 'turn_on' ? 'on' : 'off';
+          pushHass(); return;
+        }
+      }
+
+      // ── Handle cover open/close/toggle ──
+      if (domain === 'cover') {
+        const eid = data.entity_id;
+        if (eid && states[eid]) {
+          if (service === 'toggle_cover') {
+            states[eid].state = states[eid].state === 'open' ? 'closed' : 'open';
+          } else {
+            states[eid].state = service === 'open_cover' ? 'open' : 'closed';
+          }
+          pushHass(); return;
+        }
+      }
+
+      // ── Handle select.select_option (cabin overheat) ──
+      if (domain === 'select' && service === 'select_option') {
+        const eid = data.entity_id;
+        if (eid && states[eid] && data.option) {
+          states[eid].state = data.option;
+          pushHass(); return;
+        }
+      }
     },
   };
+
+  function pushHass() {
+    const c = document.querySelector('tesla-card');
+    if (c) c.hass = { ...hass, states: { ...states } };
+  }
 
   try {
     L('Waiting for tesla-card to be defined...');
 
-    // 5-second timeout so we don't hang silently
     await Promise.race([
       customElements.whenDefined('tesla-card'),
       new Promise((_, rej) => setTimeout(() => rej(new Error(
@@ -166,11 +301,9 @@
       )), 5000)),
     ]);
 
-    L('tesla-card defined ✓', 'ok');
+    L('tesla-card defined', 'ok');
 
     const card = document.createElement('tesla-card');
-    L('Element created');
-
     card.setConfig({
       car_name:    CAR,
       car_model:   '3',
@@ -180,39 +313,91 @@
       show_speed:  true,
       name:        'Terrance',
     });
-    L('setConfig done');
-
     card.hass = hass;
-    L('hass assigned');
 
     document.getElementById('card-container').appendChild(card);
-    L('Card mounted ✓', 'ok');
+    L('Card mounted', 'ok');
   } catch (err) {
     L('ERROR: ' + (err.stack || err.message || err), 'err');
     console.error(err);
   }
 
-  function pushHass() {
-    const c = document.querySelector('tesla-card');
-    if (c) c.hass = { ...hass, states: { ...states } };
-  }
+  // ── Toolbar toggle handlers ──
 
   window.toggle = (what) => {
-    if (what === 'charging') {
-      const on = states[`binary_sensor.${CAR}_charging`].state === 'off';
-      states[`binary_sensor.${CAR}_charging`].state   = on ? 'on' : 'off';
-      states[`sensor.${CAR}_charging_state`].state    = on ? 'Charging' : 'Disconnected';
-      states[`sensor.${CAR}_charge_rate`].state       = on ? '7.4' : '0';
-      states[`binary_sensor.${CAR}_plugged_in`].state = on ? 'on' : 'off';
-    } else if (what === 'locked') {
-      const cur = states[`lock.${CAR}_doors`].state;
-      states[`lock.${CAR}_doors`].state = cur === 'locked' ? 'unlocked' : 'locked';
-    } else if (what === 'online') {
-      const cur = states[`binary_sensor.${CAR}_online`].state;
-      states[`binary_sensor.${CAR}_online`].state = cur === 'on' ? 'off' : 'on';
+    const flip = (key) => { states[key].state = states[key].state === 'on' ? 'off' : 'on'; };
+    const flipState = (key, a, b) => { states[key].state = states[key].state === a ? b : a; };
+
+    switch (what) {
+      case 'charging': {
+        const on = states[`binary_sensor.${CAR}_charging`].state === 'off';
+        states[`binary_sensor.${CAR}_charging`].state   = on ? 'on' : 'off';
+        states[`sensor.${CAR}_charging_state`].state    = on ? 'Charging' : 'Disconnected';
+        states[`sensor.${CAR}_charge_rate`].state       = on ? '7.4' : '0';
+        states[`binary_sensor.${CAR}_plugged_in`].state = on ? 'on' : 'off';
+        break;
+      }
+      case 'locked':
+        flipState(`lock.${CAR}_doors`, 'locked', 'unlocked');
+        break;
+      case 'online':
+        flip(`binary_sensor.${CAR}_online`);
+        break;
+      case 'plugged':
+        flip(`binary_sensor.${CAR}_plugged_in`);
+        break;
+      case 'frunk':
+        flipState(`cover.${CAR}_frunk`, 'closed', 'open');
+        flip(`binary_sensor.${CAR}_frunk`);
+        break;
+      case 'trunk':
+        flip(`binary_sensor.${CAR}_trunk`);
+        break;
+      case 'charger_door':
+        flipState(`cover.${CAR}_charger_door`, 'closed', 'open');
+        break;
+      case 'windows':
+        flipState(`cover.${CAR}_windows`, 'closed', 'open');
+        flip(`binary_sensor.${CAR}_windows`);
+        break;
+      case 'hvac':
+        flipState(`climate.${CAR}_hvac_climate_system`, 'off', 'heat_cool');
+        break;
+      case 'defrost':
+        flip(`switch.${CAR}_defrost`);
+        break;
+      case 'camp':
+        flip(`switch.${CAR}_camp_mode`);
+        break;
+      case 'dog':
+        flip(`switch.${CAR}_dog_mode`);
+        break;
+      case 'sentry':
+        flip(`switch.${CAR}_sentry_mode`);
+        flip(`binary_sensor.${CAR}_sentry_mode`);
+        break;
+      case 'parking':
+        flip(`binary_sensor.${CAR}_parking_brake`);
+        break;
     }
     pushHass();
     L(`Toggled ${what}`, 'ok');
+  };
+
+  window.cycleSeat = (pos) => {
+    const key = `select.${CAR}_heated_seat_${pos}`;
+    const cur = states[key].state;
+    const idx = SEAT_CYCLE.indexOf(cur);
+    states[key].state = SEAT_CYCLE[(idx + 1) % SEAT_CYCLE.length];
+    pushHass();
+    L(`Seat ${pos}: ${states[key].state}`, 'ok');
+  };
+
+  window.setBattery = (pct) => {
+    states[`sensor.${CAR}_battery`].state = String(pct);
+    states[`sensor.${CAR}_battery_range`].state = String(Math.round(pct * 4.15));
+    pushHass();
+    L(`Battery → ${pct}%`, 'ok');
   };
 </script>
 

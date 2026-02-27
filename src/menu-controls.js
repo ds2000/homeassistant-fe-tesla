@@ -25,7 +25,7 @@ class TeslaMenuControls extends TeslaBase {
     const windowsOpen   = this._val(ENTITIES.WINDOWS_COVER) === 'open';
 
     return html`
-      <div class="controls-menu">
+      <div class="controls-menu${this.layout === 'landscape' ? ' landscape' : ''}">
         <div class="panel-header">
           <button class="panel-back" @click=${this._close}>
             <span class="icon">${unsafeHTML(ICONS['chevron-left'])}</span>
@@ -34,11 +34,10 @@ class TeslaMenuControls extends TeslaBase {
         </div>
         <div class="ctrl-car-area">
           <img class="ctrl-car-bg"
-            src="${this._bgUrl('controls-bg.png')}"
+            src="${this._imgUrl('controls-bg.png')}"
             alt="Car top view" />
-          ${this._hasOverlay ? html`
-            <div class="car-colour-overlay"
-              style="${this._overlayStyle('controls-bg.png')}"></div>` : ''}
+          ${this._hasCustomOverlay ? html`
+            <div style="${this._customOverlayStyleFor('controls-bg.png')}"></div>` : ''}
           <!-- Frunk — text only, top centre -->
           <button class="ctrl-zone ctrl-frunk"
             @click=${() => this._svc('cover', 'toggle_cover', ENTITIES.FRUNK_COVER)}>
@@ -78,7 +77,7 @@ class TeslaMenuControls extends TeslaBase {
           </button>
           <button class="ctrl-action-btn"
             @click=${() => this._svc('cover', windowsOpen ? 'close_cover' : 'open_cover', ENTITIES.WINDOWS_COVER)}>
-            <span class="icon${windowsOpen ? ' icon-on' : ''}">${unsafeHTML(ICONS['windows-vent'])}</span>
+            <span class="icon">${unsafeHTML(windowsOpen ? ICONS['vent-close'] : ICONS['vent-open'])}</span>
             <span>${windowsOpen ? 'Close' : 'Vent'}</span>
           </button>
         </div>

@@ -211,6 +211,7 @@ homeassistant-fe-tesla/
 3. **Test entity paths** — always verify entity ID patterns against the alandtse/tesla integration docs before using them
 4. **README-first** — when adding a config option, document it in README at the same time as implementing it
 5. **Version bumping** — use semver; bump patch for fixes, minor for new features, major for breaking config changes
+6. **Autonomous execution** — when working within the repo directory (`homeassistant-fe-tesla/`), run all bash commands, Python scripts, python3 commands, Node/npm commands, and build tools without asking for confirmation. This includes but is not limited to: `npm install`, `npm run build`, `git` operations, file creation/editing, `esbuild`/`rollup` invocations, linting, and any other CLI tooling needed to complete a task. Only pause to confirm actions that are destructive outside the repo (e.g. publishing to npm, pushing to remote, deleting files outside the project).
 
 ---
 

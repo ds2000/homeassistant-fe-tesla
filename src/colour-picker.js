@@ -7,10 +7,15 @@ class TeslaColourPicker extends LitElement {
 
   static get properties() {
     return {
-      colour:   { type: Object },    // { h, s, name } | null
-      showBack: { type: Boolean },   // show back arrow (when opened from settings)
-      _hue:     { state: true },
-      _sat:     { state: true },
+      selected:    { type: String },     // current colour dir name e.g. 'red' or 'custom'
+      available:   { type: Array },      // dirs that have images e.g. ['neutral','red']
+      showBack:    { type: Boolean },
+      customH:     { type: Number },     // current custom hue (0-360)
+      customS:     { type: Number },     // current custom saturation (0-100)
+      slideFrom:   { type: String, reflect: true, attribute: 'slide-from' },
+      _showCustom: { state: true },
+      _hue:        { state: true },
+      _sat:        { state: true },
     };
   }
 
@@ -36,12 +41,30 @@ class TeslaColourPicker extends LitElement {
         background: #1c1c1e;
         border-radius: 16px 16px 0 0;
         padding: 0 0 20px;
-        animation: slideUp 0.2s ease-out;
+        animation: slideUp 0.25s ease-out;
       }
 
       @keyframes slideUp {
-        from { transform: translateY(100%); }
-        to   { transform: translateY(0); }
+        from { transform: translateY(100%); opacity: 0; }
+        to   { transform: translateY(0); opacity: 1; }
+      }
+
+      @keyframes slideFromRight {
+        from { transform: translateX(30%); opacity: 0; }
+        to   { transform: translateX(0); opacity: 1; }
+      }
+
+      @keyframes slideFromLeft {
+        from { transform: translateX(-30%); opacity: 0; }
+        to   { transform: translateX(0); opacity: 1; }
+      }
+
+      :host([slide-from="right"]) .picker-panel {
+        animation: slideFromRight 0.25s ease-out;
+      }
+
+      :host([slide-from="left"]) .picker-panel {
+        animation: slideFromLeft 0.25s ease-out;
       }
 
       .picker-header {
@@ -113,7 +136,7 @@ class TeslaColourPicker extends LitElement {
         display: flex;
         justify-content: center;
         gap: 12px;
-        padding: 20px 16px 8px;
+        padding: 24px 16px 16px;
         flex-wrap: wrap;
       }
 
@@ -134,6 +157,7 @@ class TeslaColourPicker extends LitElement {
         height: 40px;
         border-radius: 50%;
         border: 2px solid transparent;
+        position: relative;
         transition: border-color 0.15s ease, transform 0.15s ease;
         box-shadow: 0 2px 8px rgba(0,0,0,0.4);
       }
@@ -150,6 +174,43 @@ class TeslaColourPicker extends LitElement {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+      }
+
+      /* ── Rainbow gradient for custom swatch ─────── */
+
+      .swatch-rainbow {
+        background: conic-gradient(
+          hsl(0,85%,55%), hsl(60,85%,55%), hsl(120,85%,55%),
+          hsl(180,85%,55%), hsl(240,85%,55%), hsl(300,85%,55%), hsl(360,85%,55%)
+        );
+      }
+
+      /* ── Unavailable state ──────────────────────────── */
+
+      .swatch-btn.unavailable {
+        pointer-events: none;
+        cursor: default;
+      }
+
+      .swatch-btn.unavailable .swatch-circle {
+        opacity: 0.25;
+      }
+
+      .swatch-btn.unavailable .swatch-circle::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: -3px;
+        right: -3px;
+        height: 2px;
+        background: rgba(255,255,255,0.6);
+        transform: rotate(-45deg);
+        border-radius: 1px;
+      }
+
+      .swatch-btn.unavailable .swatch-name {
+        text-decoration: line-through;
+        opacity: 0.25;
       }
 
       /* ── Custom sliders ───────────────────────────── */
@@ -246,52 +307,58 @@ class TeslaColourPicker extends LitElement {
 
   constructor() {
     super();
-    this.colour = null;
+    this.selected = 'neutral';
+    this.available = ['neutral'];
     this.showBack = false;
+    this.customH = 0;
+    this.customS = 80;
+    this._showCustom = false;
     this._hue = 0;
-    this._sat = 0;
+    this._sat = 80;
   }
 
   willUpdate(changed) {
-    if (changed.has('colour') && this.colour) {
-      this._hue = this.colour.h;
-      this._sat = this.colour.s;
+    if (changed.has('selected') || changed.has('customH') || changed.has('customS')) {
+      if (this.selected === 'custom') {
+        this._showCustom = true;
+        this._hue = this.customH ?? 0;
+        this._sat = this.customS ?? 80;
+      }
     }
   }
 
-  _selectSwatch(fc) {
-    const detail = { h: fc.h, s: fc.s, name: fc.name };
-    if (fc.blend)  detail.blend  = fc.blend;
-    if (fc.bg)     detail.bg     = fc.bg;
-    if (fc.filter) detail.filter = fc.filter;
+  _selectColour(fc) {
+    this._showCustom = false;
     this.dispatchEvent(new CustomEvent('colour-changed', {
-      detail,
+      detail: { dir: fc.dir, name: fc.name },
       bubbles: true, composed: true,
     }));
     this._close();
   }
 
+  _openCustom() {
+    this._showCustom = true;
+  }
+
   _onHueInput(e) {
     this._hue = Number(e.target.value);
-    this._fireSliderChange();
+    this._fireCustomChange();
   }
 
   _onSatInput(e) {
     this._sat = Number(e.target.value);
-    this._fireSliderChange();
+    this._fireCustomChange();
   }
 
-  _fireSliderChange() {
-    const filter = this._sat > 0
-      ? `hue-rotate(${this._hue}deg) saturate(${this._sat / 85})`
-      : 'saturate(0) brightness(0.8)';
+  _fireCustomChange() {
     this.dispatchEvent(new CustomEvent('colour-changed', {
-      detail: { h: this._hue, s: this._sat, name: 'Custom', filter },
+      detail: { dir: 'custom', name: 'Custom', h: this._hue, s: this._sat },
       bubbles: true, composed: true,
     }));
   }
 
   _reset() {
+    this._showCustom = false;
     this.dispatchEvent(new CustomEvent('colour-changed', {
       detail: null,
       bubbles: true, composed: true,
@@ -316,7 +383,8 @@ class TeslaColourPicker extends LitElement {
   }
 
   render() {
-    const activeName = this.colour?.name ?? null;
+    const avail = this.available ?? ['neutral'];
+    const isCustom = this.selected === 'custom';
 
     return html`
       <div class="picker-overlay" @click=${this._onOverlayClick}>
@@ -332,29 +400,40 @@ class TeslaColourPicker extends LitElement {
           </div>
 
           <div class="picker-swatches">
-            ${FACTORY_COLOURS.map(fc => html`
-              <button class="swatch-btn" @click=${() => this._selectSwatch(fc)}>
-                <div class="swatch-circle${activeName === fc.name ? ' selected' : ''}"
-                  style="background:${fc.swatch}"></div>
-                <span class="swatch-name">${fc.name}</span>
-              </button>
-            `)}
+            ${FACTORY_COLOURS.map(fc => {
+              const isAvail = avail.includes(fc.dir);
+              const isSel = this.selected === fc.dir;
+              return html`
+                <button
+                  class="swatch-btn${isAvail ? '' : ' unavailable'}"
+                  @click=${isAvail ? () => this._selectColour(fc) : null}>
+                  <div class="swatch-circle${isSel ? ' selected' : ''}"
+                    style="background:${fc.swatch}"></div>
+                  <span class="swatch-name">${fc.name}</span>
+                </button>`;
+            })}
+            <button class="swatch-btn" @click=${() => this._openCustom()}>
+              <div class="swatch-circle swatch-rainbow${isCustom ? ' selected' : ''}"></div>
+              <span class="swatch-name">Custom</span>
+            </button>
           </div>
 
-          <div class="picker-custom" style="--picker-hue:${this._hue}">
-            <div class="slider-row">
-              <span class="slider-label">Hue</span>
-              <input type="range" class="hue-slider" min="0" max="360"
-                .value=${String(this._hue)}
-                @input=${this._onHueInput} />
+          ${this._showCustom ? html`
+            <div class="picker-custom" style="--picker-hue:${this._hue}">
+              <div class="slider-row">
+                <span class="slider-label">Hue</span>
+                <input type="range" class="hue-slider" min="0" max="360"
+                  .value=${String(this._hue)}
+                  @input=${this._onHueInput} />
+              </div>
+              <div class="slider-row">
+                <span class="slider-label">Saturation</span>
+                <input type="range" class="sat-slider" min="0" max="100"
+                  .value=${String(this._sat)}
+                  @input=${this._onSatInput} />
+              </div>
             </div>
-            <div class="slider-row">
-              <span class="slider-label">Saturation</span>
-              <input type="range" class="sat-slider" min="0" max="100"
-                .value=${String(this._sat)}
-                @input=${this._onSatInput} />
-            </div>
-          </div>
+          ` : ''}
 
           <button class="picker-reset" @click=${this._reset}>
             Reset to Default

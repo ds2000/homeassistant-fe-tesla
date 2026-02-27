@@ -85,7 +85,7 @@ class TeslaMenuCharger extends TeslaBase {
     const addedRange = this._attr(ENTITIES.ENERGY_ADDED, 'added_range');
 
     return html`
-      <div class="charger-menu">
+      <div class="charger-menu${this.layout === 'landscape' ? ' landscape' : ''}">
 
         <!-- Header: "Charging" + range subtitle -->
         <div class="panel-header">

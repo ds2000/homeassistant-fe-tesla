@@ -5,7 +5,7 @@ import { css } from 'lit';
 export const sharedStyles = css`
   :host {
     display: block;
-    font-family: system-ui, -apple-system, sans-serif;
+    font-family: 'Gotham', 'Gill Sans', 'Century Gothic', system-ui, -apple-system, sans-serif;
   }
 
   [hidden] { display: none !important; }
@@ -19,6 +19,7 @@ export const sharedStyles = css`
     height: 24px;
     flex-shrink: 0;
     pointer-events: none;
+    transition: filter 0.15s ease;
   }
 
   .icon svg {
@@ -26,24 +27,31 @@ export const sharedStyles = css`
     height: 100%;
   }
 
+  /* SVG button images (loaded via <img>) */
+  .btn-img {
+    transition: filter 0.15s ease;
+  }
+
+  /* Unified hover glow for all icon buttons */
+  button:hover > .btn-img,
+  button:hover > .icon {
+    filter: drop-shadow(0 0 6px rgba(255,255,255,0.4));
+  }
+
   /* Active / lit-up state for stateful icons */
   .icon-on { color: #ffffff; }
 
-  /* ── Colour overlay (CSS mask + blend for body recolouring) ── */
+  /* ── Submenu panel enter animation ──────────────────────── */
 
-  .car-colour-overlay {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    -webkit-mask-size: contain;
-    mask-size: contain;
-    -webkit-mask-position: center;
-    mask-position: center;
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
+  @keyframes panelSlideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .controls-menu,
+  .climate-menu,
+  .charger-menu {
+    animation: panelSlideUp 0.25s ease-out both;
   }
 
   /* ── Panel header (back chevron + centred title) ──────────── */
@@ -70,6 +78,11 @@ export const sharedStyles = css`
     color: rgba(255,255,255,0.65);
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
+    transition: color 0.15s ease;
+  }
+
+  .panel-back:hover {
+    color: #ffffff;
   }
 
   .panel-back .icon {
@@ -111,7 +124,7 @@ export const chargerStyles = css`
   /* Main card: charge limit + slider + amps stepper */
   .chg-card {
     margin: 16px 16px 0;
-    background: #1c1c1e;
+    background: #161719;
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: 14px;
     padding: 18px 18px 0;
@@ -180,7 +193,7 @@ export const chargerStyles = css`
     align-items: center;
     margin: 0 -18px;
     border-top: 1px solid rgba(255,255,255,0.07);
-    background: #252527;
+    background: #1e1e20;
     padding: 2px 6px;
   }
 
@@ -244,36 +257,73 @@ export const climateStyles = css`
     padding: 0;
   }
 
-  /* Car area — dark slab with seat heat tap zones overlaid */
+  /* ── Car area — outer clips, inner sizes to image ─────────── */
   .clim-car-area {
-    background: #080808;
-    height: 220px;
+    background: #161719;
+    height: 500px;
     position: relative;
     overflow: hidden;
+    transition: height 0.35s ease;
+  }
+
+  .clim-car-area.clim-car-collapsed {
+    height: 260px;
+  }
+
+  /* Inner wrapper takes the image's natural size; seats are
+     positioned as percentages of the image, so they always
+     align regardless of how much the outer container clips. */
+  .clim-car-inner {
+    position: relative;
+    width: 100%;
   }
 
   .clim-car-bg {
-    position: absolute;
-    inset: 0;
     width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-position: center;
+    height: auto;
+    display: block;
     pointer-events: none;
-    opacity: 0.85;
   }
 
-  /* Seat heat tap zones (positioned in the car area) */
+  /* ── Floating back button (overlaid on car image) ────────── */
+  .clim-back-btn {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.65);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: color 0.15s ease;
+  }
+
+  .clim-back-btn:hover {
+    color: #ffffff;
+  }
+
+  .clim-back-btn .icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  /* ── Seat heat tap zones ─────────────────────────────────── */
   .clim-seat-zone {
     position: absolute;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3px;
+    gap: 2px;
     background: transparent;
     border: none;
     cursor: pointer;
-    padding: 10px 14px;
+    padding: 8px 14px;
     border-radius: 10px;
     transform: translate(-50%, -50%);
     transition: background 0.15s ease;
@@ -284,41 +334,50 @@ export const climateStyles = css`
   .clim-seat-zone:active { background: rgba(255,255,255,0.1); }
 
   .clim-seat-zone .icon {
-    width: 28px;
-    height: 28px;
+    width: 29px;
+    height: 29px;
   }
 
-  .clim-seat-zone span {
-    font-size: 0.62em;
+  .clim-seat-zone .btn-img {
+    width: 29px;
+    height: 29px;
+    object-fit: contain;
+    pointer-events: none;
+  }
+
+  .clim-seat-label {
+    font-size: 0.65em;
     font-weight: 500;
-    color: rgba(255,255,255,0.35);
+    color: rgba(255,255,255,0.45);
     letter-spacing: 0.02em;
   }
 
-  /* Seat positions — approximate top-down car layout */
-  .clim-seat-fl { top: 32%; left: 25%; }  /* front driver   */
-  .clim-seat-fr { top: 32%; left: 75%; }  /* front passenger*/
-  .clim-seat-rl { top: 70%; left: 22%; }  /* rear left      */
-  .clim-seat-rc { top: 70%; left: 50%; }  /* rear centre    */
-  .clim-seat-rr { top: 70%; left: 78%; }  /* rear right     */
+  /* Seat positions — percentages of the image dimensions
+     so they track the actual seats regardless of clip height.
+     Based on Model 3 climate-bg.png (551×950). */
+  .clim-seat-fl { top: 30%; left: 35%; }
+  .clim-seat-fr { top: 30%; left: 64%; }
+  .clim-seat-rl { top: 50%; left: 37%; }
+  .clim-seat-rc { top: 50%; left: 50%; }
+  .clim-seat-rr { top: 50%; left: 63%; }
 
-  /* Bottom sheet container — slides up when expanded */
+  /* ── Bottom sheet ────────────────────────────────────────── */
   .clim-sheet {
-    background: #111111;
-    border-radius: 14px 14px 0 0;
-    margin-top: -14px;   /* overlap the car area slightly */
+    background: #161719;
+    border-radius: 16px 16px 0 0;
+    margin-top: -16px;
     position: relative;
     z-index: 1;
     padding-bottom: 4px;
   }
 
-  /* Drag handle row */
+  /* Drag handle */
   .clim-handle {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    padding: 12px 0 8px;
+    padding: 14px 0 10px;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -326,34 +385,33 @@ export const climateStyles = css`
   }
 
   .clim-handle-pill {
-    width: 36px;
+    width: 40px;
     height: 4px;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.18);
     border-radius: 2px;
     transition: background 0.15s ease;
   }
 
-  .clim-handle:hover .clim-handle-pill { background: rgba(255,255,255,0.38); }
+  .clim-handle:hover .clim-handle-pill { background: rgba(255,255,255,0.35); }
 
-  /* Interior / Exterior temp info line */
+  /* Interior / Exterior temp info */
   .clim-temp-info {
     text-align: center;
-    font-size: 0.8em;
+    font-size: 0.82em;
     font-weight: 500;
     color: rgba(255,255,255,0.45);
     letter-spacing: 0.02em;
-    padding: 0 20px 16px;
+    padding: 0 20px 18px;
   }
 
-  /* Main control row: [Power] [← Temp →] [Vent] */
+  /* ── Main control row: [Power] [← Temp →] [Vent] ────────── */
   .clim-main-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 24px 20px;
+    padding: 0 24px 22px;
   }
 
-  /* Power / Vent icon+label buttons */
   .clim-icon-btn {
     display: flex;
     flex-direction: column;
@@ -361,13 +419,13 @@ export const climateStyles = css`
     gap: 6px;
     background: transparent;
     border: none;
-    color: rgba(255,255,255,0.45);
+    color: rgba(255,255,255,0.4);
     font-family: inherit;
     font-size: 0.72em;
     font-weight: 500;
     cursor: pointer;
     padding: 8px 10px;
-    min-width: 52px;
+    min-width: 56px;
     border-radius: 10px;
     transition: color 0.15s ease, background 0.15s ease;
     -webkit-tap-highlight-color: transparent;
@@ -379,6 +437,14 @@ export const climateStyles = css`
   .clim-icon-btn .icon {
     width: 28px;
     height: 28px;
+  }
+
+  .clim-icon-btn .btn-img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    pointer-events: none;
   }
 
   /* Temperature ← value → arrows */
@@ -396,7 +462,7 @@ export const climateStyles = css`
     justify-content: center;
     background: transparent;
     border: none;
-    color: rgba(255,255,255,0.4);
+    color: rgba(255,255,255,0.35);
     cursor: pointer;
     padding: 10px 8px;
     border-radius: 50%;
@@ -422,7 +488,7 @@ export const climateStyles = css`
     text-align: center;
   }
 
-  /* Defrost Car — full-width pill button (always visible) */
+  /* ── Defrost Car — full-width outlined button ────────────── */
   .clim-full-btn {
     display: flex;
     align-items: center;
@@ -430,23 +496,23 @@ export const climateStyles = css`
     width: calc(100% - 32px);
     margin: 0 16px 10px;
     padding: 16px 18px;
-    background: #1c1c1e;
-    border: 1px solid rgba(255,255,255,0.08);
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.12);
     border-radius: 12px;
-    color: rgba(255,255,255,0.85);
+    color: rgba(255,255,255,0.75);
     font-family: inherit;
     font-size: 0.9em;
     font-weight: 500;
     cursor: pointer;
     text-align: left;
     -webkit-tap-highlight-color: transparent;
-    transition: background 0.15s ease;
+    transition: background 0.15s ease, border-color 0.15s ease;
   }
 
-  .clim-full-btn:hover { background: #252528; }
+  .clim-full-btn:hover { background: rgba(255,255,255,0.04); }
 
   .clim-full-btn.active {
-    background: rgba(232,33,39,0.15);
+    background: rgba(232,33,39,0.12);
     border-color: rgba(232,33,39,0.3);
     color: #ff7070;
   }
@@ -454,12 +520,18 @@ export const climateStyles = css`
   .clim-full-btn .icon {
     width: 22px;
     height: 22px;
-    color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.45);
   }
 
   .clim-full-btn.active .icon { color: #e82127; }
 
-  /* Expandable heated seat section */
+  .clim-full-btn .btn-img-wide {
+    height: 24px;
+    object-fit: contain;
+    pointer-events: none;
+  }
+
+  /* ── Expandable section ──────────────────────────────────── */
   .clim-expanded-content {
     overflow: hidden;
     max-height: 0;
@@ -470,18 +542,17 @@ export const climateStyles = css`
     max-height: 520px;
   }
 
-  /* List group container — matches Tesla app Camp Mode / Dog Mode style */
+  /* List group */
   .clim-list-group {
     margin: 0 16px 10px;
-    background: #1c1c1e;
-    border: 1px solid rgba(255,255,255,0.08);
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.1);
     border-radius: 12px;
     overflow: hidden;
   }
 
   .clim-list-group--last { margin-bottom: 16px; }
 
-  /* Each row in the list group */
   .clim-list-item {
     display: flex;
     align-items: center;
@@ -505,9 +576,7 @@ export const climateStyles = css`
   .clim-list-item:hover  { background: rgba(255,255,255,0.04); }
   .clim-list-item:active { background: rgba(255,255,255,0.08); }
 
-  .clim-list-item.hot {
-    color: rgba(255,255,255,0.9);
-  }
+  .clim-list-item.hot { color: rgba(255,255,255,0.9); }
 
   .clim-list-icon {
     width: 22px;
@@ -529,7 +598,6 @@ export const climateStyles = css`
     font-weight: 600;
   }
 
-  /* Section title — matches "Cabin Overheat Protection" bold white heading */
   .clim-section-title {
     font-size: 0.9em;
     font-weight: 700;
@@ -537,21 +605,19 @@ export const climateStyles = css`
     padding: 12px 16px 8px;
   }
 
-  /* Horizontal separator between Camp/Dog group and Overheat section */
   .clim-separator {
     height: 1px;
     background: rgba(255,255,255,0.1);
     margin: 8px 16px;
   }
 
-  /* Segmented control container — extends .clim-list-group */
+  /* Segmented control */
   .clim-segment-group {
     display: flex;
     padding: 4px;
     gap: 2px;
   }
 
-  /* Each segment option button */
   .clim-segment-btn {
     flex: 1;
     padding: 14px 6px;
@@ -575,6 +641,111 @@ export const climateStyles = css`
     color: rgba(255,255,255,0.9);
     font-weight: 600;
   }
+
+  /* ── Landscape layout ─────────────────────────────────── */
+
+  .climate-menu.landscape {
+    flex-direction: row;
+  }
+
+  /* Car area: left side, height driven by image aspect ratio */
+  .landscape .clim-car-area {
+    flex: 0 0 50%;
+    max-width: 50%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Ignore collapse in landscape — always show full car */
+  .landscape .clim-car-area.clim-car-collapsed {
+    height: auto;
+  }
+
+  .landscape .clim-car-inner {
+    width: 100%;
+    position: relative;
+  }
+
+  /* Right panel: no scrollbar, content flows naturally */
+  .landscape .clim-sheet {
+    flex: 1;
+    margin-top: 0;
+    border-radius: 0;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-left: 1px solid rgba(255,255,255,0.06);
+    padding-bottom: 8px;
+  }
+
+  /* Hide drag handle in landscape — not needed */
+  .landscape .clim-handle {
+    display: none;
+  }
+
+  /* Auto-expand the extra content in landscape */
+  .landscape .clim-expanded-content {
+    max-height: none;
+  }
+
+  /* Temp info: left-aligned, compact */
+  .landscape .clim-temp-info {
+    padding: 12px 16px 10px;
+    text-align: left;
+  }
+
+  /* Main row: tighter for side panel */
+  .landscape .clim-main-row {
+    padding: 0 16px 12px;
+  }
+
+  /* Temperature value: scale down for narrower panel */
+  .landscape .clim-temp-value {
+    font-size: 2.2em;
+  }
+
+  /* Power/Vent buttons: tighter */
+  .landscape .clim-icon-btn {
+    padding: 6px 8px;
+    min-width: 48px;
+  }
+
+  /* Defrost button: compact */
+  .landscape .clim-full-btn {
+    width: calc(100% - 28px);
+    margin: 0 14px 6px;
+    padding: 12px 14px;
+  }
+
+  /* List groups: compact margins */
+  .landscape .clim-list-group {
+    margin: 0 14px 6px;
+  }
+
+  .landscape .clim-list-item {
+    padding: 12px 14px;
+  }
+
+  .landscape .clim-section-title {
+    padding: 8px 14px 4px;
+    font-size: 0.85em;
+  }
+
+  .landscape .clim-separator {
+    margin: 4px 14px;
+  }
+
+  .landscape .clim-segment-group {
+    padding: 3px;
+  }
+
+  .landscape .clim-segment-btn {
+    padding: 10px 6px;
+    font-size: 0.8em;
+  }
 `;
 
 // ── Controls panel styles ───────────────────────────────────────────────────
@@ -589,8 +760,8 @@ export const controlsStyles = css`
   /* Controls: car interaction area */
   .ctrl-car-area {
     position: relative;
-    background: #080808;
-    height: 300px;
+    background: #161719;
+    height: 400px;
     width: 100%;
     overflow: hidden;
   }
@@ -614,68 +785,76 @@ export const controlsStyles = css`
     justify-content: center;
     background: transparent;
     border: none;
-    color: rgba(255,255,255,0.88);
+    color: rgba(255,255,255,0.75);
     font-family: inherit;
     font-size: 1.1em;
     font-weight: 400;
+    letter-spacing: 0.02em;
     cursor: pointer;
-    padding: 14px 28px;
+    padding: 12px 24px;
     -webkit-tap-highlight-color: transparent;
-    transition: color 0.12s ease;
+    transition: color 0.15s ease;
     user-select: none;
   }
 
+  .ctrl-zone:hover  { color: rgba(255,255,255,1); }
   .ctrl-zone:active { color: rgba(255,255,255,0.5); }
 
-  /* Frunk: upper area, text only */
+  /* Frunk: on the hood */
   .ctrl-frunk {
     top: 14%;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  /* Lock: car centre, icon only — larger icon */
-  .ctrl-lock {
-    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
 
-  .ctrl-lock .icon {
-    width: 34px;
-    height: 34px;
-  }
-
-  /* Trunk: lower area, text only */
-  .ctrl-trunk {
-    bottom: 10%;
+  /* Lock: on glass roof — 50% (center) */
+  .ctrl-lock {
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
+    color: rgba(255,255,255,0.48);
+    padding: 10px;
   }
 
-  /* Charge port: bottom-left — small icon, highlights when open */
-  .ctrl-port {
-    bottom: 16%;
-    left: 5%;
-    padding: 10px 12px;
-    color: rgba(255,255,255,0.35);
-    font-size: 1em;
+  .ctrl-lock:hover { color: rgba(255,255,255,0.8); }
+
+  .ctrl-lock .icon {
+    width: 24px;
+    height: 24px;
   }
+
+  /* Trunk: rear deck */
+  .ctrl-trunk {
+    top: 78%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* Charge port: rear-left tail */
+  .ctrl-port {
+    top: 82%;
+    left: 20%;
+    transform: translate(-50%, -50%);
+    padding: 8px 10px;
+    color: rgba(255,255,255,0.28);
+  }
+
+  .ctrl-port:hover { color: rgba(255,255,255,0.6); }
 
   .ctrl-port .icon {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
   }
 
-  .ctrl-port.port-open { color: #ffffff; }
+  .ctrl-port.port-open { color: rgba(255,255,255,0.75); }
 
   /* Controls: bottom action bar */
   .ctrl-actions {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 14px 8px 18px;
-    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 16px 12px 20px;
+    border-top: 1px solid rgba(255,255,255,0.05);
   }
 
   .ctrl-action-btn {
@@ -686,22 +865,75 @@ export const controlsStyles = css`
     flex: 1;
     background: transparent;
     border: none;
-    color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.45);
     font-family: inherit;
-    font-size: 0.72em;
+    font-size: 0.7em;
+    font-weight: 400;
     cursor: pointer;
     padding: 6px 4px;
     -webkit-tap-highlight-color: transparent;
     transition: color 0.15s ease;
   }
 
-  .ctrl-action-btn:hover  { color: rgba(255,255,255,0.85); }
+  .ctrl-action-btn:hover  { color: rgba(255,255,255,0.8); }
   .ctrl-action-btn:active { color: #ffffff; }
 
   .ctrl-action-btn .icon {
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
   }
+
+  /* ── Landscape layout ─────────────────────────────────── */
+
+  .controls-menu.landscape {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  /* Header spans full width */
+  .landscape .panel-header {
+    flex: 0 0 100%;
+  }
+
+  /* Car area: left side */
+  .landscape .ctrl-car-area {
+    flex: 0 0 55%;
+    max-width: 55%;
+    height: auto;
+    min-height: 340px;
+  }
+
+  /* Action bar: right column, vertically centred */
+  .landscape .ctrl-actions {
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    padding: 24px 20px;
+    gap: 6px;
+    border-top: none;
+    border-left: 1px solid rgba(255,255,255,0.05);
+  }
+
+  /* Action buttons: horizontal row style in the vertical column */
+  .landscape .ctrl-action-btn {
+    flex-direction: row;
+    gap: 14px;
+    padding: 16px 20px;
+    font-size: 0.82em;
+    border-radius: 12px;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .landscape .ctrl-action-btn:hover {
+    background: rgba(255,255,255,0.04);
+  }
+
+  .landscape .ctrl-action-btn .icon {
+    width: 22px;
+    height: 22px;
+  }
+
 `;
 
 // ── Main card styles (header, car image, quick actions, nav rows, etc.) ─────
@@ -709,13 +941,39 @@ export const controlsStyles = css`
 export const cardStyles = css`
   ha-card {
     display: block;
-    background: var(--ha-card-background, #0d0d0d);
+    background: var(--ha-card-background, #161719);
     color: #ffffff;
     overflow: hidden;
     position: relative;
     border-radius: 12px;
     padding: 0;
   }
+
+  /* ── Staggered panel transitions ─────────────────────────── */
+
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .header {
+    animation: fadeSlideIn 0.25s ease-out both;
+  }
+
+  .car-image-area {
+    animation: fadeSlideIn 0.3s ease-out 0.05s both;
+  }
+
+  .quick-actions {
+    animation: fadeSlideIn 0.3s ease-out 0.1s both;
+  }
+
+  .nav-row:nth-child(1) { animation: fadeSlideIn 0.3s ease-out 0.12s both; }
+  .nav-row:nth-child(2) { animation: fadeSlideIn 0.3s ease-out 0.16s both; }
+  .nav-row:nth-child(3) { animation: fadeSlideIn 0.3s ease-out 0.20s both; }
+  .nav-row:nth-child(4) { animation: fadeSlideIn 0.3s ease-out 0.24s both; }
+  .nav-row:nth-child(5) { animation: fadeSlideIn 0.3s ease-out 0.28s both; }
+  .nav-row:nth-child(6) { animation: fadeSlideIn 0.3s ease-out 0.32s both; }
 
   /* ── Header ──────────────────────────────────────────────── */
 
@@ -810,27 +1068,6 @@ export const cardStyles = css`
     padding-top: 2px;
   }
 
-  .online-badge {
-    font-size: 0.68em;
-    padding: 3px 8px;
-    border-radius: 12px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-
-  .online-badge.online {
-    background: rgba(39,174,96,0.15);
-    color: #2ecc71;
-    border: 1px solid rgba(46,204,113,0.3);
-  }
-
-  .online-badge.offline {
-    background: rgba(192,57,43,0.15);
-    color: #e74c3c;
-    border: 1px solid rgba(231,76,60,0.3);
-  }
-
   .icon-btn {
     display: flex;
     align-items: center;
@@ -846,7 +1083,7 @@ export const cardStyles = css`
     -webkit-tap-highlight-color: transparent;
   }
 
-  .icon-btn:hover { color: rgba(255,255,255,0.75); }
+  .icon-btn:hover { color: rgba(255,255,255,0.8); }
 
   .icon-btn .icon {
     width: 20px;
@@ -858,17 +1095,16 @@ export const cardStyles = css`
   .car-image-area {
     position: relative;
     width: 100%;
-    background: #0d0d0d;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 160px;
+    aspect-ratio: 417 / 262;
+    background: #161719;
     overflow: hidden;
   }
 
   .car-image {
+    position: absolute;
+    inset: 0;
     width: 100%;
-    max-height: 260px;
+    height: 100%;
     object-fit: contain;
     object-position: center;
     display: block;
@@ -900,7 +1136,7 @@ export const cardStyles = css`
     align-items: center;
     gap: 32px;
     padding: 16px 0 14px;
-    background: #0d0d0d;
+    background: #161719;
     border-bottom: 1px solid rgba(255,255,255,0.07);
   }
 
@@ -925,10 +1161,20 @@ export const cardStyles = css`
 
   .quick-btn.q-locked   { color: #ffffff; }    /* locked state */
   .quick-btn.q-unlocked { color: rgba(255,255,255,0.4); }
+  .quick-btn.q-active   { color: #ffffff; }    /* on state (charging, climate) */
 
   .quick-btn .icon {
     width: 26px;
     height: 26px;
+  }
+
+  /* Official Tesla SVG button images in quick actions */
+  .quick-btn .btn-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    pointer-events: none;
   }
 
   /* ── Nav rows ─────────────────────────────────────────────── */
@@ -956,7 +1202,14 @@ export const cardStyles = css`
   }
 
   .nav-row:hover  { background: rgba(255,255,255,0.03); }
+  .nav-row:hover .nav-icon { color: rgba(255,255,255,0.8); }
   .nav-row:last-child { border-bottom: none; }
+
+  .nav-row:disabled {
+    opacity: 1;
+    pointer-events: none;
+    cursor: default;
+  }
 
   .nav-row.active {
     background: rgba(232,33,39,0.06);
@@ -966,9 +1219,20 @@ export const cardStyles = css`
     width: 22px;
     height: 22px;
     color: rgba(255,255,255,0.38);
+    transition: color 0.15s ease;
   }
 
   .nav-row.active .nav-icon { color: #e82127; }
+
+  /* Official Tesla SVG button images in nav rows */
+  .nav-btn-img {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    pointer-events: none;
+  }
 
   .nav-text {
     flex: 1;
@@ -1040,7 +1304,7 @@ export const cardStyles = css`
 
   .settings-panel {
     width: 100%;
-    background: #1c1c1e;
+    background: #161719;
     border-radius: 16px 16px 0 0;
     padding: 0 0 20px;
     animation: settingsSlideUp 0.2s ease-out;
@@ -1109,20 +1373,21 @@ export const cardStyles = css`
 
   .settings-row:last-child { border-bottom: none; }
   .settings-row:hover { background: rgba(255,255,255,0.03); }
+
+  .settings-row:nth-child(1) { animation: fadeSlideIn 0.25s ease-out 0.1s both; }
+  .settings-row:nth-child(2) { animation: fadeSlideIn 0.25s ease-out 0.16s both; }
+  .settings-row:nth-child(3) { animation: fadeSlideIn 0.25s ease-out 0.22s both; }
+
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
   .settings-row:active { background: rgba(255,255,255,0.06); }
 
   .settings-row-icon {
     width: 22px;
     height: 22px;
     color: rgba(255,255,255,0.45);
-  }
-
-  .settings-swatch {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.15);
-    flex-shrink: 0;
   }
 
   .settings-row-text {
@@ -1147,5 +1412,63 @@ export const cardStyles = css`
     width: 18px;
     height: 18px;
     color: rgba(255,255,255,0.2);
+  }
+
+  /* ── Landing body (portrait = vertical stack, landscape = side-by-side) ── */
+
+  .landing-body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .landing-left {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Landscape layout ──────────────────────────────────── */
+
+  ha-card.landscape {
+    width: 150%;
+    margin-left: -25%;
+  }
+
+  ha-card.landscape .landing-body {
+    flex-direction: row;
+  }
+
+  ha-card.landscape .landing-left {
+    flex: 0 0 55%;
+    max-width: 55%;
+    border-right: 1px solid rgba(255,255,255,0.06);
+  }
+
+  ha-card.landscape .car-image-area {
+    aspect-ratio: auto;
+    flex: 1;
+    min-height: 200px;
+  }
+
+  ha-card.landscape .quick-actions {
+    border-bottom: none;
+    padding: 12px 0 10px;
+    gap: 24px;
+  }
+
+  ha-card.landscape .nav-rows {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  ha-card.landscape .nav-row {
+    padding: 14px 18px;
+  }
+
+  ha-card.landscape .nav-row .nav-label {
+    font-size: 0.92em;
+  }
+
+  ha-card.landscape .nav-row .nav-sublabel {
+    font-size: 0.72em;
   }
 `;

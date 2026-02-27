@@ -39,15 +39,16 @@ class TeslaMenuClimate extends TeslaBase {
     }, 800);
   }
 
-  // ── Seat heat icon (progressive red waves) ───────────────────────────────
+  // ── Seat heat image — maps level to the correct SVG file ─────────────────
 
-  _seatHeatSvg(level) {
-    const n = level === 'High' ? 3 : level === 'Medium' ? 2 : level === 'Low' ? 1 : 0;
-    const on = '#e82127';
-    const off = 'rgba(255,255,255,0.25)';
-    const wave = (x, active) =>
-      `<path d="M${x} 5c-2 2.5 2 5 0 7c-2 2.5 2 5 0 7" stroke="${active ? on : off}" fill="none"/>`;
-    return `<svg viewBox="0 0 24 24" stroke-width="2.8" stroke-linecap="round">${wave(6, n >= 1)}${wave(12, n >= 2)}${wave(18, n >= 3)}</svg>`;
+  _seatHeatFile(level) {
+    if (!level || level === 'Off') return 'Tesla_Heated_Seat_Off.svg';
+    const n = parseInt(level);
+    if (!isNaN(n) && n >= 1 && n <= 3) return `Tesla_Heated_Seat_${n}.svg`;
+    if (level === 'Low')    return 'Tesla_Heated_Seat_1.svg';
+    if (level === 'Medium') return 'Tesla_Heated_Seat_2.svg';
+    if (level === 'High')   return 'Tesla_Heated_Seat_3.svg';
+    return 'Tesla_Heated_Seat_Off.svg';
   }
 
   // ── Close override — also reset expanded state ────────────────────────────
@@ -91,48 +92,49 @@ class TeslaMenuClimate extends TeslaBase {
     const cabinOverheat = this._val(ENTITIES.CABIN_OVERHEAT) ?? 'Off';
 
     return html`
-      <div class="climate-menu">
-        <div class="panel-header">
-          <button class="panel-back" @click=${this._close}>
-            <span class="icon">${unsafeHTML(ICONS['chevron-left'])}</span>
-          </button>
-          <span class="panel-title">Climate</span>
-        </div>
+      <div class="climate-menu${this.layout === 'landscape' ? ' landscape' : ''}">
 
-        <!-- Car area: seat heat tap zones overlaid on interior image -->
-        <div class="clim-car-area">
-          <img class="clim-car-bg"
-            src="${this._bgUrl('climate-bg.png')}"
-            alt="Car interior view" />
-          ${this._hasOverlay ? html`
-            <div class="car-colour-overlay"
-              style="${this._overlayStyle('climate-bg.png')}"></div>` : ''}
-          <!-- Front seats -->
-          <button class="clim-seat-zone clim-seat-fl"
-            @click=${() => this._svc('select', 'select_next', ENTITIES.HEATED_SEAT_LEFT, { cycle: true })}>
-            <span class="icon">${unsafeHTML(this._seatHeatSvg(leftSeat ?? 'Off'))}</span>
-            <span>${leftSeat ?? 'Off'}</span>
-          </button>
-          <button class="clim-seat-zone clim-seat-fr"
-            @click=${() => this._svc('select', 'select_next', ENTITIES.HEATED_SEAT_RIGHT, { cycle: true })}>
-            <span class="icon">${unsafeHTML(this._seatHeatSvg(rightSeat ?? 'Off'))}</span>
-            <span>${rightSeat ?? 'Off'}</span>
-          </button>
-          <!-- Rear seats -->
-          <button class="clim-seat-zone clim-seat-rl"
-            @click=${() => this._svc('select', 'select_next', ENTITIES.HEATED_SEAT_REAR_LEFT, { cycle: true })}>
-            <span class="icon">${unsafeHTML(this._seatHeatSvg(rearLeftSeat ?? 'Off'))}</span>
-            <span>${rearLeftSeat ?? 'Off'}</span>
-          </button>
-          <button class="clim-seat-zone clim-seat-rc"
-            @click=${() => this._svc('select', 'select_next', ENTITIES.HEATED_SEAT_REAR_CENTER, { cycle: true })}>
-            <span class="icon">${unsafeHTML(this._seatHeatSvg(rearCtrSeat ?? 'Off'))}</span>
-            <span>${rearCtrSeat ?? 'Off'}</span>
-          </button>
-          <button class="clim-seat-zone clim-seat-rr"
-            @click=${() => this._svc('select', 'select_next', ENTITIES.HEATED_SEAT_REAR_RIGHT, { cycle: true })}>
-            <span class="icon">${unsafeHTML(this._seatHeatSvg(rearRightSeat ?? 'Off'))}</span>
-            <span>${rearRightSeat ?? 'Off'}</span>
+        <!-- Car area: outer clips, inner sizes to image, seats overlay image -->
+        <div class="clim-car-area${this._climExpanded ? ' clim-car-collapsed' : ''}">
+          <div class="clim-car-inner">
+            <img class="clim-car-bg"
+              src="${this._imgUrl('climate-bg.png')}"
+              alt="Car interior view" />
+            ${this._hasCustomOverlay ? html`
+              <div style="${this._customOverlayStyleFor('climate-bg.png')}"></div>` : ''}
+
+            <!-- Front seats -->
+            <button class="clim-seat-zone clim-seat-fl"
+              @click=${() => this._svc('select', 'select_next', ENTITIES.HEATED_SEAT_LEFT, { cycle: true })}>
+              <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(leftSeat ?? 'Off'))}" alt="" />
+              <span class="clim-seat-label">${leftSeat ?? 'Off'}</span>
+            </button>
+            <button class="clim-seat-zone clim-seat-fr"
+              @click=${() => this._svc('select', 'select_next', ENTITIES.HEATED_SEAT_RIGHT, { cycle: true })}>
+              <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(rightSeat ?? 'Off'))}" alt="" />
+              <span class="clim-seat-label">${rightSeat ?? 'Off'}</span>
+            </button>
+            <!-- Rear seats -->
+            <button class="clim-seat-zone clim-seat-rl"
+              @click=${() => this._svc('select', 'select_next', ENTITIES.HEATED_SEAT_REAR_LEFT, { cycle: true })}>
+              <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(rearLeftSeat ?? 'Off'))}" alt="" />
+              <span class="clim-seat-label">${rearLeftSeat ?? 'Off'}</span>
+            </button>
+            <button class="clim-seat-zone clim-seat-rc"
+              @click=${() => this._svc('select', 'select_next', ENTITIES.HEATED_SEAT_REAR_CENTER, { cycle: true })}>
+              <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(rearCtrSeat ?? 'Off'))}" alt="" />
+              <span class="clim-seat-label">${rearCtrSeat ?? 'Off'}</span>
+            </button>
+            <button class="clim-seat-zone clim-seat-rr"
+              @click=${() => this._svc('select', 'select_next', ENTITIES.HEATED_SEAT_REAR_RIGHT, { cycle: true })}>
+              <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(rearRightSeat ?? 'Off'))}" alt="" />
+              <span class="clim-seat-label">${rearRightSeat ?? 'Off'}</span>
+            </button>
+          </div>
+
+          <!-- Floating back button (positioned in outer container) -->
+          <button class="clim-back-btn" @click=${this._close}>
+            <span class="icon">${unsafeHTML(ICONS['chevron-left'])}</span>
           </button>
         </div>
 
@@ -157,7 +159,7 @@ class TeslaMenuClimate extends TeslaBase {
           <div class="clim-main-row">
             <button class="clim-icon-btn${climOn ? ' clim-active' : ''}"
               @click=${() => this._svc('climate', climOn ? 'turn_off' : 'turn_on', ENTITIES.CLIMATE)}>
-              <span class="icon">${unsafeHTML(ICONS['climate-fan'])}</span>
+              <span class="icon">${unsafeHTML(ICONS.power)}</span>
               <span>${climOn ? 'On' : 'Off'}</span>
             </button>
 
@@ -173,7 +175,7 @@ class TeslaMenuClimate extends TeslaBase {
 
             <button class="clim-icon-btn${windowsOpen ? ' clim-active' : ''}"
               @click=${() => this._svc('cover', windowsOpen ? 'close_cover' : 'open_cover', ENTITIES.WINDOWS_COVER)}>
-              <span class="icon">${unsafeHTML(ICONS['windows-vent'])}</span>
+              <span class="icon">${unsafeHTML(windowsOpen ? ICONS['vent-close'] : ICONS['vent-open'])}</span>
               <span>${windowsOpen ? 'Close' : 'Vent'}</span>
             </button>
           </div>
