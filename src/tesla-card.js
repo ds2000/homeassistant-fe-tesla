@@ -75,7 +75,7 @@ class TeslaCard extends LitElement {
       car_model:   '3',
       car_variant: '3.1',
       car_color:   'neutral',
-      image_path:  '/local/Tesla',
+      image_path:  '/hacsfiles/homeassistant-fe-tesla',
       show_speed:  true,
       ...config,
     };
@@ -100,7 +100,7 @@ class TeslaCard extends LitElement {
   }
 
   static getStubConfig() {
-    return { car_name: '', car_model: '3', car_variant: '3.1', car_color: 'neutral', image_path: '/local/Tesla' };
+    return { car_name: '', car_model: '3', car_variant: '3.1', car_color: 'neutral', image_path: '/hacsfiles/homeassistant-fe-tesla' };
   }
 
   // ─── Persistence ───────────────────────────────────────────────────────────
