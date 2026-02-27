@@ -1,2 +1,30 @@
+# Dependencies
 node_modules/
+
+# OS files
 .DS_Store
+Thumbs.db
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# Local HA symlinks (user-specific paths)
+local/
+
+# Utility scripts (not part of the card)
+scripts/
+
+# Editor / IDE
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+
+# Environment
+.env
+.env.*
