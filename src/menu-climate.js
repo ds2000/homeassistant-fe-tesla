@@ -90,6 +90,8 @@ class TeslaMenuClimate extends TeslaBase {
     const campMode      = this._val(ENTITIES.CAMP_MODE)  === 'on';
     const dogMode       = this._val(ENTITIES.DOG_MODE)   === 'on';
     const cabinOverheat = this._val(ENTITIES.CABIN_OVERHEAT) ?? 'Off';
+    const pluggedIn     = this._val(ENTITIES.PLUGGED_IN) === 'on';
+    const climBgFile    = pluggedIn ? 'climate-bg-charging.png' : 'climate-bg.png';
 
     return html`
       <div class="climate-menu${this.layout === 'landscape' ? ' landscape' : ''}">
@@ -98,10 +100,10 @@ class TeslaMenuClimate extends TeslaBase {
         <div class="clim-car-area${this._climExpanded ? ' clim-car-collapsed' : ''}">
           <div class="clim-car-inner">
             <img class="clim-car-bg"
-              src="${this._imgUrl('climate-bg.png')}"
+              src="${this._imgUrl(climBgFile)}"
               alt="Car interior view" />
             ${this._hasCustomOverlay ? html`
-              <div style="${this._customOverlayStyleFor('climate-bg.png')}"></div>` : ''}
+              <div style="${this._customOverlayStyleFor(climBgFile)}"></div>` : ''}
 
             <!-- Front seats -->
             <button class="clim-seat-zone clim-seat-fl"

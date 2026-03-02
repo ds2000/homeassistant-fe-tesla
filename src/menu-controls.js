@@ -19,10 +19,11 @@ class TeslaMenuControls extends TeslaBase {
                        || this._val(ENTITIES.FRUNK)        === 'on';
     const trunkOpen     = this._val(ENTITIES.TRUNK) === 'on';
 
-    const chargerDoorOpen = this._val(ENTITIES.CHARGER_DOOR) === 'open'
-                         || this._val(ENTITIES.PLUGGED_IN)    === 'on';
+    const pluggedIn     = this._val(ENTITIES.PLUGGED_IN) === 'on';
+    const chargerDoorOpen = this._val(ENTITIES.CHARGER_DOOR) === 'open' || pluggedIn;
 
     const windowsOpen   = this._val(ENTITIES.WINDOWS_COVER) === 'open';
+    const bgFile = pluggedIn ? 'controls-bg-charging.png' : 'controls-bg.png';
 
     return html`
       <div class="controls-menu${this.layout === 'landscape' ? ' landscape' : ''}">
@@ -34,10 +35,10 @@ class TeslaMenuControls extends TeslaBase {
         </div>
         <div class="ctrl-car-area">
           <img class="ctrl-car-bg"
-            src="${this._imgUrl('controls-bg.png')}"
+            src="${this._imgUrl(bgFile)}"
             alt="Car top view" />
           ${this._hasCustomOverlay ? html`
-            <div style="${this._customOverlayStyleFor('controls-bg.png')}"></div>` : ''}
+            <div style="${this._customOverlayStyleFor(bgFile)}"></div>` : ''}
           <!-- Frunk — text only, top centre -->
           <button class="ctrl-zone ctrl-frunk"
             @click=${() => this._svc('cover', 'toggle_cover', ENTITIES.FRUNK_COVER)}>

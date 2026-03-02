@@ -47,6 +47,9 @@
     .toolbar button:active, .toolbar-section button:active {
       background: rgba(255,255,255,0.25);
     }
+    .toolbar-section button.toggled-on {
+      background: rgba(232,33,39,0.25); border-color: #e82127; color: #e82127;
+    }
     #log {
       width: 100%; max-width: 380px;
       font-family: monospace; font-size: 0.72em;
@@ -77,6 +80,15 @@
   <button onclick="toggle('trunk')">Trunk</button>
   <button onclick="toggle('charger_door')">Charger Door</button>
   <button onclick="toggle('windows')">Windows</button>
+</div>
+
+<!-- ── Individual doors ── -->
+<div class="toolbar-section">
+  <span class="toolbar-label">Doors (near=driver, far=passenger in offcharge view)</span>
+  <button id="btn-door-nf" onclick="toggle('door_nf')">NF (Driver Front)</button>
+  <button id="btn-door-nr" onclick="toggle('door_nr')">NR (Driver Rear)</button>
+  <button id="btn-door-ff" onclick="toggle('door_ff')">FF (Pass. Front)</button>
+  <button id="btn-door-fr" onclick="toggle('door_fr')">FR (Pass. Rear)</button>
 </div>
 
 <!-- ── Climate ── -->
@@ -173,7 +185,7 @@
     [`binary_sensor.${CAR}_parking_brake`]:     { state: 'on',           attributes: {} },
     [`binary_sensor.${CAR}_frunk`]:             { state: 'off',          attributes: {} },
     [`binary_sensor.${CAR}_trunk`]:             { state: 'off',          attributes: {} },
-    [`binary_sensor.${CAR}_doors`]:             { state: 'off',          attributes: {} },
+    [`binary_sensor.${CAR}_doors`]:             { state: 'off',          attributes: { driver_front: false, driver_rear: false, passenger_front: false, passenger_rear: false } },
     [`binary_sensor.${CAR}_windows`]:           { state: 'off',          attributes: {} },
     [`binary_sensor.${CAR}_online`]:            { state: 'on',           attributes: {} },
     [`binary_sensor.${CAR}_sentry_mode`]:       { state: 'off',          attributes: {} },
@@ -360,6 +372,30 @@
         flipState(`cover.${CAR}_windows`, 'closed', 'open');
         flip(`binary_sensor.${CAR}_windows`);
         break;
+      case 'door_nf': {
+        const d = states[`binary_sensor.${CAR}_doors`].attributes;
+        d.driver_front = !d.driver_front;
+        states[`binary_sensor.${CAR}_doors`].state = (d.driver_front || d.driver_rear || d.passenger_front || d.passenger_rear) ? 'on' : 'off';
+        break;
+      }
+      case 'door_nr': {
+        const d = states[`binary_sensor.${CAR}_doors`].attributes;
+        d.driver_rear = !d.driver_rear;
+        states[`binary_sensor.${CAR}_doors`].state = (d.driver_front || d.driver_rear || d.passenger_front || d.passenger_rear) ? 'on' : 'off';
+        break;
+      }
+      case 'door_ff': {
+        const d = states[`binary_sensor.${CAR}_doors`].attributes;
+        d.passenger_front = !d.passenger_front;
+        states[`binary_sensor.${CAR}_doors`].state = (d.driver_front || d.driver_rear || d.passenger_front || d.passenger_rear) ? 'on' : 'off';
+        break;
+      }
+      case 'door_fr': {
+        const d = states[`binary_sensor.${CAR}_doors`].attributes;
+        d.passenger_rear = !d.passenger_rear;
+        states[`binary_sensor.${CAR}_doors`].state = (d.driver_front || d.driver_rear || d.passenger_front || d.passenger_rear) ? 'on' : 'off';
+        break;
+      }
       case 'hvac':
         flipState(`climate.${CAR}_hvac_climate_system`, 'off', 'heat_cool');
         break;
@@ -381,7 +417,28 @@
         break;
     }
     pushHass();
-    L(`Toggled ${what}`, 'ok');
+    // Sync door button visuals
+    const doorState = states[`binary_sensor.${CAR}_doors`].attributes;
+    const btnMap = { 'btn-door-nf': doorState.driver_front, 'btn-door-nr': doorState.driver_rear,
+                     'btn-door-ff': doorState.passenger_front, 'btn-door-fr': doorState.passenger_rear };
+    for (const [id, active] of Object.entries(btnMap)) {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('toggled-on', !!active);
+    }
+    // Log the combo state filename the card should now use
+    const toggleOrder = ['trunk', 'chargeport', 'frunk', 'fr', 'ff', 'nr', 'nf'];
+    const active = [];
+    if (states[`binary_sensor.${CAR}_trunk`].state === 'on') active.push('trunk');
+    if (states[`cover.${CAR}_charger_door`].state === 'open'
+        || states[`binary_sensor.${CAR}_plugged_in`].state === 'on') active.push('chargeport');
+    if (states[`cover.${CAR}_frunk`].state === 'open'
+        || states[`binary_sensor.${CAR}_frunk`].state === 'on') active.push('frunk');
+    if (doorState.passenger_rear) active.push('fr');
+    if (doorState.passenger_front) active.push('ff');
+    if (doorState.driver_rear) active.push('nr');
+    if (doorState.driver_front) active.push('nf');
+    const comboFile = active.length ? active.join('-') + '.png' : 'base.png';
+    L(`Toggled ${what} → states/${comboFile}`, 'ok');
   };
 
   window.cycleSeat = (pos) => {

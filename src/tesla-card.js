@@ -12,12 +12,28 @@ import './menu-controls.js';
 import './colour-picker.js';
 import './model-picker.js';
 
-// ─── Image filenames ──────────────────────────────────────────────────────────
-const IMG_BASE             = 'base.png';
-const IMG_CHARGE_PORT_OPEN = 'chargeport-open.png';
-const IMG_FRUNK_OPEN       = 'frunk-open.png';
-const IMG_TRUNK_OPEN       = 'trunk-open.png';
-// Future: doors-open.png, windows-open.png
+// ─── Overlay image filenames ─────────────────────────────────────────────────
+// Base images (opaque, used as the canvas)
+const IMG_BASE       = 'base.png';
+const IMG_TRUNK_OPEN = 'trunk-open.png';
+
+// Transparent overlays composited on top of the base via CSS stacking.
+// Z-order (furthest → nearest to camera in offcharge front 3/4 view):
+const OVERLAY_Z_ORDER = ['chargeport', 'frunk', 'fr', 'ff', 'nr', 'nf'];
+
+// When both same-side doors are open, use a combined overlay instead of
+// stacking individual ones (handles shared interior correctly).
+const COMBINED_OVERLAYS = {
+  'nf+nr': 'nf-nr-combined-overlay.png',
+  'ff+fr': 'ff-fr-combined-overlay.png',
+};
+
+// On-charge (rear 3/4 view): different z-order, no chargeport or ff overlays.
+// Files use 'oncharge-' prefix so both sets coexist in the same directory.
+const OVERLAY_Z_ORDER_ONCHARGE = ['frunk', 'nf', 'nr', 'fr'];
+const COMBINED_OVERLAYS_ONCHARGE = {
+  'nf+nr': 'oncharge-nf-nr-combined-overlay.png',
+};
 
 // localStorage key prefixes
 const LS_COLOUR_PREFIX = 'tesla-card-colour-';
@@ -55,6 +71,8 @@ class TeslaCard extends LitElement {
     this._layout          = 'portrait';
     this._settingsSlide   = null;
     this._baseConfig      = null;
+    this._combinedAvail   = {};   // { 'nf+nr': true/false, 'ff+fr': true/false, 'oc_nf+nr': ... }
+    this._onchargeAvail   = false; // whether oncharge-base.png exists for current colour
     // Pre-bound so Lit reuses the same function reference across renders
     this._toggleCharger       = () => this._toggle('charger');
     this._toggleClimate       = () => this._toggle('climate');
@@ -93,6 +111,29 @@ class TeslaCard extends LitElement {
       base.car_color = co.dir === 'custom' ? 'neutral' : co.dir;
     }
     this.config = base;
+    this._preloadCombinedOverlays();
+  }
+
+  _preloadCombinedOverlays() {
+    // Offcharge combined overlays
+    for (const [key, filename] of Object.entries(COMBINED_OVERLAYS)) {
+      const img = new Image();
+      img.onload = () => { this._combinedAvail[key] = true; this.requestUpdate(); };
+      img.onerror = () => { this._combinedAvail[key] = false; };
+      img.src = this._overlayUrl(filename);
+    }
+    // Probe for on-charge base image (determines if oncharge set exists)
+    const ocProbe = new Image();
+    ocProbe.onload = () => { this._onchargeAvail = true; this.requestUpdate(); };
+    ocProbe.onerror = () => { this._onchargeAvail = false; };
+    ocProbe.src = this._overlayUrl('oncharge-base.png');
+    // Oncharge combined overlays
+    for (const [key, filename] of Object.entries(COMBINED_OVERLAYS_ONCHARGE)) {
+      const img = new Image();
+      img.onload = () => { this._combinedAvail['oc_' + key] = true; this.requestUpdate(); };
+      img.onerror = () => { this._combinedAvail['oc_' + key] = false; };
+      img.src = this._overlayUrl(filename);
+    }
   }
 
   static getConfigElement() {
@@ -235,6 +276,11 @@ class TeslaCard extends LitElement {
     return `${image_path}/${car_model}/${car_variant}/${car_color}/${f}?v=${TeslaCard._imgVer}`;
   }
 
+  _overlayUrl(f) {
+    const { image_path, car_model, car_variant, car_color } = this.config;
+    return `${image_path}/${car_model}/${car_variant}/${car_color}/overlays/${f}?v=${TeslaCard._imgVer}`;
+  }
+
   _btnUrl(f) {
     return `${this.config.image_path}/buttons/${f}?v=${TeslaCard._imgVer}`;
   }
@@ -327,21 +373,75 @@ class TeslaCard extends LitElement {
     const online    = this._val(ENTITIES.ONLINE) === 'on';
     const onlineEnt = this._state(ENTITIES.ONLINE);
 
-    // Car image — priority: frunk > trunk > charger port > base
+    // Car image — overlay stacking
     const frunkOpen       = this._val(ENTITIES.FRUNK_COVER) === 'open'
                          || this._val(ENTITIES.FRUNK)         === 'on';
     const trunkOpen       = this._val(ENTITIES.TRUNK)         === 'on';
-    const chargerDoorOpen = this._val(ENTITIES.CHARGER_DOOR) === 'open'
-                         || this._val(ENTITIES.PLUGGED_IN)    === 'on';
-    let carImg = IMG_BASE;
-    if (frunkOpen)            carImg = IMG_FRUNK_OPEN;
-    else if (trunkOpen)       carImg = IMG_TRUNK_OPEN;
-    else if (chargerDoorOpen) carImg = IMG_CHARGE_PORT_OPEN;
+    const pluggedIn       = this._val(ENTITIES.PLUGGED_IN)    === 'on';
+    const chargerDoorOpen = this._val(ENTITIES.CHARGER_DOOR) === 'open' || pluggedIn;
+
+    // Individual door states from binary_sensor.{car_name}_doors attributes
+    const doorState = {
+      nf: this._attr(ENTITIES.DOORS, 'driver_front')    === true,
+      nr: this._attr(ENTITIES.DOORS, 'driver_rear')     === true,
+      ff: this._attr(ENTITIES.DOORS, 'passenger_front') === true,
+      fr: this._attr(ENTITIES.DOORS, 'passenger_rear')  === true,
+    };
+
+    // When plugged in and on-charge images exist, switch to rear 3/4 view
+    const useOncharge = pluggedIn && this._onchargeAvail;
+    const prefix = useOncharge ? 'oncharge-' : '';
+
+    // Base image: trunk-open swaps the entire base silhouette
+    const baseImg = trunkOpen ? `${prefix}trunk-open.png` : `${prefix}base.png`;
+
+    // Z-order and available overlays depend on camera angle.
+    // On-charge view has no chargeport overlay (always visible) and no ff (not in frame).
+    const zOrder = useOncharge ? OVERLAY_Z_ORDER_ONCHARGE : OVERLAY_Z_ORDER;
+    const activeOverlays = {
+      frunk: frunkOpen,
+      nf: doorState.nf,
+      nr: doorState.nr,
+      fr: doorState.fr,
+    };
+    if (!useOncharge) {
+      activeOverlays.chargeport = chargerDoorOpen;
+      activeOverlays.ff = doorState.ff;
+    }
+
+    // Check for combined overlays (both same-side doors open)
+    const combinedKey = useOncharge ? 'oc_nf+nr' : 'nf+nr';
+    const useNfNrCombined = doorState.nf && doorState.nr && this._combinedAvail[combinedKey];
+    const useFfFrCombined = !useOncharge && doorState.ff && doorState.fr && this._combinedAvail['ff+fr'];
+    const combinedMap = useOncharge ? COMBINED_OVERLAYS_ONCHARGE : COMBINED_OVERLAYS;
+
+    // Build list of overlay filenames to stack (z-ordered)
+    const overlayFiles = [];
+    let nfNrFirstSeen = false;
+    let ffFrFirstSeen = false;
+
+    for (const name of zOrder) {
+      if (!activeOverlays[name]) continue;
+
+      // Skip individual doors when using combined overlay;
+      // insert combined at the position of the last constituent in z-order
+      if ((name === 'nf' || name === 'nr') && useNfNrCombined) {
+        if (nfNrFirstSeen) overlayFiles.push(combinedMap['nf+nr']);
+        nfNrFirstSeen = true;
+        continue;
+      }
+      if ((name === 'ff' || name === 'fr') && useFfFrCombined) {
+        if (ffFrFirstSeen) overlayFiles.push(combinedMap['ff+fr']);
+        ffFrFirstSeen = true;
+        continue;
+      }
+
+      overlayFiles.push(`${prefix}${name}-overlay.png`);
+    }
 
     // ── Derived display values for nav rows ──
     const lockState   = this._val(ENTITIES.DOOR_LOCK);
     const isLocked    = lockState === 'locked';
-    const pluggedIn   = this._val(ENTITIES.PLUGGED_IN) === 'on';
     const chgState    = this._val(ENTITIES.CHARGING_STATE) ?? '—';
     const chgRate     = this._val(ENTITIES.CHARGE_RATE);
     const chgRateUnit = this._attr(ENTITIES.CHARGE_RATE, 'unit_of_measurement') ?? 'kW';
@@ -433,17 +533,19 @@ class TeslaCard extends LitElement {
                     <span>Image not found</span>
                   </div>` : html`
                   <img class="car-image"
-                    src="${this._imgUrl(carImg)}"
+                    src="${this._overlayUrl(baseImg)}"
                     alt="Tesla ${this.config.car_model}"
-                    @error=${(e) => {
-                      if (carImg !== IMG_BASE) e.target.src = this._imgUrl(IMG_BASE);
-                      else this._imageError = true;
-                    }}
+                    @error=${() => { this._imageError = true; }}
                     @load=${() => { this._imageError = false; }}
-                  />`}
+                  />
+                  ${overlayFiles.map(f => html`
+                    <img class="car-overlay"
+                      src="${this._overlayUrl(f)}"
+                      alt="" />`)}
+                `}
                 ${this._hasCustomOverlay ? html`
                   <div class="car-colour-overlay"
-                    style="${this._customOverlayStyleFor(carImg)}"></div>` : ''}
+                    style="${this._customOverlayStyleFor(baseImg)}"></div>` : ''}
               </div>
               <!-- Quick action icons: lock, controls, charge, climate -->
               <div class="quick-actions">

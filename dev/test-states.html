@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Overlay Compositing Test</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #111; color: #eee;
+      font-family: 'SF Mono', 'Menlo', monospace;
+      font-size: 13px; padding: 20px;
+    }
+    h1 { font-size: 16px; margin-bottom: 6px; color: #fff; }
+    .summary { margin-bottom: 16px; font-size: 14px; }
+    .pass { color: #2ecc71; }
+    .fail { color: #e74c3c; }
+    .muted { color: rgba(255,255,255,0.35); }
+
+    .layout { display: flex; gap: 24px; flex-wrap: wrap; }
+    .layout-left { flex: 1; min-width: 320px; }
+    .layout-right { width: 460px; flex-shrink: 0; }
+
+    /* Toggle buttons */
+    .toggle-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+    .toggle-btn {
+      padding: 8px 16px; border-radius: 6px;
+      border: 2px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.05); color: #fff;
+      cursor: pointer; font-size: 13px; font-weight: 600;
+      transition: all 0.12s; min-width: 60px; text-align: center;
+    }
+    .toggle-btn:hover { background: rgba(255,255,255,0.12); }
+    .toggle-btn.active { border-color: #e82127; background: rgba(232,33,39,0.15); color: #e82127; }
+
+    /* Preview area */
+    .preview {
+      position: relative; width: 100%; max-width: 417px;
+      aspect-ratio: 417 / 262;
+      background: #161719; border-radius: 8px; overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .preview img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: contain; display: block;
+    }
+    .preview .overlay-img { pointer-events: none; }
+    .preview-info { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 16px; }
+
+    /* File status table */
+    table { border-collapse: collapse; width: 100%; margin-bottom: 16px; }
+    th, td { text-align: left; padding: 4px 8px; font-size: 12px; }
+    th { color: rgba(255,255,255,0.4); border-bottom: 1px solid rgba(255,255,255,0.1); }
+    td { border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .status-ok { color: #2ecc71; }
+    .status-fail { color: #e74c3c; }
+    .status-na { color: rgba(255,255,255,0.25); }
+
+    /* Individual overlay preview grid */
+    .overlay-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+    .overlay-thumb {
+      width: 130px; border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px; overflow: hidden; background: #1a1a1a;
+      cursor: pointer; transition: border-color 0.15s;
+    }
+    .overlay-thumb:hover { border-color: rgba(255,255,255,0.3); }
+    .overlay-thumb img {
+      width: 100%; height: 80px; object-fit: contain;
+      /* Checkerboard background to show transparency */
+      background: repeating-conic-gradient(#333 0% 25%, #222 0% 50%) 50% / 12px 12px;
+      display: block;
+    }
+    .overlay-thumb .label {
+      padding: 3px 5px; font-size: 9px; color: rgba(255,255,255,0.6);
+    }
+  </style>
+</head>
+<body>
+
+<h1>Overlay Compositing Test</h1>
+<div style="margin-bottom:10px; display:flex; gap:12px; align-items:center; flex-wrap:wrap">
+  <div>
+    <label style="font-size:12px; color:rgba(255,255,255,0.5)">Colour:</label>
+    <select id="colour-select" style="background:#222; color:#eee; border:1px solid #444; border-radius:4px; padding:4px 8px; font-size:12px; margin-left:4px;">
+      <option value="/dist/3/3.1/red/overlays">red</option>
+      <option value="/dist/3/3.1/neutral/overlays">neutral</option>
+      <option value="/dist/3/3.1/blue/overlays">blue</option>
+    </select>
+  </div>
+  <div style="display:flex; gap:4px">
+    <button id="btn-offcharge" class="toggle-btn active" style="padding:4px 12px; font-size:11px; min-width:auto">Offcharge</button>
+    <button id="btn-oncharge" class="toggle-btn" style="padding:4px 12px; font-size:11px; min-width:auto">On-charge</button>
+  </div>
+</div>
+<div class="summary" id="summary">Loading...</div>
+
+<div class="layout">
+  <div class="layout-right">
+    <div class="toggle-row" id="toggles"></div>
+    <div class="preview" id="preview"></div>
+    <div class="preview-info" id="preview-info">Toggle states above to see overlays composited</div>
+
+    <h2 style="font-size:13px; margin-bottom:8px; color:rgba(255,255,255,0.5)">Individual Overlays</h2>
+    <div class="overlay-grid" id="overlay-grid"></div>
+  </div>
+  <div class="layout-left">
+    <table id="file-table">
+      <thead><tr><th>File</th><th>Status</th><th>Size</th><th>Opaque</th></tr></thead>
+      <tbody id="file-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  let OVERLAYS_DIR = document.getElementById('colour-select').value;
+  let chargingMode = false; // false = offcharge, true = oncharge
+
+  // ── Mode-dependent config ──
+  const MODES = {
+    offcharge: {
+      files: [
+        { name: 'base.png', required: true, isOverlay: false },
+        { name: 'trunk-open.png', required: true, isOverlay: false },
+        { name: 'chargeport-overlay.png', required: true, isOverlay: true },
+        { name: 'frunk-overlay.png', required: true, isOverlay: true },
+        { name: 'fr-overlay.png', required: true, isOverlay: true },
+        { name: 'ff-overlay.png', required: true, isOverlay: true },
+        { name: 'nr-overlay.png', required: true, isOverlay: true },
+        { name: 'nf-overlay.png', required: true, isOverlay: true },
+        { name: 'nf-nr-combined-overlay.png', required: false, isOverlay: true },
+        { name: 'ff-fr-combined-overlay.png', required: false, isOverlay: true },
+      ],
+      toggles: [
+        { id: 'trunk', label: 'Trunk' },
+        { id: 'chargeport', label: 'Chargeport' },
+        { id: 'frunk', label: 'Frunk' },
+        { id: 'nf', label: 'NF' },
+        { id: 'nr', label: 'NR' },
+        { id: 'ff', label: 'FF' },
+        { id: 'fr', label: 'FR' },
+      ],
+      zOrder: ['chargeport', 'frunk', 'fr', 'ff', 'nr', 'nf'],
+      combined: {
+        'nf+nr': 'nf-nr-combined-overlay.png',
+        'ff+fr': 'ff-fr-combined-overlay.png',
+      },
+      prefix: '',
+    },
+    oncharge: {
+      files: [
+        { name: 'oncharge-base.png', required: true, isOverlay: false },
+        { name: 'oncharge-trunk-open.png', required: true, isOverlay: false },
+        { name: 'oncharge-frunk-overlay.png', required: true, isOverlay: true },
+        { name: 'oncharge-fr-overlay.png', required: true, isOverlay: true },
+        { name: 'oncharge-nr-overlay.png', required: true, isOverlay: true },
+        { name: 'oncharge-nf-overlay.png', required: true, isOverlay: true },
+        { name: 'oncharge-nf-nr-combined-overlay.png', required: false, isOverlay: true },
+      ],
+      toggles: [
+        { id: 'trunk', label: 'Trunk' },
+        { id: 'frunk', label: 'Frunk' },
+        { id: 'nf', label: 'NF' },
+        { id: 'nr', label: 'NR' },
+        { id: 'fr', label: 'FR' },
+      ],
+      zOrder: ['frunk', 'nf', 'nr', 'fr'],
+      combined: {
+        'nf+nr': 'oncharge-nf-nr-combined-overlay.png',
+      },
+      prefix: 'oncharge-',
+    },
+  };
+
+  function mode() { return chargingMode ? MODES.oncharge : MODES.offcharge; }
+
+  // ── State ──
+  const active = {};
+  const fileStatus = {}; // name → { ok, w, h }
+
+  function resetActive() {
+    for (const k of Object.keys(active)) delete active[k];
+    mode().toggles.forEach(t => active[t.id] = false);
+  }
+  resetActive();
+
+  // ── Test all files ──
+  function testImage(url) {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => resolve({ ok: true, w: img.naturalWidth, h: img.naturalHeight });
+      img.onerror = () => resolve({ ok: false, w: 0, h: 0 });
+      img.src = url + '?t=' + Date.now();
+    });
+  }
+
+  async function runTests() {
+    const m = mode();
+    let passed = 0, failed = 0;
+    const tbody = document.getElementById('file-tbody');
+    tbody.innerHTML = '';
+
+    // Clear old file status
+    for (const k of Object.keys(fileStatus)) delete fileStatus[k];
+
+    for (const f of m.files) {
+      const result = await testImage(`${OVERLAYS_DIR}/${f.name}`);
+      fileStatus[f.name] = result;
+
+      const sizeStr = result.ok ? `${result.w}×${result.h}` : '—';
+      const statusClass = result.ok ? 'status-ok' : (f.required ? 'status-fail' : 'status-na');
+      const statusText = result.ok ? '✓' : (f.required ? '✕ MISSING' : '— N/A');
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${f.name}</td><td class="${statusClass}">${statusText}</td><td>${sizeStr}</td><td>${f.isOverlay && result.ok ? 'transparent' : (result.ok ? 'opaque' : '—')}</td>`;
+      tbody.appendChild(tr);
+
+      if (result.ok) passed++;
+      else if (f.required) failed++;
+    }
+
+    const modeLabel = chargingMode ? ' (on-charge)' : ' (offcharge)';
+    document.getElementById('summary').innerHTML =
+      `<span class="pass">${passed} files loaded</span>` +
+      (failed ? ` · <span class="fail">${failed} MISSING</span>` : '') +
+      ` · <span class="muted">${m.files.length} total${modeLabel}</span>`;
+
+    buildOverlayGrid();
+  }
+
+  // ── Toggle UI ──
+  function buildToggles() {
+    const container = document.getElementById('toggles');
+    container.innerHTML = '';
+    const m = mode();
+    for (const t of m.toggles) {
+      const btn = document.createElement('button');
+      btn.className = 'toggle-btn' + (active[t.id] ? ' active' : '');
+      btn.textContent = t.label;
+      btn.dataset.id = t.id;
+      btn.onclick = () => {
+        active[t.id] = !active[t.id];
+        btn.classList.toggle('active', active[t.id]);
+        updatePreview();
+      };
+      container.appendChild(btn);
+    }
+  }
+
+  // ── Composite preview ──
+  function updatePreview() {
+    const m = mode();
+    const preview = document.getElementById('preview');
+    preview.innerHTML = '';
+
+    // Base image
+    const baseFile = active.trunk ? `${m.prefix}trunk-open.png` : `${m.prefix}base.png`;
+    const baseImg = document.createElement('img');
+    baseImg.src = `${OVERLAYS_DIR}/${baseFile}`;
+    baseImg.alt = baseFile;
+    preview.appendChild(baseImg);
+
+    // Build overlay list (replicating card logic)
+    const overlayFiles = [];
+    const nfNrKey = `${m.prefix}nf-nr-combined-overlay.png`;
+    const ffFrKey = `${m.prefix}ff-fr-combined-overlay.png`;
+    const hasNfNrCombined = active.nf && active.nr && fileStatus[nfNrKey]?.ok;
+    const hasFfFrCombined = active.ff && active.fr && fileStatus[ffFrKey]?.ok;
+
+    let nfNrFirstSeen = false;
+    let ffFrFirstSeen = false;
+
+    for (const name of m.zOrder) {
+      if (!active[name]) continue;
+
+      if ((name === 'nf' || name === 'nr') && hasNfNrCombined) {
+        if (nfNrFirstSeen) overlayFiles.push(m.combined['nf+nr']);
+        nfNrFirstSeen = true;
+        continue;
+      }
+      if ((name === 'ff' || name === 'fr') && hasFfFrCombined) {
+        if (ffFrFirstSeen) overlayFiles.push(m.combined['ff+fr']);
+        ffFrFirstSeen = true;
+        continue;
+      }
+
+      overlayFiles.push(`${m.prefix}${name}-overlay.png`);
+    }
+
+    // Stack overlays
+    for (const f of overlayFiles) {
+      const img = document.createElement('img');
+      img.src = `${OVERLAYS_DIR}/${f}`;
+      img.alt = f;
+      img.className = 'overlay-img';
+      preview.appendChild(img);
+    }
+
+    // Info text
+    const activeNames = m.toggles.filter(t => active[t.id]).map(t => t.id);
+    const info = activeNames.length
+      ? `${baseFile} + ${overlayFiles.join(' + ')}`
+      : baseFile;
+    document.getElementById('preview-info').textContent = info;
+  }
+
+  // ── Individual overlay thumbnails ──
+  function buildOverlayGrid() {
+    const m = mode();
+    const grid = document.getElementById('overlay-grid');
+    grid.innerHTML = '';
+    for (const f of m.files) {
+      if (!f.isOverlay || !fileStatus[f.name]?.ok) continue;
+      const thumb = document.createElement('div');
+      thumb.className = 'overlay-thumb';
+      thumb.innerHTML = `<img src="${OVERLAYS_DIR}/${f.name}" loading="lazy" /><div class="label">${f.name}</div>`;
+      grid.appendChild(thumb);
+    }
+  }
+
+  // ── Mode switch ──
+  function switchMode(charging) {
+    chargingMode = charging;
+    resetActive();
+    buildToggles();
+    runTests();
+    updatePreview();
+    // Update button state
+    document.getElementById('btn-offcharge').classList.toggle('active', !charging);
+    document.getElementById('btn-oncharge').classList.toggle('active', charging);
+  }
+
+  // ── Init ──
+  buildToggles();
+  updatePreview();
+  runTests();
+
+  document.getElementById('colour-select').addEventListener('change', function () {
+    OVERLAYS_DIR = this.value;
+    runTests();
+    updatePreview();
+  });
+
+  document.getElementById('btn-offcharge').addEventListener('click', () => switchMode(false));
+  document.getElementById('btn-oncharge').addEventListener('click', () => switchMode(true));
+</script>
+
+</body>
+</html>

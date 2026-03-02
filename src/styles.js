@@ -1110,6 +1110,17 @@ export const cardStyles = css`
     display: block;
   }
 
+  .car-overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    pointer-events: none;
+  }
+
   .car-image-placeholder {
     display: flex;
     flex-direction: column;

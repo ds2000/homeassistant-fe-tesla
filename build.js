@@ -37,6 +37,23 @@ if (watch) {
   const MODELS_SRC = 'images/models';
   const BUTTONS_SRC = 'images/buttons';
 
+  // Recursively copy a directory, skipping dotfiles, .old, _previews, RAW
+  function copyDir(src, dest) {
+    for (const entry of readdirSync(src)) {
+      if (entry.startsWith('.')) continue;
+      if (entry.includes('.old.')) continue;
+      if (entry === '_previews' || entry === 'RAW') continue;
+      const srcPath = join(src, entry);
+      const destPath = join(dest, entry);
+      if (statSync(srcPath).isDirectory()) {
+        mkdirSync(destPath, { recursive: true });
+        copyDir(srcPath, destPath);
+      } else {
+        cpSync(srcPath, destPath);
+      }
+    }
+  }
+
   // Model images: only variant-based directories (e.g. 3/3.1/, Y/Y.1/, S/S.1/)
   function copyModelImages(srcDir, destDir) {
     for (const model of readdirSync(srcDir)) {
@@ -57,14 +74,7 @@ if (watch) {
           const destColour = join(destDir, model, variant, colour);
           mkdirSync(destColour, { recursive: true });
 
-          for (const file of readdirSync(colourPath)) {
-            if (file.startsWith('.')) continue;
-            if (file.includes('.old.')) continue;
-            if (file === '_previews' || file === 'RAW') continue;
-            const filePath = join(colourPath, file);
-            if (statSync(filePath).isDirectory()) continue;
-            cpSync(filePath, join(destColour, file));
-          }
+          copyDir(colourPath, destColour);
         }
       }
     }
