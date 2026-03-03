@@ -4,9 +4,13 @@ A custom Lovelace card for the [alandtse/tesla](https://github.com/alandtse/tesl
 
 [![Add to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=ds2000&repository=homeassistant-fe-tesla&category=plugin)
 
-![Screenshot 2023-06-22 at 21 26 00](https://github.com/ds2000/homeassistant-fe-tesla/assets/10222737/adff06dd-176e-4c23-af94-f30e405cb222)
+If you find this card useful: [<img src="/images/bmac.jpeg" height="32">](https://www.buymeacoffee.com/daveshaw301)
 
-![Screenshot 2023-06-22 at 21 26 29](https://github.com/ds2000/homeassistant-fe-tesla/assets/10222737/af036517-a545-41d6-8263-9ddc2d58c8ec)
+| Base | Doors Open | On Charge |
+|------|-----------|-----------|
+| ![Base state](images/readme/card-base.png) | ![Doors open](images/readme/card-doors-open.png) | ![On charge](images/readme/card-oncharge.png) |
+
+![Overlay test overview](images/readme/card-test-overview.png)
 
 ---
 
@@ -52,7 +56,6 @@ Or manually: open HACS, click **Frontend** > **+**, search for **Tesla Card**, a
 
 1. A working [Home Assistant](https://www.home-assistant.io/) installation
 2. The [alandtse/tesla](https://github.com/alandtse/tesla) integration installed and configured
-3. Car images uploaded to your HA instance (see [Image Setup](#image-setup) below)
 
 ---
 
@@ -91,35 +94,6 @@ show_speed: true
 ### Visual editor
 
 The card includes a built-in GUI editor. Click the pencil icon on the card in the Lovelace UI to configure all options without writing YAML.
-
----
-
-## Image Setup
-
-The card loads images from your HA instance at:
-
-```
-{image_path}/{car_model}/{car_variant}/{car_color}/
-```
-
-With defaults this resolves to `/local/Tesla/3/3.1/red_multi_coat/`.
-
-### Upload your images
-
-Copy your image folder to `/config/www/Tesla/` on your HA instance so that they are accessible at `/local/Tesla/`. The [VS Code add-on](https://community.home-assistant.io/t/home-assistant-community-add-on-visual-studio-code/107863) is a convenient way to do this.
-
-### Available image sets
-
-The following model/variant/colour combinations are included in this repository under `images/models/`. Copy the folder you need into your HA `/config/www/Tesla/` directory.
-
-| Model | Variant | Colour | Folder path |
-|-------|---------|--------|-------------|
-| Model 3 | 3.1 | Red Multi-Coat | `images/models/3/3.1/red_multi_coat/` |
-| Model 3 | 3.1 | Deep Blue Metallic | `images/models/3/3.1/deep_blue_metallic/` |
-| Model S | S.1 | Pearl White Multi-Coat | `images/models/S/S.1/pearl_white_multi_coat/` |
-| Model Y | Y.1 | Pearl White Multi-Coat | `images/models/Y/Y.1/pearl_white_multi_coat/` |
-
-Don't see your car? Submit images via the [Tesla Card Image Uploader](https://ds2000.github.io/homeassistant-fe-tesla-image-uploader) -- your screenshots will be automatically processed and added to the library.
 
 ---
 
@@ -203,7 +177,3 @@ npm run watch
 ```
 
 Source files are in `src/`. The compiled output is `dist/tesla-card.js`.
-
----
-
-If you use this card and find it useful: [<img src="/images/bmac.jpeg" height="32">](https://www.buymeacoffee.com/daveshaw301)
