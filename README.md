@@ -6,11 +6,13 @@ A custom Lovelace card for the [alandtse/tesla](https://github.com/alandtse/tesl
 
 If you find this card useful: [<img src="/images/bmac.jpeg" height="32">](https://www.buymeacoffee.com/daveshaw301)
 
-| Base | Doors Open | On Charge |
-|------|-----------|-----------|
-| ![Base state](images/readme/card-base.png) | ![Doors open](images/readme/card-doors-open.png) | ![On charge](images/readme/card-oncharge.png) |
+| Landing | Charging | Doors Open |
+|---------|----------|-----------|
+| ![Landing](images/readme/card-landing.png) | ![Charging](images/readme/card-charging.png) | ![Doors](images/readme/card-doors.png) |
 
-![Overlay test overview](images/readme/card-test-overview.png)
+| Controls | Climate | Charger |
+|----------|---------|---------|
+| ![Controls](images/readme/card-controls.png) | ![Climate](images/readme/card-climate.png) | ![Charger](images/readme/card-charger.png) |
 
 ---
 
