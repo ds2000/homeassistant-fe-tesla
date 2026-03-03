@@ -1,6 +1,8 @@
 # Tesla Card for Home Assistant
 
-A HACS-compatible Lovelace custom card for the [alandtse/tesla](https://github.com/alandtse/tesla) integration. Control your Tesla directly from your dashboard with a clean, app-style interface.
+A custom Lovelace card for the [alandtse/tesla](https://github.com/alandtse/tesla) integration. Control your Tesla directly from your Home Assistant dashboard with a clean, app-style interface.
+
+[![Add to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=ds2000&repository=homeassistant-fe-tesla&category=plugin)
 
 ![Screenshot 2023-06-22 at 21 26 00](https://github.com/ds2000/homeassistant-fe-tesla/assets/10222737/adff06dd-176e-4c23-af94-f30e405cb222)
 
@@ -10,14 +12,39 @@ A HACS-compatible Lovelace custom card for the [alandtse/tesla](https://github.c
 
 ## Features
 
-- **Default view** — car image (changes state when frunk open or plugged in), battery bar, range, parked/speed status, inside temperature
+- **Real-time car visualization** — overlay-based rendering composites door, trunk, frunk, and chargeport states in real time (128 offcharge + 64 oncharge combinations)
+- **On-charge mode** — automatically switches to charging images when plugged in, with an animated green glow on the charging cable
+- **Default view** — car image with battery bar, range, parked/speed status, inside temperature
 - **Charger menu** — charging state, charge port open/close, start/stop charging, charge limit slider, charging amps slider
 - **Climate menu** — HVAC on/off, temperature stepper, defrost toggle, heated seat levels (Off/Low/Med/High per seat), window vent/close
 - **Controls menu** — door lock/unlock with state badge, frunk open, trunk open/close, sentry mode toggle, remote start, horn, flash lights, window vent/close
+- **Landscape layout** — optional wide layout with side-by-side panels
+- **Multiple models & colours** — Model 3, Y, S, X with community-contributed colour variants
 
-**No helper entities required.** Menu state is managed entirely inside the card — no `input_boolean` toggles needed.
+**No helper entities required.** Menu state is managed entirely inside the card.
 
-**No card dependencies required.** This card is a single self-contained JS file — no `stack-in-card`, no `slider-entity-row`.
+**No card dependencies required.** Single self-contained JS file.
+
+---
+
+## Installation
+
+### Via HACS (recommended)
+
+[![Add to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=ds2000&repository=homeassistant-fe-tesla&category=plugin)
+
+Or manually: open HACS, click **Frontend** > **+**, search for **Tesla Card**, and install.
+
+### Manual
+
+1. Download `dist/tesla-card.js` from this repository
+2. Copy it to `/config/www/tesla-card.js` on your HA instance
+3. Go to **Settings > Dashboards > Resources** and add:
+   ```
+   URL:  /local/tesla-card.js
+   Type: JavaScript module
+   ```
+4. Reload your browser
 
 ---
 
@@ -29,31 +56,9 @@ A HACS-compatible Lovelace custom card for the [alandtse/tesla](https://github.c
 
 ---
 
-## Installation
-
-### Via HACS (recommended)
-
-1. Open HACS → **Frontend**
-2. Click the **+** button and search for `Tesla Card`
-3. Install and reload your browser
-4. Add the card to your dashboard (see [Configuration](#configuration))
-
-### Manual
-
-1. Download `dist/tesla-card.js` from this repository
-2. Copy it to `/config/www/tesla-card.js` on your HA instance
-3. Go to **Settings → Dashboards → Resources** and add:
-   ```
-   URL:  /local/tesla-card.js
-   Type: JavaScript module
-   ```
-4. Reload your browser
-
----
-
 ## Configuration
 
-Add the card to your dashboard via the UI editor, or paste the following into the YAML editor:
+Add the card to your dashboard via the UI editor, or paste into the YAML editor:
 
 ```yaml
 type: custom:tesla-card
@@ -64,12 +69,12 @@ car_name: my_tesla
 
 | Option | Required | Default | Description |
 |--------|----------|---------|-------------|
-| `car_name` | **Yes** | — | The entity prefix for your car, as set by the tesla integration (e.g. `my_tesla` for entities like `sensor.my_tesla_battery`) |
-| `car_model` | No | `3` | Model number: `3`, `Y`, `S`, or `X` — used to select the image subfolder |
-| `car_color` | No | `red` | Colour name — used to select the image subfolder (must match folder name exactly) |
-| `image_path` | No | `/local/Tesla` | Base path where your car images are stored |
+| `car_name` | **Yes** | -- | Entity prefix for your car (e.g. `my_tesla` for `sensor.my_tesla_battery`) |
+| `car_model` | No | `3` | Model number: `3`, `Y`, `S`, or `X` |
+| `car_color` | No | `red_multi_coat` | Colour ID matching the image folder name |
+| `image_path` | No | `/local/Tesla` | Base path where car images are stored |
 | `name` | No | _(car_name)_ | Display name shown at the top of the card |
-| `show_speed` | No | `true` | Show the Parked / speed status column in the status bar |
+| `show_speed` | No | `true` | Show the Parked / speed status column |
 
 ### Full example
 
@@ -77,7 +82,7 @@ car_name: my_tesla
 type: custom:tesla-card
 car_name: my_tesla
 car_model: "3"
-car_color: red
+car_color: red_multi_coat
 image_path: /local/Tesla
 name: My Tesla
 show_speed: true
@@ -94,45 +99,33 @@ The card includes a built-in GUI editor. Click the pencil icon on the card in th
 The card loads images from your HA instance at:
 
 ```
-{image_path}/{car_model}/{car_color}/
+{image_path}/{car_model}/{car_variant}/{car_color}/
 ```
 
-With defaults this resolves to `/local/Tesla/3/red/`.
+With defaults this resolves to `/local/Tesla/3/3.1/red_multi_coat/`.
 
 ### Upload your images
 
 Copy your image folder to `/config/www/Tesla/` on your HA instance so that they are accessible at `/local/Tesla/`. The [VS Code add-on](https://community.home-assistant.io/t/home-assistant-community-add-on-visual-studio-code/107863) is a convenient way to do this.
 
-### Required filenames
-
-The card looks for these specific filenames. If a file is missing, the card shows a fallback icon placeholder instead of an error.
-
-| Filename | Shown when |
-|----------|-----------|
-| `base.jpg` | Default / parked state |
-| `baseChargeportOpened.jpg` | `binary_sensor.{car_name}_plugged_in` is `on` |
-| `baseFrunkOpened.jpg` | `binary_sensor.{car_name}_frunk` is `on` |
-
 ### Available image sets
 
-The following model/colour combinations are included in this repository under `images/models/`. Copy the folder you need into your HA `/config/www/Tesla/` directory.
+The following model/variant/colour combinations are included in this repository under `images/models/`. Copy the folder you need into your HA `/config/www/Tesla/` directory.
 
-| Model | Colour | Folder path |
-|-------|--------|-------------|
-| Model 3 | Red | `images/models/3/red/` |
-| Model 3 | Blue | `images/models/3/blue/` |
-| Model 3 | Gray | `images/models/3/gray/` |
-| Model S | White | `images/models/s/white/` |
-| Model Y | Silver | `images/models/y/silver/` |
-| Model Y | White | `images/models/y/white/` |
+| Model | Variant | Colour | Folder path |
+|-------|---------|--------|-------------|
+| Model 3 | 3.1 | Red Multi-Coat | `images/models/3/3.1/red_multi_coat/` |
+| Model 3 | 3.1 | Deep Blue Metallic | `images/models/3/3.1/deep_blue_metallic/` |
+| Model S | S.1 | Pearl White Multi-Coat | `images/models/S/S.1/pearl_white_multi_coat/` |
+| Model Y | Y.1 | Pearl White Multi-Coat | `images/models/Y/Y.1/pearl_white_multi_coat/` |
 
-Don't see your car? Screenshot your Tesla app, crop to just the car, and save as `base.jpg` in a new folder such as `images/models/3/midnight/`. Then set `car_color: midnight` in your card config. Contributions of new image sets are very welcome — see [Contributing](#contributing).
+Don't see your car? Submit images via the [Tesla Card Image Uploader](https://ds2000.github.io/homeassistant-fe-tesla-image-uploader) -- your screenshots will be automatically processed and added to the library.
 
 ---
 
 ## Entity Reference
 
-All entity IDs are derived from your `car_name` value automatically. The table below shows every entity the card uses. Replace `{car_name}` with your value (e.g. `my_tesla`).
+All entity IDs are derived from your `car_name` value automatically. Replace `{car_name}` with your value (e.g. `my_tesla`).
 
 ### Sensors (read-only)
 
@@ -182,7 +175,7 @@ All entity IDs are derived from your `car_name` value automatically. The table b
 | `button.{car_name}_remote_start` | Remote start |
 | `device_tracker.{car_name}_location_tracker` | Speed attribute (when not parked) |
 
-Not all entities need to exist — the card silently skips any that are unavailable.
+Not all entities need to exist -- the card silently skips any that are unavailable.
 
 ---
 
@@ -190,9 +183,9 @@ Not all entities need to exist — the card silently skips any that are unavaila
 
 All contributions are welcome:
 
-- **New car images** — add a folder under `images/models/{model}/{color}/` with at minimum `base.jpg`, `baseChargeportOpened.jpg`, and `baseFrunkOpened.jpg`
-- **Bug reports** — open an issue with your HA version, integration version, and what you expected vs what happened
-- **Pull requests** — please follow the one-feature-at-a-time rule and test against a live HA instance before submitting
+- **New car images** -- submit via the [Image Uploader](https://ds2000.github.io/homeassistant-fe-tesla-image-uploader), or add a folder under `images/models/{model}/{variant}/{colour}/`
+- **Bug reports** -- open an issue with your HA version, integration version, and what you expected vs what happened
+- **Pull requests** -- please follow the one-feature-at-a-time rule and test against a live HA instance before submitting
 
 ---
 

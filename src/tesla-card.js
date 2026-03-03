@@ -39,6 +39,8 @@ const COMBINED_OVERLAYS_ONCHARGE = {
 const LS_COLOUR_PREFIX = 'tesla-card-colour-';
 const LS_MODEL_PREFIX  = 'tesla-card-model-';
 const LS_LAYOUT_PREFIX = 'tesla-card-layout-';
+const LS_SIZE_PREFIX   = 'tesla-card-size-';
+const CARD_SIZES       = ['small', 'medium', 'large'];
 
 class TeslaCard extends LitElement {
 
@@ -56,6 +58,7 @@ class TeslaCard extends LitElement {
       _colourOverride: { state: true },   // { dir } | { dir:'custom', h, s } | null
       _layout:         { state: true },   // 'portrait' | 'landscape'
       _settingsSlide:  { state: true },   // null | 'left' | 'right' — panel transition direction
+      _cardSize:       { state: true },   // 'small' | 'medium' | 'large'
     };
   }
 
@@ -70,9 +73,11 @@ class TeslaCard extends LitElement {
     this._colourOverride  = null;
     this._layout          = 'portrait';
     this._settingsSlide   = null;
+    this._cardSize        = 'medium';
     this._baseConfig      = null;
     this._combinedAvail   = {};   // { 'nf+nr': true/false, 'ff+fr': true/false, 'oc_nf+nr': ... }
     this._onchargeAvail   = false; // whether oncharge-base.png exists for current colour
+    this._cableAvail      = false; // whether oncharge-cable-overlay.png exists
     // Pre-bound so Lit reuses the same function reference across renders
     this._toggleCharger       = () => this._toggle('charger');
     this._toggleClimate       = () => this._toggle('climate');
@@ -127,6 +132,11 @@ class TeslaCard extends LitElement {
     ocProbe.onload = () => { this._onchargeAvail = true; this.requestUpdate(); };
     ocProbe.onerror = () => { this._onchargeAvail = false; };
     ocProbe.src = this._overlayUrl('oncharge-base.png');
+    // Probe for on-charge cable overlay (for charging glow animation)
+    const cableProbe = new Image();
+    cableProbe.onload = () => { this._cableAvail = true; this.requestUpdate(); };
+    cableProbe.onerror = () => { this._cableAvail = false; };
+    cableProbe.src = this._overlayUrl('oncharge-cable-overlay.png');
     // Oncharge combined overlays
     for (const [key, filename] of Object.entries(COMBINED_OVERLAYS_ONCHARGE)) {
       const img = new Image();
@@ -153,6 +163,7 @@ class TeslaCard extends LitElement {
       this._restoreColour();
     }
     this._restoreLayout();
+    this._restoreSize();
   }
 
   // ── Colour ──
@@ -267,6 +278,31 @@ class TeslaCard extends LitElement {
   _toggleLayout() {
     this._layout = this._layout === 'landscape' ? 'portrait' : 'landscape';
     this._persistLayout();
+  }
+
+  // ── Card Size ──
+
+  _sizeLsKey() {
+    return LS_SIZE_PREFIX + (this._baseConfig?.car_name ?? 'default');
+  }
+
+  _restoreSize() {
+    try {
+      const raw = localStorage.getItem(this._sizeLsKey());
+      if (raw && CARD_SIZES.includes(raw)) this._cardSize = raw;
+    } catch { /* ignore */ }
+  }
+
+  _persistSize() {
+    try {
+      localStorage.setItem(this._sizeLsKey(), this._cardSize);
+    } catch { /* */ }
+  }
+
+  _setCardSize(size) {
+    if (this._cardSize === size) return;
+    this._cardSize = size;
+    this._persistSize();
   }
 
   // ─── Image URL helpers ───────────────────────────────────────────────────
@@ -488,9 +524,10 @@ class TeslaCard extends LitElement {
     // Available colours for current model/variant
     const availColours = getVariantColours(this.config.car_model, this.config.car_variant);
     const isLandscape = this._layout === 'landscape';
+    const sizeClass   = this._cardSize !== 'medium' ? `size-${this._cardSize}` : '';
 
     return html`
-      <ha-card class="${isLandscape ? 'landscape' : ''}">
+      <ha-card class="${isLandscape ? 'landscape' : ''} ${sizeClass}">
 
         <!-- ── Header (hidden when a submenu is open) ─────── -->
         ${!menu ? html`
@@ -542,6 +579,10 @@ class TeslaCard extends LitElement {
                     <img class="car-overlay"
                       src="${this._overlayUrl(f)}"
                       alt="" />`)}
+                  ${charging && useOncharge && this._cableAvail ? html`
+                    <img class="car-overlay charging-glow"
+                      src="${this._overlayUrl('oncharge-cable-overlay.png')}"
+                      alt="" />` : ''}
                 `}
                 ${this._hasCustomOverlay ? html`
                   <div class="car-colour-overlay"
@@ -626,6 +667,7 @@ class TeslaCard extends LitElement {
             .hass=${this.hass}
             .config=${this.config}
             .layout=${this._layout}
+
             @close-menu=${this._handleCloseMenu}>
           </tesla-menu-charger>` : ''}
 
@@ -635,6 +677,7 @@ class TeslaCard extends LitElement {
             .config=${this.config}
             .customColour=${this._customColour}
             .layout=${this._layout}
+
             @close-menu=${this._handleCloseMenu}>
           </tesla-menu-climate>` : ''}
 
@@ -644,6 +687,7 @@ class TeslaCard extends LitElement {
             .config=${this.config}
             .customColour=${this._customColour}
             .layout=${this._layout}
+
             @close-menu=${this._handleCloseMenu}>
           </tesla-menu-controls>` : ''}
 
@@ -667,6 +711,19 @@ class TeslaCard extends LitElement {
                   </div>
                   <span class="icon settings-row-chevron">${unsafeHTML(ICONS['chevron-right'])}</span>
                 </button>
+                <div class="settings-row settings-row-static">
+                  <span class="icon settings-row-icon">${unsafeHTML(ICONS.resize)}</span>
+                  <div class="settings-row-text">
+                    <span class="settings-row-label">Card Size</span>
+                  </div>
+                  <div class="settings-size-control">
+                    ${CARD_SIZES.map(s => html`
+                      <button class="settings-size-btn${this._cardSize === s ? ' selected' : ''}"
+                        @click=${(e) => { e.stopPropagation(); this._setCardSize(s); }}>
+                        ${s === 'small' ? 'S' : s === 'medium' ? 'M' : 'L'}
+                      </button>`)}
+                  </div>
+                </div>
                 <button class="settings-row"
                   @click=${() => this._toggleLayout()}>
                   <span class="icon settings-row-icon">${unsafeHTML(ICONS.layout)}</span>
@@ -711,6 +768,16 @@ class TeslaCard extends LitElement {
   }
 
   getCardSize() { return 5; }
+
+  // Sections view grid hints — card fills the section by default
+  getGridOptions() {
+    return {
+      columns: 12,       // full section width
+      min_columns: 4,    // minimum ~1/3 section
+      rows: 'auto',
+      min_rows: 3,
+    };
+  }
 }
 
 customElements.define('tesla-card', TeslaCard);

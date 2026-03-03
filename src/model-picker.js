@@ -32,6 +32,7 @@ class TeslaModelPicker extends LitElement {
 
       .picker-panel {
         width: 100%;
+        max-height: 100%;
         background: #1c1c1e;
         border-radius: 16px 16px 0 0;
         padding: 0 0 20px;
@@ -130,6 +131,8 @@ class TeslaModelPicker extends LitElement {
 
       .model-list {
         padding: 8px 0 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
       }
 
       .model-section {

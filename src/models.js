@@ -1,27 +1,19 @@
-// Tesla model definitions — used by editor dropdowns, model picker, and colour system.
-// `colours`: array of image directory names available for this variant.
+// Tesla model definitions — derived from models.json (single source of truth).
+// `colours`: array of image directory names available for this variant (picker shows these).
+// `factoryColours`: full catalogue from models.json (used by uploader and colour picker).
 
-export const TESLA_MODELS = [
-  { id: '3', name: 'Model 3', variants: [
-    { id: '3.1', label: '2017–2023',      colours: ['neutral', 'red', 'blue'] },
-    { id: '3.2', label: '2024+ Highland',  colours: ['neutral'] },
-  ]},
-  { id: 'Y', name: 'Model Y', variants: [
-    { id: 'Y.1', label: '2020–2024',       colours: ['neutral', 'white'] },
-    { id: 'Y.2', label: '2025+ Juniper',   colours: ['neutral'] },
-  ]},
-  { id: 'S', name: 'Model S', variants: [
-    { id: 'S.1', label: '2012–2021',       colours: ['neutral', 'white'] },
-    { id: 'S.2', label: '2021+ Refresh',   colours: ['neutral'] },
-  ]},
-  { id: 'X', name: 'Model X', variants: [
-    { id: 'X.1', label: '2015–2021',       colours: ['neutral'] },
-    { id: 'X.2', label: '2021+ Refresh',   colours: ['neutral'] },
-  ]},
-  { id: 'CT', name: 'Cybertruck', variants: [
-    { id: 'CT.1', label: '2024+',          colours: ['neutral'] },
-  ]},
-];
+import modelsData from '../models.json';
+
+export const TESLA_MODELS = modelsData.models.map(m => ({
+  id: m.id,
+  name: m.name,
+  variants: m.variants.map(v => ({
+    id: v.id,
+    label: v.label,
+    colours: ['neutral', ...v.colours.filter(c => c.hasImages).map(c => c.id)],
+    factoryColours: v.colours,
+  })),
+}));
 
 /**
  * Get the list of available colour directories for a model + variant.

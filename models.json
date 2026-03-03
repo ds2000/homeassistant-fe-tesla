@@ -1,0 +1,337 @@
+{
+  "models": [
+    {
+      "id": "3",
+      "name": "Model 3",
+      "variants": [
+        {
+          "id": "3.1",
+          "label": "2017\u20132023",
+          "colours": [
+            {
+              "id": "red_multi_coat",
+              "name": "Red Multi-Coat",
+              "swatch": "#c41e28",
+              "hasImages": true
+            },
+            {
+              "id": "deep_blue_metallic",
+              "name": "Deep Blue Metallic",
+              "swatch": "#223873",
+              "hasImages": true
+            },
+            {
+              "id": "pearl_white_multi_coat",
+              "name": "Pearl White Multi-Coat",
+              "swatch": "#f2f2f2"
+            },
+            {
+              "id": "midnight_silver_metallic",
+              "name": "Midnight Silver Metallic",
+              "swatch": "#71757a"
+            },
+            {
+              "id": "solid_black",
+              "name": "Solid Black",
+              "swatch": "#141414"
+            },
+            {
+              "id": "silver_metallic",
+              "name": "Silver Metallic",
+              "swatch": "#c0c0c0"
+            }
+          ]
+        },
+        {
+          "id": "3.2",
+          "label": "2024+ Highland",
+          "colours": [
+            {
+              "id": "pearl_white",
+              "name": "Pearl White",
+              "swatch": "#f2f2f2"
+            },
+            {
+              "id": "solid_black",
+              "name": "Solid Black",
+              "swatch": "#141414"
+            },
+            {
+              "id": "quicksilver",
+              "name": "Quicksilver",
+              "swatch": "#9e9a91"
+            },
+            {
+              "id": "ultra_red",
+              "name": "Ultra Red",
+              "swatch": "#c41e28"
+            },
+            {
+              "id": "midnight_cherry_red",
+              "name": "Midnight Cherry Red",
+              "swatch": "#850029"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Y",
+      "name": "Model Y",
+      "variants": [
+        {
+          "id": "Y.1",
+          "label": "2020\u20132024",
+          "colours": [
+            {
+              "id": "pearl_white_multi_coat",
+              "name": "Pearl White Multi-Coat",
+              "swatch": "#f2f2f2",
+              "hasImages": true
+            },
+            {
+              "id": "solid_black",
+              "name": "Solid Black",
+              "swatch": "#141414"
+            },
+            {
+              "id": "midnight_silver_metallic",
+              "name": "Midnight Silver Metallic",
+              "swatch": "#71757a"
+            },
+            {
+              "id": "deep_blue_metallic",
+              "name": "Deep Blue Metallic",
+              "swatch": "#223873"
+            },
+            {
+              "id": "red_multi_coat",
+              "name": "Red Multi-Coat",
+              "swatch": "#c41e28"
+            },
+            {
+              "id": "midnight_cherry_red",
+              "name": "Midnight Cherry Red",
+              "swatch": "#850029"
+            },
+            {
+              "id": "quicksilver",
+              "name": "Quicksilver",
+              "swatch": "#9e9a91"
+            }
+          ]
+        },
+        {
+          "id": "Y.2",
+          "label": "2025+ Juniper",
+          "colours": [
+            {
+              "id": "pearl_white",
+              "name": "Pearl White",
+              "swatch": "#f2f2f2"
+            },
+            {
+              "id": "solid_black",
+              "name": "Solid Black",
+              "swatch": "#141414"
+            },
+            {
+              "id": "quicksilver",
+              "name": "Quicksilver",
+              "swatch": "#9e9a91"
+            },
+            {
+              "id": "ultra_red",
+              "name": "Ultra Red",
+              "swatch": "#c41e28"
+            },
+            {
+              "id": "midnight_cherry_red",
+              "name": "Midnight Cherry Red",
+              "swatch": "#850029"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S",
+      "name": "Model S",
+      "variants": [
+        {
+          "id": "S.1",
+          "label": "2012\u20132021",
+          "colours": [
+            {
+              "id": "pearl_white_multi_coat",
+              "name": "Pearl White Multi-Coat",
+              "swatch": "#f2f2f2",
+              "hasImages": true
+            },
+            {
+              "id": "solid_black",
+              "name": "Solid Black",
+              "swatch": "#141414"
+            },
+            {
+              "id": "midnight_silver_metallic",
+              "name": "Midnight Silver Metallic",
+              "swatch": "#71757a"
+            },
+            {
+              "id": "deep_blue_metallic",
+              "name": "Deep Blue Metallic",
+              "swatch": "#223873"
+            },
+            {
+              "id": "red_multi_coat",
+              "name": "Red Multi-Coat",
+              "swatch": "#c41e28"
+            },
+            {
+              "id": "silver_metallic",
+              "name": "Silver Metallic",
+              "swatch": "#c0c0c0"
+            }
+          ]
+        },
+        {
+          "id": "S.2",
+          "label": "2021+ Refresh",
+          "colours": [
+            {
+              "id": "pearl_white_multi_coat",
+              "name": "Pearl White Multi-Coat",
+              "swatch": "#f2f2f2"
+            },
+            {
+              "id": "solid_black",
+              "name": "Solid Black",
+              "swatch": "#141414"
+            },
+            {
+              "id": "midnight_silver_metallic",
+              "name": "Midnight Silver Metallic",
+              "swatch": "#71757a"
+            },
+            {
+              "id": "ultra_red",
+              "name": "Ultra Red",
+              "swatch": "#c41e28"
+            },
+            {
+              "id": "midnight_cherry_red",
+              "name": "Midnight Cherry Red",
+              "swatch": "#850029"
+            },
+            {
+              "id": "quicksilver",
+              "name": "Quicksilver",
+              "swatch": "#9e9a91"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "X",
+      "name": "Model X",
+      "variants": [
+        {
+          "id": "X.1",
+          "label": "2015\u20132021",
+          "colours": [
+            {
+              "id": "solid_black",
+              "name": "Solid Black",
+              "swatch": "#141414"
+            },
+            {
+              "id": "pearl_white_multi_coat",
+              "name": "Pearl White Multi-Coat",
+              "swatch": "#f2f2f2"
+            },
+            {
+              "id": "midnight_silver_metallic",
+              "name": "Midnight Silver Metallic",
+              "swatch": "#71757a"
+            },
+            {
+              "id": "deep_blue_metallic",
+              "name": "Deep Blue Metallic",
+              "swatch": "#223873"
+            },
+            {
+              "id": "red_multi_coat",
+              "name": "Red Multi-Coat",
+              "swatch": "#c41e28"
+            },
+            {
+              "id": "silver_metallic",
+              "name": "Silver Metallic",
+              "swatch": "#c0c0c0"
+            }
+          ]
+        },
+        {
+          "id": "X.2",
+          "label": "2021+ Refresh",
+          "colours": [
+            {
+              "id": "pearl_white_multi_coat",
+              "name": "Pearl White Multi-Coat",
+              "swatch": "#f2f2f2"
+            },
+            {
+              "id": "solid_black",
+              "name": "Solid Black",
+              "swatch": "#141414"
+            },
+            {
+              "id": "midnight_silver_metallic",
+              "name": "Midnight Silver Metallic",
+              "swatch": "#71757a"
+            },
+            {
+              "id": "ultra_red",
+              "name": "Ultra Red",
+              "swatch": "#c41e28"
+            },
+            {
+              "id": "midnight_cherry_red",
+              "name": "Midnight Cherry Red",
+              "swatch": "#850029"
+            },
+            {
+              "id": "quicksilver",
+              "name": "Quicksilver",
+              "swatch": "#9e9a91"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CT",
+      "name": "Cybertruck",
+      "variants": [
+        {
+          "id": "CT.1",
+          "label": "2024+",
+          "colours": [
+            {
+              "id": "stainless_steel",
+              "name": "Stainless Steel",
+              "swatch": "#b0b0b0"
+            },
+            {
+              "id": "satin_black",
+              "name": "Satin Black",
+              "swatch": "#1a1a1a"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

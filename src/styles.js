@@ -246,6 +246,7 @@ export const chargerStyles = css`
   }
 
   .chg-port-btn:hover { color: rgba(255,255,255,0.85); }
+
 `;
 
 // ── Climate panel styles ────────────────────────────────────────────────────
@@ -354,12 +355,12 @@ export const climateStyles = css`
 
   /* Seat positions — percentages of the image dimensions
      so they track the actual seats regardless of clip height.
-     Based on Model 3 climate-bg.png (551×950). */
-  .clim-seat-fl { top: 30%; left: 35%; }
-  .clim-seat-fr { top: 30%; left: 64%; }
-  .clim-seat-rl { top: 50%; left: 37%; }
-  .clim-seat-rc { top: 50%; left: 50%; }
-  .clim-seat-rr { top: 50%; left: 63%; }
+     Based on Model 3 climate-bg.png (1100×1898). */
+  .clim-seat-fl { top: 27%; left: 37%; }
+  .clim-seat-fr { top: 27%; left: 63%; }
+  .clim-seat-rl { top: 44%; left: 33%; }
+  .clim-seat-rc { top: 44%; left: 50%; }
+  .clim-seat-rr { top: 44%; left: 67%; }
 
   /* ── Bottom sheet ────────────────────────────────────────── */
   .clim-sheet {
@@ -746,6 +747,7 @@ export const climateStyles = css`
     padding: 10px 6px;
     font-size: 0.8em;
   }
+
 `;
 
 // ── Controls panel styles ───────────────────────────────────────────────────
@@ -934,6 +936,7 @@ export const controlsStyles = css`
     height: 22px;
   }
 
+
 `;
 
 // ── Main card styles (header, car image, quick actions, nav rows, etc.) ─────
@@ -954,6 +957,15 @@ export const cardStyles = css`
   @keyframes fadeSlideIn {
     from { opacity: 0; transform: translateY(8px); }
     to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes chargePulse {
+    0%, 100% { filter: brightness(1) drop-shadow(0 0 6px rgba(34, 197, 94, 0.3)) drop-shadow(0 0 12px rgba(34, 197, 94, 0.15)); }
+    50%      { filter: brightness(1.5) drop-shadow(0 0 14px rgba(34, 197, 94, 0.9)) drop-shadow(0 0 28px rgba(34, 197, 94, 0.4)); }
+  }
+
+  .car-overlay.charging-glow {
+    animation: chargePulse 2s ease-in-out infinite;
   }
 
   .header {
@@ -1370,6 +1382,7 @@ export const cardStyles = css`
     align-items: center;
     width: 100%;
     padding: 16px 20px;
+    box-sizing: border-box;
     background: transparent;
     border: none;
     border-bottom: 1px solid rgba(255,255,255,0.06);
@@ -1481,5 +1494,52 @@ export const cardStyles = css`
 
   ha-card.landscape .nav-row .nav-sublabel {
     font-size: 0.72em;
+  }
+
+  /* ── Card size — uniform zoom scaling ────────────────────── */
+
+  ha-card.size-small { zoom: 0.85; }
+  ha-card.size-large { zoom: 1.15; }
+
+  /* ── Settings: Card Size segmented control ─────────────────── */
+
+  .settings-row-static {
+    cursor: default;
+  }
+
+  .settings-row-static:hover {
+    background: transparent;
+  }
+
+  .settings-size-control {
+    display: flex;
+    gap: 2px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 2px;
+  }
+
+  .settings-size-btn {
+    padding: 6px 14px;
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.4);
+    font-family: inherit;
+    font-size: 0.78em;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .settings-size-btn:hover {
+    color: rgba(255,255,255,0.7);
+  }
+
+  .settings-size-btn.selected {
+    background: rgba(255,255,255,0.12);
+    color: #ffffff;
+    font-weight: 600;
   }
 `;

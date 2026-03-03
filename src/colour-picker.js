@@ -7,8 +7,8 @@ class TeslaColourPicker extends LitElement {
 
   static get properties() {
     return {
-      selected:    { type: String },     // current colour dir name e.g. 'red' or 'custom'
-      available:   { type: Array },      // dirs that have images e.g. ['neutral','red']
+      selected:    { type: String },     // current colour dir name e.g. 'red_multi_coat' or 'custom'
+      available:   { type: Array },      // dirs that have images e.g. ['neutral','red_multi_coat']
       showBack:    { type: Boolean },
       customH:     { type: Number },     // current custom hue (0-360)
       customS:     { type: Number },     // current custom saturation (0-100)
@@ -38,10 +38,15 @@ class TeslaColourPicker extends LitElement {
 
       .picker-panel {
         width: 100%;
+        max-height: 100%;
         background: #1c1c1e;
         border-radius: 16px 16px 0 0;
         padding: 0 0 20px;
         animation: slideUp 0.25s ease-out;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
       }
 
       @keyframes slideUp {

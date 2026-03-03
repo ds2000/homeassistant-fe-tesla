@@ -73,6 +73,17 @@
     .overlay-thumb .label {
       padding: 3px 5px; font-size: 9px; color: rgba(255,255,255,0.6);
     }
+
+    /* Charging glow (mirrors card animation) */
+    @keyframes chargePulse {
+      0%, 100% { filter: brightness(1) drop-shadow(0 0 6px rgba(34, 197, 94, 0.3)) drop-shadow(0 0 12px rgba(34, 197, 94, 0.15)); }
+      50%      { filter: brightness(1.5) drop-shadow(0 0 14px rgba(34, 197, 94, 0.9)) drop-shadow(0 0 28px rgba(34, 197, 94, 0.4)); }
+    }
+    .charging-glow {
+      animation: chargePulse 2s ease-in-out infinite;
+    }
+
+    .toggle-btn.active-green { border-color: #22c55e; background: rgba(34,197,94,0.15); color: #22c55e; }
   </style>
 </head>
 <body>
@@ -82,14 +93,15 @@
   <div>
     <label style="font-size:12px; color:rgba(255,255,255,0.5)">Colour:</label>
     <select id="colour-select" style="background:#222; color:#eee; border:1px solid #444; border-radius:4px; padding:4px 8px; font-size:12px; margin-left:4px;">
-      <option value="/dist/3/3.1/red/overlays">red</option>
-      <option value="/dist/3/3.1/neutral/overlays">neutral</option>
-      <option value="/dist/3/3.1/blue/overlays">blue</option>
+      <option value="">Loading...</option>
     </select>
   </div>
   <div style="display:flex; gap:4px">
     <button id="btn-offcharge" class="toggle-btn active" style="padding:4px 12px; font-size:11px; min-width:auto">Offcharge</button>
     <button id="btn-oncharge" class="toggle-btn" style="padding:4px 12px; font-size:11px; min-width:auto">On-charge</button>
+  </div>
+  <div>
+    <button id="btn-charging" class="toggle-btn" style="padding:4px 12px; font-size:11px; min-width:auto">⚡ Charging</button>
   </div>
 </div>
 <div class="summary" id="summary">Loading...</div>
@@ -114,6 +126,7 @@
 <script>
   let OVERLAYS_DIR = document.getElementById('colour-select').value;
   let chargingMode = false; // false = offcharge, true = oncharge
+  let chargingActive = false; // true = actively charging (green glow)
 
   // ── Mode-dependent config ──
   const MODES = {
@@ -155,6 +168,7 @@
         { name: 'oncharge-nr-overlay.png', required: true, isOverlay: true },
         { name: 'oncharge-nf-overlay.png', required: true, isOverlay: true },
         { name: 'oncharge-nf-nr-combined-overlay.png', required: false, isOverlay: true },
+        { name: 'oncharge-cable-overlay.png', required: false, isOverlay: true, isCable: true },
       ],
       toggles: [
         { id: 'trunk', label: 'Trunk' },
@@ -295,6 +309,15 @@
       preview.appendChild(img);
     }
 
+    // Cable overlay — only in oncharge mode when charging is active
+    if (chargingActive && chargingMode && fileStatus['oncharge-cable-overlay.png']?.ok) {
+      const cableImg = document.createElement('img');
+      cableImg.src = `${OVERLAYS_DIR}/oncharge-cable-overlay.png`;
+      cableImg.alt = 'cable';
+      cableImg.className = 'overlay-img charging-glow';
+      preview.appendChild(cableImg);
+    }
+
     // Info text
     const activeNames = m.toggles.filter(t => active[t.id]).map(t => t.id);
     const info = activeNames.length
@@ -329,10 +352,46 @@
     document.getElementById('btn-oncharge').classList.toggle('active', charging);
   }
 
+  // ── Populate colour dropdown from models.json ──
+  async function populateColours() {
+    const select = document.getElementById('colour-select');
+    try {
+      const resp = await fetch('/models.json');
+      const data = await resp.json();
+      select.innerHTML = '';
+      const entries = [];
+      for (const model of data.models) {
+        for (const variant of model.variants) {
+          for (const colour of variant.colours) {
+            const path = `/dist/${model.id}/${variant.id}/${colour.id}/overlays`;
+            const label = `${model.name} ${variant.label} — ${colour.name}`;
+            entries.push({ path, label, hasImages: !!colour.hasImages });
+          }
+        }
+      }
+      // Show hasImages entries first
+      entries.sort((a, b) => (b.hasImages ? 1 : 0) - (a.hasImages ? 1 : 0));
+      for (const e of entries) {
+        const opt = document.createElement('option');
+        opt.value = e.path;
+        opt.textContent = e.label + (e.hasImages ? '' : ' (no images)');
+        select.appendChild(opt);
+      }
+      OVERLAYS_DIR = select.value;
+    } catch (err) {
+      select.innerHTML = '<option value="/dist/3/3.1/red_multi_coat/overlays">Model 3 2017–2023 — Red Multi-Coat</option>';
+      OVERLAYS_DIR = select.value;
+    }
+  }
+
   // ── Init ──
-  buildToggles();
-  updatePreview();
-  runTests();
+  async function init() {
+    await populateColours();
+    buildToggles();
+    updatePreview();
+    runTests();
+  }
+  init();
 
   document.getElementById('colour-select').addEventListener('change', function () {
     OVERLAYS_DIR = this.value;
@@ -342,6 +401,12 @@
 
   document.getElementById('btn-offcharge').addEventListener('click', () => switchMode(false));
   document.getElementById('btn-oncharge').addEventListener('click', () => switchMode(true));
+
+  document.getElementById('btn-charging').addEventListener('click', function () {
+    chargingActive = !chargingActive;
+    this.classList.toggle('active-green', chargingActive);
+    updatePreview();
+  });
 </script>
 
 </body>

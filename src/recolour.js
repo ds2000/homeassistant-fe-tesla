@@ -1,11 +1,13 @@
-// Factory Tesla colours for the colour picker.
+// Factory Tesla colours for the colour picker — derived from models.json.
 // `dir` maps to the image directory name under {model}/{variant}/.
 
-export const FACTORY_COLOURS = [
-  { name: 'Pearl White',        dir: 'white',       swatch: '#f2f2f2' },
-  { name: 'Midnight Grey',      dir: 'neutral',     swatch: '#71757a' },
-  { name: 'Solid Black',        dir: 'black',       swatch: '#141414' },
-  { name: 'Ultra Red',          dir: 'red',         swatch: '#c41e28' },
-  { name: 'Quicksilver',        dir: 'quicksilver',  swatch: '#9e9a91' },
-  { name: 'Deep Blue Metallic', dir: 'blue',        swatch: '#223873' },
-];
+import modelsData from '../models.json';
+
+const colourMap = new Map();
+for (const m of modelsData.models)
+  for (const v of m.variants)
+    for (const c of v.colours)
+      if (!colourMap.has(c.id))
+        colourMap.set(c.id, { name: c.name, dir: c.id, swatch: c.swatch });
+
+export const FACTORY_COLOURS = Array.from(colourMap.values());
