@@ -6,12 +6,13 @@
       "variants": [
         {
           "id": "3.1",
-          "label": "2017\u20132023",
+          "label": "2017–2023",
           "colours": [
             {
               "id": "red_multi_coat",
               "name": "Red Multi-Coat",
-              "swatch": "#c41e28"
+              "swatch": "#c41e28",
+              "hasImages": true
             },
             {
               "id": "deep_blue_metallic",
@@ -79,7 +80,7 @@
       "variants": [
         {
           "id": "Y.1",
-          "label": "2020\u20132024",
+          "label": "2020–2024",
           "colours": [
             {
               "id": "pearl_white_multi_coat",
@@ -157,7 +158,7 @@
       "variants": [
         {
           "id": "S.1",
-          "label": "2012\u20132021",
+          "label": "2012–2021",
           "colours": [
             {
               "id": "pearl_white_multi_coat",
@@ -235,7 +236,7 @@
       "variants": [
         {
           "id": "X.1",
-          "label": "2015\u20132021",
+          "label": "2015–2021",
           "colours": [
             {
               "id": "solid_black",
