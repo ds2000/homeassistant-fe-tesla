@@ -15,7 +15,6 @@ import './model-picker.js';
 // ─── Overlay image filenames ─────────────────────────────────────────────────
 // Base images (opaque, used as the canvas)
 const IMG_BASE       = 'base.png';
-const IMG_TRUNK_OPEN = 'trunk-open.png';
 
 // Transparent overlays composited on top of the base via CSS stacking.
 // Z-order (furthest → nearest to camera in offcharge front 3/4 view):
@@ -30,7 +29,9 @@ const COMBINED_OVERLAYS = {
 
 // On-charge (rear 3/4 view): different z-order, no chargeport or ff overlays.
 // Files use 'oncharge-' prefix so both sets coexist in the same directory.
-const OVERLAY_Z_ORDER_ONCHARGE = ['fr', 'frunk', 'nf', 'nr'];
+// fr renders below trunk (far-rear door is behind the trunk lid in rear 3/4 view).
+const OVERLAY_BELOW_TRUNK_ONCHARGE = ['fr'];
+const OVERLAY_Z_ORDER_ONCHARGE = ['frunk', 'nf', 'nr'];
 const COMBINED_OVERLAYS_ONCHARGE = {
   'nf+nr': 'oncharge-nf-nr-combined-overlay.png',
 };
@@ -428,13 +429,14 @@ class TeslaCard extends LitElement {
     const useOncharge = pluggedIn && this._onchargeAvail;
     const prefix = useOncharge ? 'oncharge-' : '';
 
-    // Base is always base.png; trunk-open is layered on top so that
-    // Base image: trunk-open swaps the entire base silhouette
-    const baseImg = trunkOpen ? `${prefix}trunk-open.png` : `${prefix}base.png`;
+    // Base is always base.png — trunk is a transparent overlay so that
+    // belowTrunk overlays (oncharge fr) can render between base and trunk.
+    const baseImg = `${prefix}base.png`;
 
     // Z-order and available overlays depend on camera angle.
     // On-charge view has no chargeport overlay (always visible) and no ff (not in frame).
     const zOrder = useOncharge ? OVERLAY_Z_ORDER_ONCHARGE : OVERLAY_Z_ORDER;
+    const belowTrunk = useOncharge ? OVERLAY_BELOW_TRUNK_ONCHARGE : [];
     const activeOverlays = {
       frunk: frunkOpen,
       nf: doorState.nf,
@@ -452,7 +454,16 @@ class TeslaCard extends LitElement {
     const useFfFrCombined = !useOncharge && doorState.ff && doorState.fr && this._combinedAvail['ff+fr'];
     const combinedMap = useOncharge ? COMBINED_OVERLAYS_ONCHARGE : COMBINED_OVERLAYS;
 
-    // Build list of overlay filenames to stack (z-ordered)
+    // Overlays below trunk (oncharge: fr is behind trunk lid)
+    const belowTrunkFiles = [];
+    for (const name of belowTrunk) {
+      if (activeOverlays[name]) belowTrunkFiles.push(`${prefix}${name}-overlay.png`);
+    }
+
+    // Trunk overlay (transparent diff, not full base swap)
+    const trunkOverlay = trunkOpen ? `${prefix}trunk-overlay.png` : null;
+
+    // Build list of overlay filenames to stack above trunk (z-ordered)
     const overlayFiles = [];
     let nfNrFirstSeen = false;
     let ffFrFirstSeen = false;
@@ -576,6 +587,14 @@ class TeslaCard extends LitElement {
                     @error=${() => { this._imageError = true; }}
                     @load=${() => { this._imageError = false; }}
                   />
+                  ${belowTrunkFiles.map(f => html`
+                    <img class="car-overlay"
+                      src="${this._overlayUrl(f)}"
+                      alt="" />`)}
+                  ${trunkOverlay ? html`
+                    <img class="car-overlay"
+                      src="${this._overlayUrl(trunkOverlay)}"
+                      alt="" />` : ''}
                   ${overlayFiles.map(f => html`
                     <img class="car-overlay"
                       src="${this._overlayUrl(f)}"
