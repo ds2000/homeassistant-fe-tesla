@@ -167,6 +167,7 @@ All contributions are welcome:
 
 | Contributor | Submission |
 |-------------|------------|
+| David Shaw | Model 3 2017–2023 — Red Multi-Coat |
 <!-- END_CONTRIBUTORS -->
 
 ---
