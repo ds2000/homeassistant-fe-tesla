@@ -30,7 +30,7 @@ const COMBINED_OVERLAYS = {
 
 // On-charge (rear 3/4 view): different z-order, no chargeport or ff overlays.
 // Files use 'oncharge-' prefix so both sets coexist in the same directory.
-const OVERLAY_Z_ORDER_ONCHARGE = ['frunk', 'nf', 'nr', 'fr'];
+const OVERLAY_Z_ORDER_ONCHARGE = ['fr', 'frunk', 'nf', 'nr'];
 const COMBINED_OVERLAYS_ONCHARGE = {
   'nf+nr': 'oncharge-nf-nr-combined-overlay.png',
 };
