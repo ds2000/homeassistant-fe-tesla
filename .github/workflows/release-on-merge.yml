@@ -1,0 +1,66 @@
+# Auto-release when image PRs are merged
+# Bumps patch version, rebuilds dist, creates GitHub release for HACS
+name: Release on Image Merge
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  release:
+    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'images/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Bump patch version
+        id: version
+        run: |
+          CURRENT=$(jq -r '.version' package.json)
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT"
+          NEW_PATCH=$((PATCH + 1))
+          NEW_VERSION="${MAJOR}.${MINOR}.${NEW_PATCH}"
+
+          jq --arg v "$NEW_VERSION" '.version = $v' package.json > tmp.json && mv tmp.json package.json
+          echo "version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+          echo "Bumped version: $CURRENT -> $NEW_VERSION"
+
+      - name: Build dist
+        run: npm run build
+
+      - name: Commit version bump and dist
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add package.json dist/
+          git diff --cached --quiet && echo "No changes" && exit 0
+          git commit -m "release: v${{ steps.version.outputs.version }}"
+          git push origin main
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          # Build release notes from the PR
+          PR_TITLE="${{ github.event.pull_request.title }}"
+
+          gh release create "v${VERSION}" \
+            --title "v${VERSION}" \
+            --notes "### Added
+          - ${PR_TITLE}
+
+          _Auto-released by GitHub Actions on image merge._" \
+            dist/tesla-card.js
