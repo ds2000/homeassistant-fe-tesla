@@ -1,6 +1,5 @@
 {
   "name": "Tesla Card",
   "render_readme": true,
-  "homeassistant": "2023.0.0",
-  "filename": "tesla-card.js"
+  "homeassistant": "2023.0.0"
 }
