@@ -163,6 +163,12 @@ All contributions are welcome:
 - **Bug reports** -- open an issue with your HA version, integration version, and what you expected vs what happened
 - **Pull requests** -- please follow the one-feature-at-a-time rule and test against a live HA instance before submitting
 
+### Image Contributors
+
+| Contributor | Submission |
+|-------------|------------|
+<!-- END_CONTRIBUTORS -->
+
 ---
 
 ## Development
