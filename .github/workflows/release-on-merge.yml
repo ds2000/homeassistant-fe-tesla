@@ -57,10 +57,12 @@ jobs:
           # Build release notes from the PR
           PR_TITLE="${{ github.event.pull_request.title }}"
 
+          # Do NOT attach dist/tesla-card.js as a release asset.
+          # HACS sees filename in hacs.json, can't find it in assets,
+          # and falls back to downloading the full source archive (which includes images).
           gh release create "v${VERSION}" \
             --title "v${VERSION}" \
             --notes "### Added
           - ${PR_TITLE}
 
-          _Auto-released by GitHub Actions on image merge._" \
-            dist/tesla-card.js
+          _Auto-released by GitHub Actions on image merge._"
