@@ -16,8 +16,7 @@
             {
               "id": "deep_blue_metallic",
               "name": "Deep Blue Metallic",
-              "swatch": "#223873",
-              "hasImages": true
+              "swatch": "#223873"
             },
             {
               "id": "pearl_white_multi_coat",
@@ -85,8 +84,7 @@
             {
               "id": "pearl_white_multi_coat",
               "name": "Pearl White Multi-Coat",
-              "swatch": "#f2f2f2",
-              "hasImages": true
+              "swatch": "#f2f2f2"
             },
             {
               "id": "solid_black",
@@ -164,8 +162,7 @@
             {
               "id": "pearl_white_multi_coat",
               "name": "Pearl White Multi-Coat",
-              "swatch": "#f2f2f2",
-              "hasImages": true
+              "swatch": "#f2f2f2"
             },
             {
               "id": "solid_black",
