@@ -346,11 +346,11 @@ var Ue=Object.defineProperty;var ze=(n,t,e)=>t in n?Ue(n,t,{enumerable:!0,config
   /* Seat positions — percentages of the image dimensions
      so they track the actual seats regardless of clip height.
      Based on Model 3 climate-bg.png (1100×1898). */
-  .clim-seat-fl { top: 27%; left: 37%; }
-  .clim-seat-fr { top: 27%; left: 63%; }
-  .clim-seat-rl { top: 44%; left: 33%; }
-  .clim-seat-rc { top: 44%; left: 50%; }
-  .clim-seat-rr { top: 44%; left: 67%; }
+  .clim-seat-fl { top: 24%; left: 37%; }
+  .clim-seat-fr { top: 24%; left: 66%; }
+  .clim-seat-rl { top: 45%; left: 38%; }
+  .clim-seat-rc { top: 45%; left: 52%; }
+  .clim-seat-rr { top: 45%; left: 65%; }
 
   /* ── Bottom sheet ────────────────────────────────────────── */
   .clim-sheet {
@@ -2951,20 +2951,10 @@ var Ue=Object.defineProperty;var ze=(n,t,e)=>t in n?Ue(n,t,{enumerable:!0,config
    *)
 
 @lit/reactive-element/reactive-element.js:
-  (**
-   * @license
-   * Copyright 2017 Google LLC
-   * SPDX-License-Identifier: BSD-3-Clause
-   *)
-
 lit-html/lit-html.js:
-  (**
-   * @license
-   * Copyright 2017 Google LLC
-   * SPDX-License-Identifier: BSD-3-Clause
-   *)
-
 lit-element/lit-element.js:
+lit-html/directive.js:
+lit-html/directives/unsafe-html.js:
   (**
    * @license
    * Copyright 2017 Google LLC
@@ -2975,20 +2965,6 @@ lit-html/is-server.js:
   (**
    * @license
    * Copyright 2022 Google LLC
-   * SPDX-License-Identifier: BSD-3-Clause
-   *)
-
-lit-html/directive.js:
-  (**
-   * @license
-   * Copyright 2017 Google LLC
-   * SPDX-License-Identifier: BSD-3-Clause
-   *)
-
-lit-html/directives/unsafe-html.js:
-  (**
-   * @license
-   * Copyright 2017 Google LLC
    * SPDX-License-Identifier: BSD-3-Clause
    *)
 */

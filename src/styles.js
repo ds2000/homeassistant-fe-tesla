@@ -356,11 +356,11 @@ export const climateStyles = css`
   /* Seat positions — percentages of the image dimensions
      so they track the actual seats regardless of clip height.
      Based on Model 3 climate-bg.png (1100×1898). */
-  .clim-seat-fl { top: 27%; left: 37%; }
-  .clim-seat-fr { top: 27%; left: 63%; }
-  .clim-seat-rl { top: 44%; left: 33%; }
-  .clim-seat-rc { top: 44%; left: 50%; }
-  .clim-seat-rr { top: 44%; left: 67%; }
+  .clim-seat-fl { top: 24%; left: 37%; }
+  .clim-seat-fr { top: 24%; left: 66%; }
+  .clim-seat-rl { top: 45%; left: 38%; }
+  .clim-seat-rc { top: 45%; left: 52%; }
+  .clim-seat-rr { top: 45%; left: 65%; }
 
   /* ── Bottom sheet ────────────────────────────────────────── */
   .clim-sheet {
