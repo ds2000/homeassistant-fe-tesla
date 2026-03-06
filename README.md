@@ -168,6 +168,7 @@ All contributions are welcome:
 | Contributor | Submission |
 |-------------|------------|
 | David Shaw | Model 3 2017–2023 — Red Multi-Coat |
+| [@ccarcione](https://github.com/ccarcione) | Model 3 2017–2023 — Deep Blue Metallic |
 <!-- END_CONTRIBUTORS -->
 
 ---

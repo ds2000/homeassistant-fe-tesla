@@ -3,6 +3,7 @@
 ## [0.3.0] - 2026-03-03
 
 ### Added
+- **Model 3 2017–2023 — Deep Blue Metallic** images (contributed by [@ccarcione](https://github.com/ccarcione))
 - **Model 3 2017–2023 — Red Multi-Coat** images (contributed by David Shaw)
 - **Overlay-based rendering** — car state is now composited from transparent PNG overlays instead of prerendered JPGs, enabling all 128 offcharge and 64 oncharge door/trunk/frunk/chargeport combinations
 - **On-charge image switching** — when the car is plugged in, the card switches to a separate set of oncharge overlays showing the charging cable; falls back to offcharge images if oncharge set is unavailable

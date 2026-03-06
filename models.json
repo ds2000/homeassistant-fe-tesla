@@ -17,7 +17,8 @@
             {
               "id": "deep_blue_metallic",
               "name": "Deep Blue Metallic",
-              "swatch": "#223873"
+              "swatch": "#223873",
+              "hasImages": true
             },
             {
               "id": "pearl_white_multi_coat",
