@@ -24,8 +24,8 @@ export class TeslaBase extends LitElement {
 
   // ── Entity helpers ──────────────────────────────────────────────────────────
 
-  _eid(t)      { return entityId(t, this.config.car_name); }
-  _state(t)    { return this.hass?.states[this._eid(t)]; }
+  _eid(t)      { return t ? entityId(t, this.config.car_name) : null; }
+  _state(t)    { const id = this._eid(t); return id ? this.hass?.states[id] : undefined; }
   _val(t)      { return this._state(t)?.state; }
   _attr(t, a)  { return this._state(t)?.attributes?.[a]; }
   _nattr(t, a) { const v = this._attr(t, a); return v != null ? Number(v) : null; }
@@ -71,7 +71,7 @@ export class TeslaBase extends LitElement {
 
   // ── Domain helper ──────────────────────────────────────────────────────────
 
-  _domainOf(t) { return t.split('.')[0]; }
+  _domainOf(t) { return t ? t.split('.')[0] : null; }
 
   /** Press a button or toggle a cover — picks the right service per domain */
   _activate(entityTpl) {
@@ -91,6 +91,7 @@ export class TeslaBase extends LitElement {
   // ── Service call ────────────────────────────────────────────────────────────
 
   async _svc(domain, service, entityTpl, extra = {}) {
+    if (!entityTpl) return;
     try {
       await this.hass.callService(domain, service, {
         entity_id: this._eid(entityTpl),

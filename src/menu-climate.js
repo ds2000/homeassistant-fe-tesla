@@ -104,10 +104,13 @@ class TeslaMenuClimate extends TeslaBase {
     const tempOut    = tempOutRaw != null ? `${Math.round(Number(tempOutRaw))}${tempOutU}` : null;
 
     const windowsOpen   = this._val(this.E.WINDOWS_COVER) === 'open';
-    const campMode      = this._val(this.E.CAMP_MODE)  === 'on';
-    const dogMode       = this._val(this.E.DOG_MODE)   === 'on';
+    const hasCampMode   = !!this.E.CAMP_MODE;
+    const hasDogMode    = !!this.E.DOG_MODE;
+    const campMode      = hasCampMode && this._val(this.E.CAMP_MODE)  === 'on';
+    const dogMode       = hasDogMode  && this._val(this.E.DOG_MODE)   === 'on';
+    const hasCabinOverheat = !!this.E.CABIN_OVERHEAT;
     const cabinOverheatRaw = this._val(this.E.CABIN_OVERHEAT) ?? 'Off';
-    const isCabinClimate = this._domainOf(this.E.CABIN_OVERHEAT) === 'climate';
+    const isCabinClimate = hasCabinOverheat && this._domainOf(this.E.CABIN_OVERHEAT) === 'climate';
     const cabinOverheat = isCabinClimate
       ? ({ off: 'Off', fan_only: 'No A/C', cool: 'On' }[cabinOverheatRaw] ?? 'Off')
       : cabinOverheatRaw;
@@ -213,32 +216,36 @@ class TeslaMenuClimate extends TeslaBase {
           <!-- Expanded section — Camp Mode / Dog Mode + Cabin Overheat Protection -->
           <div class="clim-expanded-content">
 
-            <!-- Camp Mode + Dog Mode in one grouped container -->
-            <div class="clim-list-group">
-              <button class="clim-list-item${campMode ? ' hot' : ''}"
-                @click=${() => this._svc('switch', campMode ? 'turn_off' : 'turn_on', this.E.CAMP_MODE)}>
-                <span class="icon clim-list-icon">${unsafeHTML(ICONS.tent)}</span>
-                <span class="clim-list-label">Camp Mode</span>
-              </button>
-              <button class="clim-list-item${dogMode ? ' hot' : ''}"
-                @click=${() => this._svc('switch', dogMode ? 'turn_off' : 'turn_on', this.E.DOG_MODE)}>
-                <span class="icon clim-list-icon">${unsafeHTML(ICONS.dog)}</span>
-                <span class="clim-list-label">Dog Mode</span>
-              </button>
-            </div>
-
-            <!-- Separator line -->
-            <div class="clim-separator"></div>
+            <!-- Camp Mode + Dog Mode (hidden if not available for this integration) -->
+            ${hasCampMode || hasDogMode ? html`
+              <div class="clim-list-group">
+                ${hasCampMode ? html`
+                  <button class="clim-list-item${campMode ? ' hot' : ''}"
+                    @click=${() => this._svc('switch', campMode ? 'turn_off' : 'turn_on', this.E.CAMP_MODE)}>
+                    <span class="icon clim-list-icon">${unsafeHTML(ICONS.tent)}</span>
+                    <span class="clim-list-label">Camp Mode</span>
+                  </button>` : ''}
+                ${hasDogMode ? html`
+                  <button class="clim-list-item${dogMode ? ' hot' : ''}"
+                    @click=${() => this._svc('switch', dogMode ? 'turn_off' : 'turn_on', this.E.DOG_MODE)}>
+                    <span class="icon clim-list-icon">${unsafeHTML(ICONS.dog)}</span>
+                    <span class="clim-list-label">Dog Mode</span>
+                  </button>` : ''}
+              </div>
+              <div class="clim-separator"></div>
+            ` : ''}
 
             <!-- Cabin Overheat Protection -->
-            <div class="clim-section-title">Cabin Overheat Protection</div>
-            <div class="clim-list-group clim-segment-group clim-list-group--last">
-              ${(['Off', 'No A/C', 'On']).map(opt => html`
-                <button class="clim-segment-btn${cabinOverheat === opt ? ' selected' : ''}"
-                  @click=${() => this._setCabinOverheat(opt)}>
-                  ${opt}
-                </button>`)}
-            </div>
+            ${hasCabinOverheat ? html`
+              <div class="clim-section-title">Cabin Overheat Protection</div>
+              <div class="clim-list-group clim-segment-group clim-list-group--last">
+                ${(['Off', 'No A/C', 'On']).map(opt => html`
+                  <button class="clim-segment-btn${cabinOverheat === opt ? ' selected' : ''}"
+                    @click=${() => this._setCabinOverheat(opt)}>
+                    ${opt}
+                  </button>`)}
+              </div>
+            ` : ''}
 
           </div><!-- /clim-expanded-content -->
 

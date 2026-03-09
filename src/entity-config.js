@@ -7,36 +7,48 @@ const FLEET = {
   BATTERY_LEVEL:        'sensor.{car_name}_battery_level',
   BATTERY_RANGE:        'sensor.{car_name}_battery_range',
   CHARGE_RATE:          'sensor.{car_name}_charge_rate',
-  CHARGE_LIMIT:         'sensor.{car_name}_charge_limit_soc',
+  CHARGE_LIMIT:         'number.{car_name}_charge_limit',
   CHARGING_STATE:       'sensor.{car_name}_charging',
   TEMPERATURE_INSIDE:   'sensor.{car_name}_inside_temperature',
   TEMPERATURE_OUTSIDE:  'sensor.{car_name}_outside_temperature',
   SPEED:                'sensor.{car_name}_speed',
   ODOMETER:             'sensor.{car_name}_odometer',
 
-  // Binary sensors
-  CHARGING:             'binary_sensor.{car_name}_charging',
+  // Binary sensors (Fleet has individual doors/windows, no combined entity)
+  CHARGING:             'switch.{car_name}_charge',
   PLUGGED_IN:           'binary_sensor.{car_name}_charge_cable',
-  PARKING_BRAKE:        'binary_sensor.{car_name}_parking_brake',
-  FRUNK:                'binary_sensor.{car_name}_frunk',
-  TRUNK:                'binary_sensor.{car_name}_trunk',
-  DOORS:                'binary_sensor.{car_name}_doors',
-  WINDOWS:              'binary_sensor.{car_name}_windows',
-  LOCKED:               'binary_sensor.{car_name}_locked',
+  PARKING_BRAKE:        null,
+  FRUNK:                null,
+  TRUNK:                null,
+  DOORS:                null,
+  WINDOWS:              null,
+  LOCKED:               null,
   ONLINE:               'binary_sensor.{car_name}_status',
-  SENTRY_MODE:          'binary_sensor.{car_name}_sentry_mode',
+  SENTRY_MODE:          'switch.{car_name}_sentry_mode',
+
+  // Individual door sensors (Fleet only)
+  DOOR_DRIVER_FRONT:      'binary_sensor.{car_name}_front_driver_door',
+  DOOR_DRIVER_REAR:       'binary_sensor.{car_name}_rear_driver_door',
+  DOOR_PASSENGER_FRONT:   'binary_sensor.{car_name}_front_passenger_door',
+  DOOR_PASSENGER_REAR:    'binary_sensor.{car_name}_rear_passenger_door',
+
+  // Individual window sensors (Fleet only)
+  WINDOW_DRIVER_FRONT:    'binary_sensor.{car_name}_front_driver_window',
+  WINDOW_DRIVER_REAR:     'binary_sensor.{car_name}_rear_driver_window',
+  WINDOW_PASSENGER_FRONT: 'binary_sensor.{car_name}_front_passenger_window',
+  WINDOW_PASSENGER_REAR:  'binary_sensor.{car_name}_rear_passenger_window',
 
   // Locks
-  DOOR_LOCK:            'lock.{car_name}_door_lock',
+  DOOR_LOCK:            'lock.{car_name}_lock',
 
   // Switches
-  CHARGER_SWITCH:       'switch.{car_name}_charging',
+  CHARGER_SWITCH:       'switch.{car_name}_charge',
   SENTRY_MODE_SWITCH:   'switch.{car_name}_sentry_mode',
   DEFROST_SWITCH:       'switch.{car_name}_defrost',
-  CAMP_MODE:            'switch.{car_name}_camp_mode',
-  DOG_MODE:             'switch.{car_name}_dog_mode',
+  CAMP_MODE:            null,
+  DOG_MODE:             null,
 
-  // Select — cabin overheat protection
+  // Climate — cabin overheat protection
   CABIN_OVERHEAT:       'climate.{car_name}_cabin_overheat_protection',
 
   // Select entities — heated seats (front + rear)
@@ -53,7 +65,7 @@ const FLEET = {
   CHARGE_LIMIT_NUMBER:  'number.{car_name}_charge_limit',
   CHARGING_AMPS_NUMBER: 'number.{car_name}_charge_current',
 
-  // Buttons
+  // Buttons / Covers (Fleet uses covers for port, frunk, trunk)
   CHARGE_PORT_OPEN:     'cover.{car_name}_charge_port_door',
   CHARGE_PORT_CLOSE:    'cover.{car_name}_charge_port_door',
   HORN:                 'button.{car_name}_honk_horn',
@@ -64,7 +76,7 @@ const FLEET = {
   FORCE_UPDATE:         'button.{car_name}_wake',
 
   // Covers
-  WINDOWS_COVER:        'cover.{car_name}_windows',
+  WINDOWS_COVER:        'cover.{car_name}_vent_windows',
   FRUNK_COVER:          'cover.{car_name}_frunk',
   CHARGER_DOOR:         'cover.{car_name}_charge_port_door',
 
@@ -99,6 +111,16 @@ const CUSTOM = {
   LOCKED:               'binary_sensor.{car_name}_locked',
   ONLINE:               'binary_sensor.{car_name}_online',
   SENTRY_MODE:          'binary_sensor.{car_name}_sentry_mode',
+
+  // Individual door/window sensors (Custom uses combined entities above)
+  DOOR_DRIVER_FRONT:      null,
+  DOOR_DRIVER_REAR:       null,
+  DOOR_PASSENGER_FRONT:   null,
+  DOOR_PASSENGER_REAR:    null,
+  WINDOW_DRIVER_FRONT:    null,
+  WINDOW_DRIVER_REAR:     null,
+  WINDOW_PASSENGER_FRONT: null,
+  WINDOW_PASSENGER_REAR:  null,
 
   // Locks
   DOOR_LOCK:            'lock.{car_name}_doors',

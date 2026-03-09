@@ -359,14 +359,15 @@ class TeslaCard extends LitElement {
 
   // ─── Entity helpers ────────────────────────────────────────────────────────
 
-  _eid(t)      { return entityId(t, this.config.car_name); }
-  _state(t)    { return this.hass?.states[this._eid(t)]; }
+  _eid(t)      { return t ? entityId(t, this.config.car_name) : null; }
+  _state(t)    { const id = this._eid(t); return id ? this.hass?.states[id] : undefined; }
   _val(t)      { return this._state(t)?.state; }
   _attr(t, a)  { return this._state(t)?.attributes?.[a]; }
 
   // ─── Service call ──────────────────────────────────────────────────────────
 
   async _svc(domain, service, entityTpl, extra = {}) {
+    if (!entityTpl) return;
     try {
       await this.hass.callService(domain, service, {
         entity_id: this._eid(entityTpl),
@@ -416,17 +417,25 @@ class TeslaCard extends LitElement {
     // Car image — overlay stacking
     const frunkOpen       = this._val(this.E.FRUNK_COVER) === 'open'
                          || this._val(this.E.FRUNK)         === 'on';
-    const trunkOpen       = this._val(this.E.TRUNK)         === 'on';
+    const trunkOpen       = this._val(this.E.OPEN_TRUNK) === 'open'
+                         || this._val(this.E.TRUNK)      === 'on';
     const pluggedIn       = this._val(this.E.PLUGGED_IN)    === 'on';
     const chargerDoorOpen = this._val(this.E.CHARGER_DOOR) === 'open' || pluggedIn;
 
-    // Individual door states from binary_sensor.{car_name}_doors attributes
-    const doorState = {
-      nf: this._attr(this.E.DOORS, 'driver_front')    === true,
-      nr: this._attr(this.E.DOORS, 'driver_rear')     === true,
-      ff: this._attr(this.E.DOORS, 'passenger_front') === true,
-      fr: this._attr(this.E.DOORS, 'passenger_rear')  === true,
-    };
+    // Door states — Fleet has individual sensors, Custom has combined entity
+    const doorState = this.E.DOOR_DRIVER_FRONT
+      ? {
+          nf: this._val(this.E.DOOR_DRIVER_FRONT)    === 'on',
+          nr: this._val(this.E.DOOR_DRIVER_REAR)     === 'on',
+          ff: this._val(this.E.DOOR_PASSENGER_FRONT) === 'on',
+          fr: this._val(this.E.DOOR_PASSENGER_REAR)  === 'on',
+        }
+      : {
+          nf: this._attr(this.E.DOORS, 'driver_front')    === true,
+          nr: this._attr(this.E.DOORS, 'driver_rear')     === true,
+          ff: this._attr(this.E.DOORS, 'passenger_front') === true,
+          fr: this._attr(this.E.DOORS, 'passenger_rear')  === true,
+        };
 
     // When plugged in and on-charge images exist, switch to rear 3/4 view
     const useOncharge = pluggedIn && this._onchargeAvail;
@@ -503,7 +512,7 @@ class TeslaCard extends LitElement {
     const tempStr     = tgtTempRaw != null ? Number(tgtTempRaw).toFixed(1) : '—';
 
     const statusText = !online && onlineEnt ? 'Asleep'
-      : this._val(this.E.PARKING_BRAKE) === 'on' ? 'Parked'
+      : this.E.PARKING_BRAKE && this._val(this.E.PARKING_BRAKE) === 'on' ? 'Parked'
       : (() => {
           if (!this.config.show_speed) return null;
           const s = this._attr(this.E.LOCATION, 'speed');
