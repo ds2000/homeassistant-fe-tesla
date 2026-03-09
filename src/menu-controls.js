@@ -1,7 +1,7 @@
 import { html } from 'lit';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { TeslaBase } from './tesla-base.js';
-import { ENTITIES } from './entity-config.js';
+
 import { sharedStyles, controlsStyles } from './styles.js';
 import { ICONS } from './icons.js';
 
@@ -12,17 +12,17 @@ class TeslaMenuControls extends TeslaBase {
   render() {
     if (!this.config || !this.hass) return html``;
 
-    const lockState     = this._val(ENTITIES.DOOR_LOCK);
+    const lockState     = this._val(this.E.DOOR_LOCK);
     const isLocked      = lockState === 'locked';
 
-    const frunkOpen     = this._val(ENTITIES.FRUNK_COVER) === 'open'
-                       || this._val(ENTITIES.FRUNK)        === 'on';
-    const trunkOpen     = this._val(ENTITIES.TRUNK) === 'on';
+    const frunkOpen     = this._val(this.E.FRUNK_COVER) === 'open'
+                       || this._val(this.E.FRUNK)        === 'on';
+    const trunkOpen     = this._val(this.E.TRUNK) === 'on';
 
-    const pluggedIn     = this._val(ENTITIES.PLUGGED_IN) === 'on';
-    const chargerDoorOpen = this._val(ENTITIES.CHARGER_DOOR) === 'open' || pluggedIn;
+    const pluggedIn     = this._val(this.E.PLUGGED_IN) === 'on';
+    const chargerDoorOpen = this._val(this.E.CHARGER_DOOR) === 'open' || pluggedIn;
 
-    const windowsOpen   = this._val(ENTITIES.WINDOWS_COVER) === 'open';
+    const windowsOpen   = this._val(this.E.WINDOWS_COVER) === 'open';
     const bgFile = pluggedIn ? 'controls-bg-charging.png' : 'controls-bg.png';
 
     return html`
@@ -41,43 +41,43 @@ class TeslaMenuControls extends TeslaBase {
             <div style="${this._customOverlayStyleFor(bgFile)}"></div>` : ''}
           <!-- Frunk — text only, top centre -->
           <button class="ctrl-zone ctrl-frunk"
-            @click=${() => this._svc('cover', 'toggle_cover', ENTITIES.FRUNK_COVER)}>
+            @click=${() => this._svc('cover', 'toggle_cover', this.E.FRUNK_COVER)}>
             ${frunkOpen ? 'Close' : 'Open'}
           </button>
           <!-- Lock — icon only, car centre -->
           <button class="ctrl-zone ctrl-lock"
-            @click=${() => this._svc('lock', isLocked ? 'unlock' : 'lock', ENTITIES.DOOR_LOCK)}>
+            @click=${() => this._svc('lock', isLocked ? 'unlock' : 'lock', this.E.DOOR_LOCK)}>
             <span class="icon">${unsafeHTML(isLocked ? ICONS.lock : ICONS.unlock)}</span>
           </button>
           <!-- Trunk — text only, bottom centre -->
           <button class="ctrl-zone ctrl-trunk"
-            @click=${() => this._svc('button', 'press', ENTITIES.OPEN_TRUNK)}>
+            @click=${() => this._activate(this.E.OPEN_TRUNK)}>
             ${trunkOpen ? 'Close' : 'Open'}
           </button>
           <!-- Charge port — icon only, bottom left -->
           <button class="ctrl-zone ctrl-port ${chargerDoorOpen ? 'port-open' : ''}"
-            @click=${() => this._svc('button', 'press', chargerDoorOpen ? ENTITIES.CHARGE_PORT_CLOSE : ENTITIES.CHARGE_PORT_OPEN)}>
+            @click=${() => this._openClose(this.E.CHARGE_PORT_OPEN, this.E.CHARGE_PORT_CLOSE, chargerDoorOpen)}>
             <span class="icon">${unsafeHTML(ICONS['charge-bolt'])}</span>
           </button>
         </div>
         <div class="ctrl-actions">
           <button class="ctrl-action-btn"
-            @click=${() => this._svc('button', 'press', ENTITIES.FLASH_LIGHTS)}>
+            @click=${() => this._svc('button', 'press', this.E.FLASH_LIGHTS)}>
             <span class="icon">${unsafeHTML(ICONS['flash-lights'])}</span>
             <span>Flash</span>
           </button>
           <button class="ctrl-action-btn"
-            @click=${() => this._svc('button', 'press', ENTITIES.HORN)}>
+            @click=${() => this._svc('button', 'press', this.E.HORN)}>
             <span class="icon">${unsafeHTML(ICONS.horn)}</span>
             <span>Horn</span>
           </button>
           <button class="ctrl-action-btn"
-            @click=${() => this._svc('button', 'press', ENTITIES.REMOTE_START)}>
+            @click=${() => this._svc('button', 'press', this.E.REMOTE_START)}>
             <span class="icon">${unsafeHTML(ICONS['remote-start'])}</span>
             <span>Start</span>
           </button>
           <button class="ctrl-action-btn"
-            @click=${() => this._svc('cover', windowsOpen ? 'close_cover' : 'open_cover', ENTITIES.WINDOWS_COVER)}>
+            @click=${() => this._svc('cover', windowsOpen ? 'close_cover' : 'open_cover', this.E.WINDOWS_COVER)}>
             <span class="icon">${unsafeHTML(windowsOpen ? ICONS['vent-close'] : ICONS['vent-open'])}</span>
             <span>${windowsOpen ? 'Close' : 'Vent'}</span>
           </button>

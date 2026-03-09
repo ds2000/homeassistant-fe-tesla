@@ -1,6 +1,6 @@
-var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,configurable:!0,writable:!0,value:e}):n[t]=e;var rt=(n,t,e)=>Be(n,typeof t!="symbol"?t+"":t,e);var ot=globalThis,lt=ot.ShadowRoot&&(ot.ShadyCSS===void 0||ot.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,bt=Symbol(),Xt=new WeakMap,F=class{constructor(t,e,s){if(this._$cssResult$=!0,s!==bt)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o,e=this.t;if(lt&&t===void 0){let s=e!==void 0&&e.length===1;s&&(t=Xt.get(e)),t===void 0&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),s&&Xt.set(e,t))}return t}toString(){return this.cssText}},Jt=n=>new F(typeof n=="string"?n:n+"",void 0,bt),k=(n,...t)=>{let e=n.length===1?n[0]:t.reduce((s,i,a)=>s+(o=>{if(o._$cssResult$===!0)return o.cssText;if(typeof o=="number")return o;throw Error("Value passed to 'css' function must be a 'css' function result: "+o+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(i)+n[a+1],n[0]);return new F(e,n,bt)},te=(n,t)=>{if(lt)n.adoptedStyleSheets=t.map(e=>e instanceof CSSStyleSheet?e:e.styleSheet);else for(let e of t){let s=document.createElement("style"),i=ot.litNonce;i!==void 0&&s.setAttribute("nonce",i),s.textContent=e.cssText,n.appendChild(s)}},vt=lt?n=>n:n=>n instanceof CSSStyleSheet?(t=>{let e="";for(let s of t.cssRules)e+=s.cssText;return Jt(e)})(n):n;var{is:Qe,defineProperty:je,getOwnPropertyDescriptor:Ge,getOwnPropertyNames:Fe,getOwnPropertySymbols:Ve,getPrototypeOf:Ke}=Object,S=globalThis,ee=S.trustedTypes,qe=ee?ee.emptyScript:"",We=S.reactiveElementPolyfillSupport,V=(n,t)=>n,xt={toAttribute(n,t){switch(t){case Boolean:n=n?qe:null;break;case Object:case Array:n=n==null?n:JSON.stringify(n)}return n},fromAttribute(n,t){let e=n;switch(t){case Boolean:e=n!==null;break;case Number:e=n===null?null:Number(n);break;case Object:case Array:try{e=JSON.parse(n)}catch{e=null}}return e}},ie=(n,t)=>!Qe(n,t),se={attribute:!0,type:String,converter:xt,reflect:!1,useDefault:!1,hasChanged:ie};Symbol.metadata??(Symbol.metadata=Symbol("metadata")),S.litPropertyMetadata??(S.litPropertyMetadata=new WeakMap);var C=class extends HTMLElement{static addInitializer(t){this._$Ei(),(this.l??(this.l=[])).push(t)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(t,e=se){if(e.state&&(e.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(t)&&((e=Object.create(e)).wrapped=!0),this.elementProperties.set(t,e),!e.noAccessor){let s=Symbol(),i=this.getPropertyDescriptor(t,s,e);i!==void 0&&je(this.prototype,t,i)}}static getPropertyDescriptor(t,e,s){let{get:i,set:a}=Ge(this.prototype,t)??{get(){return this[e]},set(o){this[e]=o}};return{get:i,set(o){let p=i?.call(this);a?.call(this,o),this.requestUpdate(t,p,s)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)??se}static _$Ei(){if(this.hasOwnProperty(V("elementProperties")))return;let t=Ke(this);t.finalize(),t.l!==void 0&&(this.l=[...t.l]),this.elementProperties=new Map(t.elementProperties)}static finalize(){if(this.hasOwnProperty(V("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(V("properties"))){let e=this.properties,s=[...Fe(e),...Ve(e)];for(let i of s)this.createProperty(i,e[i])}let t=this[Symbol.metadata];if(t!==null){let e=litPropertyMetadata.get(t);if(e!==void 0)for(let[s,i]of e)this.elementProperties.set(s,i)}this._$Eh=new Map;for(let[e,s]of this.elementProperties){let i=this._$Eu(e,s);i!==void 0&&this._$Eh.set(i,e)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(t){let e=[];if(Array.isArray(t)){let s=new Set(t.flat(1/0).reverse());for(let i of s)e.unshift(vt(i))}else t!==void 0&&e.push(vt(t));return e}static _$Eu(t,e){let s=e.attribute;return s===!1?void 0:typeof s=="string"?s:typeof t=="string"?t.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(t=>this.enableUpdating=t),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(t=>t(this))}addController(t){(this._$EO??(this._$EO=new Set)).add(t),this.renderRoot!==void 0&&this.isConnected&&t.hostConnected?.()}removeController(t){this._$EO?.delete(t)}_$E_(){let t=new Map,e=this.constructor.elementProperties;for(let s of e.keys())this.hasOwnProperty(s)&&(t.set(s,this[s]),delete this[s]);t.size>0&&(this._$Ep=t)}createRenderRoot(){let t=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return te(t,this.constructor.elementStyles),t}connectedCallback(){this.renderRoot??(this.renderRoot=this.createRenderRoot()),this.enableUpdating(!0),this._$EO?.forEach(t=>t.hostConnected?.())}enableUpdating(t){}disconnectedCallback(){this._$EO?.forEach(t=>t.hostDisconnected?.())}attributeChangedCallback(t,e,s){this._$AK(t,s)}_$ET(t,e){let s=this.constructor.elementProperties.get(t),i=this.constructor._$Eu(t,s);if(i!==void 0&&s.reflect===!0){let a=(s.converter?.toAttribute!==void 0?s.converter:xt).toAttribute(e,s.type);this._$Em=t,a==null?this.removeAttribute(i):this.setAttribute(i,a),this._$Em=null}}_$AK(t,e){let s=this.constructor,i=s._$Eh.get(t);if(i!==void 0&&this._$Em!==i){let a=s.getPropertyOptions(i),o=typeof a.converter=="function"?{fromAttribute:a.converter}:a.converter?.fromAttribute!==void 0?a.converter:xt;this._$Em=i;let p=o.fromAttribute(e,a.type);this[i]=p??this._$Ej?.get(i)??p,this._$Em=null}}requestUpdate(t,e,s,i=!1,a){if(t!==void 0){let o=this.constructor;if(i===!1&&(a=this[t]),s??(s=o.getPropertyOptions(t)),!((s.hasChanged??ie)(a,e)||s.useDefault&&s.reflect&&a===this._$Ej?.get(t)&&!this.hasAttribute(o._$Eu(t,s))))return;this.C(t,e,s)}this.isUpdatePending===!1&&(this._$ES=this._$EP())}C(t,e,{useDefault:s,reflect:i,wrapped:a},o){s&&!(this._$Ej??(this._$Ej=new Map)).has(t)&&(this._$Ej.set(t,o??e??this[t]),a!==!0||o!==void 0)||(this._$AL.has(t)||(this.hasUpdated||s||(e=void 0),this._$AL.set(t,e)),i===!0&&this._$Em!==t&&(this._$Eq??(this._$Eq=new Set)).add(t))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(e){Promise.reject(e)}let t=this.scheduleUpdate();return t!=null&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??(this.renderRoot=this.createRenderRoot()),this._$Ep){for(let[i,a]of this._$Ep)this[i]=a;this._$Ep=void 0}let s=this.constructor.elementProperties;if(s.size>0)for(let[i,a]of s){let{wrapped:o}=a,p=this[i];o!==!0||this._$AL.has(i)||p===void 0||this.C(i,void 0,a,p)}}let t=!1,e=this._$AL;try{t=this.shouldUpdate(e),t?(this.willUpdate(e),this._$EO?.forEach(s=>s.hostUpdate?.()),this.update(e)):this._$EM()}catch(s){throw t=!1,this._$EM(),s}t&&this._$AE(e)}willUpdate(t){}_$AE(t){this._$EO?.forEach(e=>e.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(t){return!0}update(t){this._$Eq&&(this._$Eq=this._$Eq.forEach(e=>this._$ET(e,this[e]))),this._$EM()}updated(t){}firstUpdated(t){}};C.elementStyles=[],C.shadowRootOptions={mode:"open"},C[V("elementProperties")]=new Map,C[V("finalized")]=new Map,We?.({ReactiveElement:C}),(S.reactiveElementVersions??(S.reactiveElementVersions=[])).push("2.1.2");var q=globalThis,ae=n=>n,ct=q.trustedTypes,ne=ct?ct.createPolicy("lit-html",{createHTML:n=>n}):void 0,he="$lit$",M=`lit$${Math.random().toFixed(9).slice(2)}$`,pe="?"+M,Ye=`<${pe}>`,U=document,W=()=>U.createComment(""),Y=n=>n===null||typeof n!="object"&&typeof n!="function",Et=Array.isArray,Ze=n=>Et(n)||typeof n?.[Symbol.iterator]=="function",kt=`[ 	
-\f\r]`,K=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,re=/-->/g,oe=/>/g,I=RegExp(`>|${kt}(?:([^\\s"'>=/]+)(${kt}*=${kt}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`,"g"),le=/'/g,ce=/"/g,ue=/^(?:script|style|textarea|title)$/i,St=n=>(t,...e)=>({_$litType$:n,strings:t,values:e}),l=St(1),ms=St(2),gs=St(3),E=Symbol.for("lit-noChange"),_=Symbol.for("lit-nothing"),de=new WeakMap,N=U.createTreeWalker(U,129);function me(n,t){if(!Et(n)||!n.hasOwnProperty("raw"))throw Error("invalid template strings array");return ne!==void 0?ne.createHTML(t):t}var Xe=(n,t)=>{let e=n.length-1,s=[],i,a=t===2?"<svg>":t===3?"<math>":"",o=K;for(let p=0;p<e;p++){let h=n[p],f,g,u=-1,b=0;for(;b<h.length&&(o.lastIndex=b,g=o.exec(h),g!==null);)b=o.lastIndex,o===K?g[1]==="!--"?o=re:g[1]!==void 0?o=oe:g[2]!==void 0?(ue.test(g[2])&&(i=RegExp("</"+g[2],"g")),o=I):g[3]!==void 0&&(o=I):o===I?g[0]===">"?(o=i??K,u=-1):g[1]===void 0?u=-2:(u=o.lastIndex-g[2].length,f=g[1],o=g[3]===void 0?I:g[3]==='"'?ce:le):o===ce||o===le?o=I:o===re||o===oe?o=K:(o=I,i=void 0);let v=o===I&&n[p+1].startsWith("/>")?" ":"";a+=o===K?h+Ye:u>=0?(s.push(f),h.slice(0,u)+he+h.slice(u)+M+v):h+M+(u===-2?p:v)}return[me(n,a+(n[e]||"<?>")+(t===2?"</svg>":t===3?"</math>":"")),s]},Z=class n{constructor({strings:t,_$litType$:e},s){let i;this.parts=[];let a=0,o=0,p=t.length-1,h=this.parts,[f,g]=Xe(t,e);if(this.el=n.createElement(f,s),N.currentNode=this.el.content,e===2||e===3){let u=this.el.content.firstChild;u.replaceWith(...u.childNodes)}for(;(i=N.nextNode())!==null&&h.length<p;){if(i.nodeType===1){if(i.hasAttributes())for(let u of i.getAttributeNames())if(u.endsWith(he)){let b=g[o++],v=i.getAttribute(u).split(M),$=/([.?@])?(.*)/.exec(b);h.push({type:1,index:a,name:$[2],strings:v,ctor:$[1]==="."?yt:$[1]==="?"?$t:$[1]==="@"?At:B}),i.removeAttribute(u)}else u.startsWith(M)&&(h.push({type:6,index:a}),i.removeAttribute(u));if(ue.test(i.tagName)){let u=i.textContent.split(M),b=u.length-1;if(b>0){i.textContent=ct?ct.emptyScript:"";for(let v=0;v<b;v++)i.append(u[v],W()),N.nextNode(),h.push({type:2,index:++a});i.append(u[b],W())}}}else if(i.nodeType===8)if(i.data===pe)h.push({type:2,index:a});else{let u=-1;for(;(u=i.data.indexOf(M,u+1))!==-1;)h.push({type:7,index:a}),u+=M.length-1}a++}}static createElement(t,e){let s=U.createElement("template");return s.innerHTML=t,s}};function D(n,t,e=n,s){if(t===E)return t;let i=s!==void 0?e._$Co?.[s]:e._$Cl,a=Y(t)?void 0:t._$litDirective$;return i?.constructor!==a&&(i?._$AO?.(!1),a===void 0?i=void 0:(i=new a(n),i._$AT(n,e,s)),s!==void 0?(e._$Co??(e._$Co=[]))[s]=i:e._$Cl=i),i!==void 0&&(t=D(n,i._$AS(n,t.values),i,s)),t}var wt=class{constructor(t,e){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){let{el:{content:e},parts:s}=this._$AD,i=(t?.creationScope??U).importNode(e,!0);N.currentNode=i;let a=N.nextNode(),o=0,p=0,h=s[0];for(;h!==void 0;){if(o===h.index){let f;h.type===2?f=new X(a,a.nextSibling,this,t):h.type===1?f=new h.ctor(a,h.name,h.strings,this,t):h.type===6&&(f=new Ct(a,this,t)),this._$AV.push(f),h=s[++p]}o!==h?.index&&(a=N.nextNode(),o++)}return N.currentNode=U,i}p(t){let e=0;for(let s of this._$AV)s!==void 0&&(s.strings!==void 0?(s._$AI(t,s,e),e+=s.strings.length-2):s._$AI(t[e])),e++}},X=class n{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(t,e,s,i){this.type=2,this._$AH=_,this._$AN=void 0,this._$AA=t,this._$AB=e,this._$AM=s,this.options=i,this._$Cv=i?.isConnected??!0}get parentNode(){let t=this._$AA.parentNode,e=this._$AM;return e!==void 0&&t?.nodeType===11&&(t=e.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,e=this){t=D(this,t,e),Y(t)?t===_||t==null||t===""?(this._$AH!==_&&this._$AR(),this._$AH=_):t!==this._$AH&&t!==E&&this._(t):t._$litType$!==void 0?this.$(t):t.nodeType!==void 0?this.T(t):Ze(t)?this.k(t):this._(t)}O(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}T(t){this._$AH!==t&&(this._$AR(),this._$AH=this.O(t))}_(t){this._$AH!==_&&Y(this._$AH)?this._$AA.nextSibling.data=t:this.T(U.createTextNode(t)),this._$AH=t}$(t){let{values:e,_$litType$:s}=t,i=typeof s=="number"?this._$AC(t):(s.el===void 0&&(s.el=Z.createElement(me(s.h,s.h[0]),this.options)),s);if(this._$AH?._$AD===i)this._$AH.p(e);else{let a=new wt(i,this),o=a.u(this.options);a.p(e),this.T(o),this._$AH=a}}_$AC(t){let e=de.get(t.strings);return e===void 0&&de.set(t.strings,e=new Z(t)),e}k(t){Et(this._$AH)||(this._$AH=[],this._$AR());let e=this._$AH,s,i=0;for(let a of t)i===e.length?e.push(s=new n(this.O(W()),this.O(W()),this,this.options)):s=e[i],s._$AI(a),i++;i<e.length&&(this._$AR(s&&s._$AB.nextSibling,i),e.length=i)}_$AR(t=this._$AA.nextSibling,e){for(this._$AP?.(!1,!0,e);t!==this._$AB;){let s=ae(t).nextSibling;ae(t).remove(),t=s}}setConnected(t){this._$AM===void 0&&(this._$Cv=t,this._$AP?.(t))}},B=class{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(t,e,s,i,a){this.type=1,this._$AH=_,this._$AN=void 0,this.element=t,this.name=e,this._$AM=i,this.options=a,s.length>2||s[0]!==""||s[1]!==""?(this._$AH=Array(s.length-1).fill(new String),this.strings=s):this._$AH=_}_$AI(t,e=this,s,i){let a=this.strings,o=!1;if(a===void 0)t=D(this,t,e,0),o=!Y(t)||t!==this._$AH&&t!==E,o&&(this._$AH=t);else{let p=t,h,f;for(t=a[0],h=0;h<a.length-1;h++)f=D(this,p[s+h],e,h),f===E&&(f=this._$AH[h]),o||(o=!Y(f)||f!==this._$AH[h]),f===_?t=_:t!==_&&(t+=(f??"")+a[h+1]),this._$AH[h]=f}o&&!i&&this.j(t)}j(t){t===_?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,t??"")}},yt=class extends B{constructor(){super(...arguments),this.type=3}j(t){this.element[this.name]=t===_?void 0:t}},$t=class extends B{constructor(){super(...arguments),this.type=4}j(t){this.element.toggleAttribute(this.name,!!t&&t!==_)}},At=class extends B{constructor(t,e,s,i,a){super(t,e,s,i,a),this.type=5}_$AI(t,e=this){if((t=D(this,t,e,0)??_)===E)return;let s=this._$AH,i=t===_&&s!==_||t.capture!==s.capture||t.once!==s.once||t.passive!==s.passive,a=t!==_&&(s===_||i);i&&this.element.removeEventListener(this.name,this,s),a&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){typeof this._$AH=="function"?this._$AH.call(this.options?.host??this.element,t):this._$AH.handleEvent(t)}},Ct=class{constructor(t,e,s){this.element=t,this.type=6,this._$AN=void 0,this._$AM=e,this.options=s}get _$AU(){return this._$AM._$AU}_$AI(t){D(this,t)}};var Je=q.litHtmlPolyfillSupport;Je?.(Z,X),(q.litHtmlVersions??(q.litHtmlVersions=[])).push("3.3.2");var ge=(n,t,e)=>{let s=e?.renderBefore??t,i=s._$litPart$;if(i===void 0){let a=e?.renderBefore??null;s._$litPart$=i=new X(t.insertBefore(W(),a),a,void 0,e??{})}return i._$AI(n),i};var J=globalThis,x=class extends C{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){var e;let t=super.createRenderRoot();return(e=this.renderOptions).renderBefore??(e.renderBefore=t.firstChild),t}update(t){let e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=ge(e,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return E}};x._$litElement$=!0,x.finalized=!0,J.litElementHydrateSupport?.({LitElement:x});var ts=J.litElementPolyfillSupport;ts?.({LitElement:x});(J.litElementVersions??(J.litElementVersions=[])).push("4.2.2");var fe={ATTRIBUTE:1,CHILD:2,PROPERTY:3,BOOLEAN_ATTRIBUTE:4,EVENT:5,ELEMENT:6},_e=n=>(...t)=>({_$litDirective$:n,values:t}),dt=class{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,s){this._$Ct=t,this._$AM=e,this._$Ci=s}_$AS(t,e){return this.update(t,e)}update(t,e){return this.render(...e)}};var tt=class extends dt{constructor(t){if(super(t),this.it=_,t.type!==fe.CHILD)throw Error(this.constructor.directiveName+"() can only be used in child bindings")}render(t){if(t===_||t==null)return this._t=void 0,this.it=t;if(t===E)return t;if(typeof t!="string")throw Error(this.constructor.directiveName+"() called with a non-string value");if(t===this.it)return this._t;this.it=t;let e=[t];return e.raw=e,this._t={_$litType$:this.constructor.resultType,strings:e,values:[]}}};tt.directiveName="unsafeHTML",tt.resultType=1;var d=_e(tt);var O=k`
+var Be=Object.defineProperty;var Ge=(n,t,e)=>t in n?Be(n,t,{enumerable:!0,configurable:!0,writable:!0,value:e}):n[t]=e;var nt=(n,t,e)=>Ge(n,typeof t!="symbol"?t+"":t,e);var rt=globalThis,ot=rt.ShadowRoot&&(rt.ShadyCSS===void 0||rt.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,vt=Symbol(),Xt=new WeakMap,F=class{constructor(t,e,s){if(this._$cssResult$=!0,s!==vt)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o,e=this.t;if(ot&&t===void 0){let s=e!==void 0&&e.length===1;s&&(t=Xt.get(e)),t===void 0&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),s&&Xt.set(e,t))}return t}toString(){return this.cssText}},Jt=n=>new F(typeof n=="string"?n:n+"",void 0,vt),x=(n,...t)=>{let e=n.length===1?n[0]:t.reduce((s,i,a)=>s+(r=>{if(r._$cssResult$===!0)return r.cssText;if(typeof r=="number")return r;throw Error("Value passed to 'css' function must be a 'css' function result: "+r+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(i)+n[a+1],n[0]);return new F(e,n,vt)},te=(n,t)=>{if(ot)n.adoptedStyleSheets=t.map(e=>e instanceof CSSStyleSheet?e:e.styleSheet);else for(let e of t){let s=document.createElement("style"),i=rt.litNonce;i!==void 0&&s.setAttribute("nonce",i),s.textContent=e.cssText,n.appendChild(s)}},xt=ot?n=>n:n=>n instanceof CSSStyleSheet?(t=>{let e="";for(let s of t.cssRules)e+=s.cssText;return Jt(e)})(n):n;var{is:Qe,defineProperty:je,getOwnPropertyDescriptor:Fe,getOwnPropertyNames:Ve,getOwnPropertySymbols:Ke,getPrototypeOf:Ye}=Object,C=globalThis,ee=C.trustedTypes,We=ee?ee.emptyScript:"",qe=C.reactiveElementPolyfillSupport,V=(n,t)=>n,kt={toAttribute(n,t){switch(t){case Boolean:n=n?We:null;break;case Object:case Array:n=n==null?n:JSON.stringify(n)}return n},fromAttribute(n,t){let e=n;switch(t){case Boolean:e=n!==null;break;case Number:e=n===null?null:Number(n);break;case Object:case Array:try{e=JSON.parse(n)}catch{e=null}}return e}},ie=(n,t)=>!Qe(n,t),se={attribute:!0,type:String,converter:kt,reflect:!1,useDefault:!1,hasChanged:ie};Symbol.metadata??(Symbol.metadata=Symbol("metadata")),C.litPropertyMetadata??(C.litPropertyMetadata=new WeakMap);var $=class extends HTMLElement{static addInitializer(t){this._$Ei(),(this.l??(this.l=[])).push(t)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(t,e=se){if(e.state&&(e.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(t)&&((e=Object.create(e)).wrapped=!0),this.elementProperties.set(t,e),!e.noAccessor){let s=Symbol(),i=this.getPropertyDescriptor(t,s,e);i!==void 0&&je(this.prototype,t,i)}}static getPropertyDescriptor(t,e,s){let{get:i,set:a}=Fe(this.prototype,t)??{get(){return this[e]},set(r){this[e]=r}};return{get:i,set(r){let d=i?.call(this);a?.call(this,r),this.requestUpdate(t,d,s)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)??se}static _$Ei(){if(this.hasOwnProperty(V("elementProperties")))return;let t=Ye(this);t.finalize(),t.l!==void 0&&(this.l=[...t.l]),this.elementProperties=new Map(t.elementProperties)}static finalize(){if(this.hasOwnProperty(V("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(V("properties"))){let e=this.properties,s=[...Ve(e),...Ke(e)];for(let i of s)this.createProperty(i,e[i])}let t=this[Symbol.metadata];if(t!==null){let e=litPropertyMetadata.get(t);if(e!==void 0)for(let[s,i]of e)this.elementProperties.set(s,i)}this._$Eh=new Map;for(let[e,s]of this.elementProperties){let i=this._$Eu(e,s);i!==void 0&&this._$Eh.set(i,e)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(t){let e=[];if(Array.isArray(t)){let s=new Set(t.flat(1/0).reverse());for(let i of s)e.unshift(xt(i))}else t!==void 0&&e.push(xt(t));return e}static _$Eu(t,e){let s=e.attribute;return s===!1?void 0:typeof s=="string"?s:typeof t=="string"?t.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(t=>this.enableUpdating=t),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(t=>t(this))}addController(t){(this._$EO??(this._$EO=new Set)).add(t),this.renderRoot!==void 0&&this.isConnected&&t.hostConnected?.()}removeController(t){this._$EO?.delete(t)}_$E_(){let t=new Map,e=this.constructor.elementProperties;for(let s of e.keys())this.hasOwnProperty(s)&&(t.set(s,this[s]),delete this[s]);t.size>0&&(this._$Ep=t)}createRenderRoot(){let t=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return te(t,this.constructor.elementStyles),t}connectedCallback(){this.renderRoot??(this.renderRoot=this.createRenderRoot()),this.enableUpdating(!0),this._$EO?.forEach(t=>t.hostConnected?.())}enableUpdating(t){}disconnectedCallback(){this._$EO?.forEach(t=>t.hostDisconnected?.())}attributeChangedCallback(t,e,s){this._$AK(t,s)}_$ET(t,e){let s=this.constructor.elementProperties.get(t),i=this.constructor._$Eu(t,s);if(i!==void 0&&s.reflect===!0){let a=(s.converter?.toAttribute!==void 0?s.converter:kt).toAttribute(e,s.type);this._$Em=t,a==null?this.removeAttribute(i):this.setAttribute(i,a),this._$Em=null}}_$AK(t,e){let s=this.constructor,i=s._$Eh.get(t);if(i!==void 0&&this._$Em!==i){let a=s.getPropertyOptions(i),r=typeof a.converter=="function"?{fromAttribute:a.converter}:a.converter?.fromAttribute!==void 0?a.converter:kt;this._$Em=i;let d=r.fromAttribute(e,a.type);this[i]=d??this._$Ej?.get(i)??d,this._$Em=null}}requestUpdate(t,e,s,i=!1,a){if(t!==void 0){let r=this.constructor;if(i===!1&&(a=this[t]),s??(s=r.getPropertyOptions(t)),!((s.hasChanged??ie)(a,e)||s.useDefault&&s.reflect&&a===this._$Ej?.get(t)&&!this.hasAttribute(r._$Eu(t,s))))return;this.C(t,e,s)}this.isUpdatePending===!1&&(this._$ES=this._$EP())}C(t,e,{useDefault:s,reflect:i,wrapped:a},r){s&&!(this._$Ej??(this._$Ej=new Map)).has(t)&&(this._$Ej.set(t,r??e??this[t]),a!==!0||r!==void 0)||(this._$AL.has(t)||(this.hasUpdated||s||(e=void 0),this._$AL.set(t,e)),i===!0&&this._$Em!==t&&(this._$Eq??(this._$Eq=new Set)).add(t))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(e){Promise.reject(e)}let t=this.scheduleUpdate();return t!=null&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??(this.renderRoot=this.createRenderRoot()),this._$Ep){for(let[i,a]of this._$Ep)this[i]=a;this._$Ep=void 0}let s=this.constructor.elementProperties;if(s.size>0)for(let[i,a]of s){let{wrapped:r}=a,d=this[i];r!==!0||this._$AL.has(i)||d===void 0||this.C(i,void 0,a,d)}}let t=!1,e=this._$AL;try{t=this.shouldUpdate(e),t?(this.willUpdate(e),this._$EO?.forEach(s=>s.hostUpdate?.()),this.update(e)):this._$EM()}catch(s){throw t=!1,this._$EM(),s}t&&this._$AE(e)}willUpdate(t){}_$AE(t){this._$EO?.forEach(e=>e.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(t){return!0}update(t){this._$Eq&&(this._$Eq=this._$Eq.forEach(e=>this._$ET(e,this[e]))),this._$EM()}updated(t){}firstUpdated(t){}};$.elementStyles=[],$.shadowRootOptions={mode:"open"},$[V("elementProperties")]=new Map,$[V("finalized")]=new Map,qe?.({ReactiveElement:$}),(C.reactiveElementVersions??(C.reactiveElementVersions=[])).push("2.1.2");var Y=globalThis,ae=n=>n,lt=Y.trustedTypes,ne=lt?lt.createPolicy("lit-html",{createHTML:n=>n}):void 0,de="$lit$",S=`lit$${Math.random().toFixed(9).slice(2)}$`,pe="?"+S,Ze=`<${pe}>`,H=document,W=()=>H.createComment(""),q=n=>n===null||typeof n!="object"&&typeof n!="function",St=Array.isArray,Xe=n=>St(n)||typeof n?.[Symbol.iterator]=="function",wt=`[ 	
+\f\r]`,K=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,re=/-->/g,oe=/>/g,N=RegExp(`>|${wt}(?:([^\\s"'>=/]+)(${wt}*=${wt}*(?:[^ 	
+\f\r"'\`<>=]|("|')|))|$)`,"g"),le=/'/g,ce=/"/g,me=/^(?:script|style|textarea|title)$/i,Mt=n=>(t,...e)=>({_$litType$:n,strings:t,values:e}),o=Mt(1),fs=Mt(2),bs=Mt(3),A=Symbol.for("lit-noChange"),_=Symbol.for("lit-nothing"),he=new WeakMap,I=H.createTreeWalker(H,129);function ue(n,t){if(!St(n)||!n.hasOwnProperty("raw"))throw Error("invalid template strings array");return ne!==void 0?ne.createHTML(t):t}var Je=(n,t)=>{let e=n.length-1,s=[],i,a=t===2?"<svg>":t===3?"<math>":"",r=K;for(let d=0;d<e;d++){let h=n[d],g,u,p=-1,f=0;for(;f<h.length&&(r.lastIndex=f,u=r.exec(h),u!==null);)f=r.lastIndex,r===K?u[1]==="!--"?r=re:u[1]!==void 0?r=oe:u[2]!==void 0?(me.test(u[2])&&(i=RegExp("</"+u[2],"g")),r=N):u[3]!==void 0&&(r=N):r===N?u[0]===">"?(r=i??K,p=-1):u[1]===void 0?p=-2:(p=r.lastIndex-u[2].length,g=u[1],r=u[3]===void 0?N:u[3]==='"'?ce:le):r===ce||r===le?r=N:r===re||r===oe?r=K:(r=N,i=void 0);let b=r===N&&n[d+1].startsWith("/>")?" ":"";a+=r===K?h+Ze:p>=0?(s.push(g),h.slice(0,p)+de+h.slice(p)+S+b):h+S+(p===-2?d:b)}return[ue(n,a+(n[e]||"<?>")+(t===2?"</svg>":t===3?"</math>":"")),s]},Z=class n{constructor({strings:t,_$litType$:e},s){let i;this.parts=[];let a=0,r=0,d=t.length-1,h=this.parts,[g,u]=Je(t,e);if(this.el=n.createElement(g,s),I.currentNode=this.el.content,e===2||e===3){let p=this.el.content.firstChild;p.replaceWith(...p.childNodes)}for(;(i=I.nextNode())!==null&&h.length<d;){if(i.nodeType===1){if(i.hasAttributes())for(let p of i.getAttributeNames())if(p.endsWith(de)){let f=u[r++],b=i.getAttribute(p).split(S),y=/([.?@])?(.*)/.exec(f);h.push({type:1,index:a,name:y[2],strings:b,ctor:y[1]==="."?Et:y[1]==="?"?$t:y[1]==="@"?At:B}),i.removeAttribute(p)}else p.startsWith(S)&&(h.push({type:6,index:a}),i.removeAttribute(p));if(me.test(i.tagName)){let p=i.textContent.split(S),f=p.length-1;if(f>0){i.textContent=lt?lt.emptyScript:"";for(let b=0;b<f;b++)i.append(p[b],W()),I.nextNode(),h.push({type:2,index:++a});i.append(p[f],W())}}}else if(i.nodeType===8)if(i.data===pe)h.push({type:2,index:a});else{let p=-1;for(;(p=i.data.indexOf(S,p+1))!==-1;)h.push({type:7,index:a}),p+=S.length-1}a++}}static createElement(t,e){let s=H.createElement("template");return s.innerHTML=t,s}};function z(n,t,e=n,s){if(t===A)return t;let i=s!==void 0?e._$Co?.[s]:e._$Cl,a=q(t)?void 0:t._$litDirective$;return i?.constructor!==a&&(i?._$AO?.(!1),a===void 0?i=void 0:(i=new a(n),i._$AT(n,e,s)),s!==void 0?(e._$Co??(e._$Co=[]))[s]=i:e._$Cl=i),i!==void 0&&(t=z(n,i._$AS(n,t.values),i,s)),t}var yt=class{constructor(t,e){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){let{el:{content:e},parts:s}=this._$AD,i=(t?.creationScope??H).importNode(e,!0);I.currentNode=i;let a=I.nextNode(),r=0,d=0,h=s[0];for(;h!==void 0;){if(r===h.index){let g;h.type===2?g=new X(a,a.nextSibling,this,t):h.type===1?g=new h.ctor(a,h.name,h.strings,this,t):h.type===6&&(g=new Ct(a,this,t)),this._$AV.push(g),h=s[++d]}r!==h?.index&&(a=I.nextNode(),r++)}return I.currentNode=H,i}p(t){let e=0;for(let s of this._$AV)s!==void 0&&(s.strings!==void 0?(s._$AI(t,s,e),e+=s.strings.length-2):s._$AI(t[e])),e++}},X=class n{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(t,e,s,i){this.type=2,this._$AH=_,this._$AN=void 0,this._$AA=t,this._$AB=e,this._$AM=s,this.options=i,this._$Cv=i?.isConnected??!0}get parentNode(){let t=this._$AA.parentNode,e=this._$AM;return e!==void 0&&t?.nodeType===11&&(t=e.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,e=this){t=z(this,t,e),q(t)?t===_||t==null||t===""?(this._$AH!==_&&this._$AR(),this._$AH=_):t!==this._$AH&&t!==A&&this._(t):t._$litType$!==void 0?this.$(t):t.nodeType!==void 0?this.T(t):Xe(t)?this.k(t):this._(t)}O(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}T(t){this._$AH!==t&&(this._$AR(),this._$AH=this.O(t))}_(t){this._$AH!==_&&q(this._$AH)?this._$AA.nextSibling.data=t:this.T(H.createTextNode(t)),this._$AH=t}$(t){let{values:e,_$litType$:s}=t,i=typeof s=="number"?this._$AC(t):(s.el===void 0&&(s.el=Z.createElement(ue(s.h,s.h[0]),this.options)),s);if(this._$AH?._$AD===i)this._$AH.p(e);else{let a=new yt(i,this),r=a.u(this.options);a.p(e),this.T(r),this._$AH=a}}_$AC(t){let e=he.get(t.strings);return e===void 0&&he.set(t.strings,e=new Z(t)),e}k(t){St(this._$AH)||(this._$AH=[],this._$AR());let e=this._$AH,s,i=0;for(let a of t)i===e.length?e.push(s=new n(this.O(W()),this.O(W()),this,this.options)):s=e[i],s._$AI(a),i++;i<e.length&&(this._$AR(s&&s._$AB.nextSibling,i),e.length=i)}_$AR(t=this._$AA.nextSibling,e){for(this._$AP?.(!1,!0,e);t!==this._$AB;){let s=ae(t).nextSibling;ae(t).remove(),t=s}}setConnected(t){this._$AM===void 0&&(this._$Cv=t,this._$AP?.(t))}},B=class{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(t,e,s,i,a){this.type=1,this._$AH=_,this._$AN=void 0,this.element=t,this.name=e,this._$AM=i,this.options=a,s.length>2||s[0]!==""||s[1]!==""?(this._$AH=Array(s.length-1).fill(new String),this.strings=s):this._$AH=_}_$AI(t,e=this,s,i){let a=this.strings,r=!1;if(a===void 0)t=z(this,t,e,0),r=!q(t)||t!==this._$AH&&t!==A,r&&(this._$AH=t);else{let d=t,h,g;for(t=a[0],h=0;h<a.length-1;h++)g=z(this,d[s+h],e,h),g===A&&(g=this._$AH[h]),r||(r=!q(g)||g!==this._$AH[h]),g===_?t=_:t!==_&&(t+=(g??"")+a[h+1]),this._$AH[h]=g}r&&!i&&this.j(t)}j(t){t===_?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,t??"")}},Et=class extends B{constructor(){super(...arguments),this.type=3}j(t){this.element[this.name]=t===_?void 0:t}},$t=class extends B{constructor(){super(...arguments),this.type=4}j(t){this.element.toggleAttribute(this.name,!!t&&t!==_)}},At=class extends B{constructor(t,e,s,i,a){super(t,e,s,i,a),this.type=5}_$AI(t,e=this){if((t=z(this,t,e,0)??_)===A)return;let s=this._$AH,i=t===_&&s!==_||t.capture!==s.capture||t.once!==s.once||t.passive!==s.passive,a=t!==_&&(s===_||i);i&&this.element.removeEventListener(this.name,this,s),a&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){typeof this._$AH=="function"?this._$AH.call(this.options?.host??this.element,t):this._$AH.handleEvent(t)}},Ct=class{constructor(t,e,s){this.element=t,this.type=6,this._$AN=void 0,this._$AM=e,this.options=s}get _$AU(){return this._$AM._$AU}_$AI(t){z(this,t)}};var ts=Y.litHtmlPolyfillSupport;ts?.(Z,X),(Y.litHtmlVersions??(Y.litHtmlVersions=[])).push("3.3.2");var ge=(n,t,e)=>{let s=e?.renderBefore??t,i=s._$litPart$;if(i===void 0){let a=e?.renderBefore??null;s._$litPart$=i=new X(t.insertBefore(W(),a),a,void 0,e??{})}return i._$AI(n),i};var J=globalThis,v=class extends ${constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){var e;let t=super.createRenderRoot();return(e=this.renderOptions).renderBefore??(e.renderBefore=t.firstChild),t}update(t){let e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=ge(e,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return A}};v._$litElement$=!0,v.finalized=!0,J.litElementHydrateSupport?.({LitElement:v});var es=J.litElementPolyfillSupport;es?.({LitElement:v});(J.litElementVersions??(J.litElementVersions=[])).push("4.2.2");var _e={ATTRIBUTE:1,CHILD:2,PROPERTY:3,BOOLEAN_ATTRIBUTE:4,EVENT:5,ELEMENT:6},fe=n=>(...t)=>({_$litDirective$:n,values:t}),ct=class{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,s){this._$Ct=t,this._$AM=e,this._$Ci=s}_$AS(t,e){return this.update(t,e)}update(t,e){return this.render(...e)}};var tt=class extends ct{constructor(t){if(super(t),this.it=_,t.type!==_e.CHILD)throw Error(this.constructor.directiveName+"() can only be used in child bindings")}render(t){if(t===_||t==null)return this._t=void 0,this.it=t;if(t===A)return t;if(typeof t!="string")throw Error(this.constructor.directiveName+"() called with a non-string value");if(t===this.it)return this._t;this.it=t;let e=[t];return e.raw=e,this._t={_$litType$:this.constructor.resultType,strings:e,values:[]}}};tt.directiveName="unsafeHTML",tt.resultType=1;var c=fe(tt);var M=x`
   :host {
     display: block;
     font-family: 'Gotham', 'Gill Sans', 'Century Gothic', system-ui, -apple-system, sans-serif;
@@ -108,7 +108,7 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
     font-weight: 400;
     color: rgba(255,255,255,0.4);
   }
-`,be=k`
+`,be=x`
   .charger-menu {
     display: flex;
     flex-direction: column;
@@ -241,7 +241,7 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
 
   .chg-port-btn:hover { color: rgba(255,255,255,0.85); }
 
-`,ve=k`
+`,ve=x`
   .climate-menu {
     display: flex;
     flex-direction: column;
@@ -738,7 +738,7 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
     font-size: 0.8em;
   }
 
-`,xe=k`
+`,xe=x`
   .controls-menu {
     display: flex;
     flex-direction: column;
@@ -923,7 +923,7 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
   }
 
 
-`,ke=k`
+`,ke=x`
   ha-card {
     display: block;
     background: var(--ha-card-background, #161719);
@@ -1524,7 +1524,7 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
     color: #ffffff;
     font-weight: 600;
   }
-`;var r={BATTERY_LEVEL:"sensor.{car_name}_battery",BATTERY_RANGE:"sensor.{car_name}_battery_range",CHARGE_RATE:"sensor.{car_name}_charge_rate",CHARGE_LIMIT:"sensor.{car_name}_charge_limit",CHARGING_STATE:"sensor.{car_name}_charging_state",TEMPERATURE_INSIDE:"sensor.{car_name}_temperature_inside",TEMPERATURE_OUTSIDE:"sensor.{car_name}_temperature_outside",SPEED:"sensor.{car_name}_speed",ODOMETER:"sensor.{car_name}_odometer",CHARGING:"binary_sensor.{car_name}_charging",PLUGGED_IN:"binary_sensor.{car_name}_plugged_in",PARKING_BRAKE:"binary_sensor.{car_name}_parking_brake",FRUNK:"binary_sensor.{car_name}_frunk",TRUNK:"binary_sensor.{car_name}_trunk",DOORS:"binary_sensor.{car_name}_doors",WINDOWS:"binary_sensor.{car_name}_windows",LOCKED:"binary_sensor.{car_name}_locked",ONLINE:"binary_sensor.{car_name}_online",SENTRY_MODE:"binary_sensor.{car_name}_sentry_mode",DOOR_LOCK:"lock.{car_name}_doors",CHARGER_SWITCH:"switch.{car_name}_charger",SENTRY_MODE_SWITCH:"switch.{car_name}_sentry_mode",DEFROST_SWITCH:"switch.{car_name}_defrost",CAMP_MODE:"switch.{car_name}_camp_mode",DOG_MODE:"switch.{car_name}_dog_mode",CABIN_OVERHEAT:"select.{car_name}_cabin_overheat_protection",HEATED_SEAT_LEFT:"select.{car_name}_heated_seat_left",HEATED_SEAT_RIGHT:"select.{car_name}_heated_seat_right",HEATED_SEAT_REAR_LEFT:"select.{car_name}_heated_seat_rear_left",HEATED_SEAT_REAR_CENTER:"select.{car_name}_heated_seat_rear_center",HEATED_SEAT_REAR_RIGHT:"select.{car_name}_heated_seat_rear_right",CLIMATE:"climate.{car_name}_hvac_climate_system",CHARGE_LIMIT_NUMBER:"number.{car_name}_charge_limit",CHARGING_AMPS_NUMBER:"number.{car_name}_charging_amps",CHARGE_PORT_OPEN:"button.{car_name}_charge_port_open",CHARGE_PORT_CLOSE:"button.{car_name}_charge_port_close",VENT_WINDOWS:"button.{car_name}_vent_windows",CLOSE_WINDOWS:"button.{car_name}_close_windows",HORN:"button.{car_name}_horn",FLASH_LIGHTS:"button.{car_name}_flash_lights",REMOTE_START:"button.{car_name}_remote_start",OPEN_FRUNK:"button.{car_name}_frunk",OPEN_TRUNK:"button.{car_name}_trunk",FORCE_UPDATE:"button.{car_name}_force_data_update",WINDOWS_COVER:"cover.{car_name}_windows",FRUNK_COVER:"cover.{car_name}_frunk",CHARGER_DOOR:"cover.{car_name}_charger_door",ENERGY_ADDED:"sensor.{car_name}_energy_added",LOCATION:"device_tracker.{car_name}_location_tracker"};function ht(n,t){return n.replace("{car_name}",t)}var c={lock:`<svg viewBox="24 13 54 67" fill="currentColor" stroke="none">
+`;var we={BATTERY_LEVEL:"sensor.{car_name}_battery_level",BATTERY_RANGE:"sensor.{car_name}_battery_range",CHARGE_RATE:"sensor.{car_name}_charge_rate",CHARGE_LIMIT:"sensor.{car_name}_charge_limit_soc",CHARGING_STATE:"sensor.{car_name}_charging",TEMPERATURE_INSIDE:"sensor.{car_name}_inside_temperature",TEMPERATURE_OUTSIDE:"sensor.{car_name}_outside_temperature",SPEED:"sensor.{car_name}_speed",ODOMETER:"sensor.{car_name}_odometer",CHARGING:"binary_sensor.{car_name}_charging",PLUGGED_IN:"binary_sensor.{car_name}_charge_cable",PARKING_BRAKE:"binary_sensor.{car_name}_parking_brake",FRUNK:"binary_sensor.{car_name}_frunk",TRUNK:"binary_sensor.{car_name}_trunk",DOORS:"binary_sensor.{car_name}_doors",WINDOWS:"binary_sensor.{car_name}_windows",LOCKED:"binary_sensor.{car_name}_locked",ONLINE:"binary_sensor.{car_name}_status",SENTRY_MODE:"binary_sensor.{car_name}_sentry_mode",DOOR_LOCK:"lock.{car_name}_door_lock",CHARGER_SWITCH:"switch.{car_name}_charging",SENTRY_MODE_SWITCH:"switch.{car_name}_sentry_mode",DEFROST_SWITCH:"switch.{car_name}_defrost",CAMP_MODE:"switch.{car_name}_camp_mode",DOG_MODE:"switch.{car_name}_dog_mode",CABIN_OVERHEAT:"climate.{car_name}_cabin_overheat_protection",HEATED_SEAT_LEFT:"select.{car_name}_seat_heater_front_left",HEATED_SEAT_RIGHT:"select.{car_name}_seat_heater_front_right",HEATED_SEAT_REAR_LEFT:"select.{car_name}_seat_heater_rear_left",HEATED_SEAT_REAR_CENTER:"select.{car_name}_seat_heater_rear_center",HEATED_SEAT_REAR_RIGHT:"select.{car_name}_seat_heater_rear_right",CLIMATE:"climate.{car_name}_climate",CHARGE_LIMIT_NUMBER:"number.{car_name}_charge_limit",CHARGING_AMPS_NUMBER:"number.{car_name}_charge_current",CHARGE_PORT_OPEN:"cover.{car_name}_charge_port_door",CHARGE_PORT_CLOSE:"cover.{car_name}_charge_port_door",HORN:"button.{car_name}_honk_horn",FLASH_LIGHTS:"button.{car_name}_flash_lights",REMOTE_START:"button.{car_name}_keyless_driving",OPEN_FRUNK:"cover.{car_name}_frunk",OPEN_TRUNK:"cover.{car_name}_trunk",FORCE_UPDATE:"button.{car_name}_wake",WINDOWS_COVER:"cover.{car_name}_windows",FRUNK_COVER:"cover.{car_name}_frunk",CHARGER_DOOR:"cover.{car_name}_charge_port_door",ENERGY_ADDED:"sensor.{car_name}_charge_energy_added",LOCATION:"device_tracker.{car_name}_location"},ss={BATTERY_LEVEL:"sensor.{car_name}_battery",BATTERY_RANGE:"sensor.{car_name}_battery_range",CHARGE_RATE:"sensor.{car_name}_charge_rate",CHARGE_LIMIT:"sensor.{car_name}_charge_limit",CHARGING_STATE:"sensor.{car_name}_charging_state",TEMPERATURE_INSIDE:"sensor.{car_name}_temperature_inside",TEMPERATURE_OUTSIDE:"sensor.{car_name}_temperature_outside",SPEED:"sensor.{car_name}_speed",ODOMETER:"sensor.{car_name}_odometer",CHARGING:"binary_sensor.{car_name}_charging",PLUGGED_IN:"binary_sensor.{car_name}_plugged_in",PARKING_BRAKE:"binary_sensor.{car_name}_parking_brake",FRUNK:"binary_sensor.{car_name}_frunk",TRUNK:"binary_sensor.{car_name}_trunk",DOORS:"binary_sensor.{car_name}_doors",WINDOWS:"binary_sensor.{car_name}_windows",LOCKED:"binary_sensor.{car_name}_locked",ONLINE:"binary_sensor.{car_name}_online",SENTRY_MODE:"binary_sensor.{car_name}_sentry_mode",DOOR_LOCK:"lock.{car_name}_doors",CHARGER_SWITCH:"switch.{car_name}_charger",SENTRY_MODE_SWITCH:"switch.{car_name}_sentry_mode",DEFROST_SWITCH:"switch.{car_name}_defrost",CAMP_MODE:"switch.{car_name}_camp_mode",DOG_MODE:"switch.{car_name}_dog_mode",CABIN_OVERHEAT:"select.{car_name}_cabin_overheat_protection",HEATED_SEAT_LEFT:"select.{car_name}_heated_seat_left",HEATED_SEAT_RIGHT:"select.{car_name}_heated_seat_right",HEATED_SEAT_REAR_LEFT:"select.{car_name}_heated_seat_rear_left",HEATED_SEAT_REAR_CENTER:"select.{car_name}_heated_seat_rear_center",HEATED_SEAT_REAR_RIGHT:"select.{car_name}_heated_seat_rear_right",CLIMATE:"climate.{car_name}_hvac_climate_system",CHARGE_LIMIT_NUMBER:"number.{car_name}_charge_limit",CHARGING_AMPS_NUMBER:"number.{car_name}_charging_amps",CHARGE_PORT_OPEN:"button.{car_name}_charge_port_open",CHARGE_PORT_CLOSE:"button.{car_name}_charge_port_close",HORN:"button.{car_name}_horn",FLASH_LIGHTS:"button.{car_name}_flash_lights",REMOTE_START:"button.{car_name}_remote_start",OPEN_FRUNK:"button.{car_name}_frunk",OPEN_TRUNK:"button.{car_name}_trunk",FORCE_UPDATE:"button.{car_name}_force_data_update",WINDOWS_COVER:"cover.{car_name}_windows",FRUNK_COVER:"cover.{car_name}_frunk",CHARGER_DOOR:"cover.{car_name}_charger_door",ENERGY_ADDED:"sensor.{car_name}_energy_added",LOCATION:"device_tracker.{car_name}_location_tracker"},is={fleet:we,custom:ss};function ht(n="fleet"){return is[n]||we}function dt(n,t){return n.replace("{car_name}",t)}var l={lock:`<svg viewBox="24 13 54 67" fill="currentColor" stroke="none">
     <path fill-rule="evenodd" d="
       M 51.01 15.62 C 60.29 15.63 67.36 22.81 67.39 32.00 Q 67.40 35.66 67.40 38.23 A 0.67 0.67 0.0 0 0 67.91 38.89 C 71.02 39.64 73.19 39.67 74.78 42.99 Q 75.53 44.58 75.53 49.12 Q 75.51 69.54 75.50 69.97 Q 75.34 74.60 72.13 76.54 Q 70.63 77.45 64.65 77.48 Q 57.83 77.51 50.99 77.50 Q 44.15 77.50 37.32 77.47 Q 31.35 77.44 29.85 76.52 Q 26.64 74.58 26.48 69.95 Q 26.47 69.52 26.47 49.10 Q 26.47 44.56 27.22 42.97 C 28.81 39.65 30.98 39.63 34.09 38.88 A 0.67 0.67 0.0 0 0 34.60 38.22 Q 34.61 35.65 34.62 31.99 C 34.65 22.80 41.74 15.62 51.01 15.62 Z
       M 39.95 39.00 L 62.05 39.00 A 0.57 0.57 0.0 0 0 62.62 38.43 L 62.62 32.80 A 12.30 11.49 90.0 0 0 51.13 20.50 L 50.87 20.50 A 12.30 11.49 -90.0 0 0 39.38 32.80 L 39.38 38.43 A 0.57 0.57 0.0 0 0 39.95 39.00 Z"/>
@@ -1807,7 +1807,7 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14" />
     <path d="M10 16v-8h2.667c.736 0 1.333 .895 1.333 2s-.597 2 -1.333 2h-2.667" />
-  </svg>`};var pt={models:[{id:"3",name:"Model 3",variants:[{id:"3.1",label:"2017\u20132023",colours:[{id:"red_multi_coat",name:"Red Multi-Coat",swatch:"#c41e28",hasImages:!0},{id:"deep_blue_metallic",name:"Deep Blue Metallic",swatch:"#223873",hasImages:!0},{id:"pearl_white_multi_coat",name:"Pearl White Multi-Coat",swatch:"#f2f2f2"},{id:"midnight_silver_metallic",name:"Midnight Silver Metallic",swatch:"#71757a"},{id:"solid_black",name:"Solid Black",swatch:"#141414"},{id:"silver_metallic",name:"Silver Metallic",swatch:"#c0c0c0"}]},{id:"3.2",label:"2024+ Highland",colours:[{id:"pearl_white",name:"Pearl White",swatch:"#f2f2f2"},{id:"solid_black",name:"Solid Black",swatch:"#141414"},{id:"quicksilver",name:"Quicksilver",swatch:"#9e9a91"},{id:"ultra_red",name:"Ultra Red",swatch:"#c41e28"},{id:"midnight_cherry_red",name:"Midnight Cherry Red",swatch:"#850029"}]}]},{id:"Y",name:"Model Y",variants:[{id:"Y.1",label:"2020\u20132024",colours:[{id:"pearl_white_multi_coat",name:"Pearl White Multi-Coat",swatch:"#f2f2f2"},{id:"solid_black",name:"Solid Black",swatch:"#141414"},{id:"midnight_silver_metallic",name:"Midnight Silver Metallic",swatch:"#71757a"},{id:"deep_blue_metallic",name:"Deep Blue Metallic",swatch:"#223873"},{id:"red_multi_coat",name:"Red Multi-Coat",swatch:"#c41e28"},{id:"midnight_cherry_red",name:"Midnight Cherry Red",swatch:"#850029"},{id:"quicksilver",name:"Quicksilver",swatch:"#9e9a91"}]},{id:"Y.2",label:"2025+ Juniper",colours:[{id:"pearl_white",name:"Pearl White",swatch:"#f2f2f2"},{id:"solid_black",name:"Solid Black",swatch:"#141414"},{id:"quicksilver",name:"Quicksilver",swatch:"#9e9a91"},{id:"ultra_red",name:"Ultra Red",swatch:"#c41e28"},{id:"midnight_cherry_red",name:"Midnight Cherry Red",swatch:"#850029"}]}]},{id:"S",name:"Model S",variants:[{id:"S.1",label:"2012\u20132021",colours:[{id:"pearl_white_multi_coat",name:"Pearl White Multi-Coat",swatch:"#f2f2f2"},{id:"solid_black",name:"Solid Black",swatch:"#141414"},{id:"midnight_silver_metallic",name:"Midnight Silver Metallic",swatch:"#71757a"},{id:"deep_blue_metallic",name:"Deep Blue Metallic",swatch:"#223873"},{id:"red_multi_coat",name:"Red Multi-Coat",swatch:"#c41e28"},{id:"silver_metallic",name:"Silver Metallic",swatch:"#c0c0c0"}]},{id:"S.2",label:"2021+ Refresh",colours:[{id:"pearl_white_multi_coat",name:"Pearl White Multi-Coat",swatch:"#f2f2f2"},{id:"solid_black",name:"Solid Black",swatch:"#141414"},{id:"midnight_silver_metallic",name:"Midnight Silver Metallic",swatch:"#71757a"},{id:"ultra_red",name:"Ultra Red",swatch:"#c41e28"},{id:"midnight_cherry_red",name:"Midnight Cherry Red",swatch:"#850029"},{id:"quicksilver",name:"Quicksilver",swatch:"#9e9a91"}]}]},{id:"X",name:"Model X",variants:[{id:"X.1",label:"2015\u20132021",colours:[{id:"solid_black",name:"Solid Black",swatch:"#141414"},{id:"pearl_white_multi_coat",name:"Pearl White Multi-Coat",swatch:"#f2f2f2"},{id:"midnight_silver_metallic",name:"Midnight Silver Metallic",swatch:"#71757a"},{id:"deep_blue_metallic",name:"Deep Blue Metallic",swatch:"#223873"},{id:"red_multi_coat",name:"Red Multi-Coat",swatch:"#c41e28"},{id:"silver_metallic",name:"Silver Metallic",swatch:"#c0c0c0"}]},{id:"X.2",label:"2021+ Refresh",colours:[{id:"pearl_white_multi_coat",name:"Pearl White Multi-Coat",swatch:"#f2f2f2"},{id:"solid_black",name:"Solid Black",swatch:"#141414"},{id:"midnight_silver_metallic",name:"Midnight Silver Metallic",swatch:"#71757a"},{id:"ultra_red",name:"Ultra Red",swatch:"#c41e28"},{id:"midnight_cherry_red",name:"Midnight Cherry Red",swatch:"#850029"},{id:"quicksilver",name:"Quicksilver",swatch:"#9e9a91"}]}]},{id:"CT",name:"Cybertruck",variants:[{id:"CT.1",label:"2024+",colours:[{id:"stainless_steel",name:"Stainless Steel",swatch:"#b0b0b0"},{id:"satin_black",name:"Satin Black",swatch:"#1a1a1a"}]}]}]};var Mt=new Map;for(let n of pt.models)for(let t of n.variants)for(let e of t.colours)Mt.has(e.id)||Mt.set(e.id,{name:e.name,dir:e.id,swatch:e.swatch});var ut=Array.from(Mt.values());var R=pt.models.map(n=>({id:n.id,name:n.name,variants:n.variants.map(t=>({id:t.id,label:t.label,colours:["neutral",...t.colours.filter(e=>e.hasImages).map(e=>e.id)],factoryColours:t.colours}))}));function Ot(n,t){let e=R.find(i=>i.id===n);return e?e.variants.find(i=>i.id===t)?.colours??["neutral"]:["neutral"]}function Rt(n){return R.find(e=>e.id===n)?.variants??[]}var Tt=class extends x{static get properties(){return{hass:{type:Object},config:{type:Object}}}setConfig(t){this.config=t}_valueChanged(t){if(!this.config||!this.hass)return;let e=t.target,s={...this.config,[e.name]:e.value};this.dispatchEvent(new CustomEvent("config-changed",{detail:{config:s}}))}_modelChanged(t){if(!this.config||!this.hass)return;let e=t.target.value,i=Rt(e)[0]?.id??"",a={...this.config,car_model:e,car_variant:i};this.dispatchEvent(new CustomEvent("config-changed",{detail:{config:a}}))}render(){if(!this.config)return l``;let t=this.config.car_model??"3",e=Rt(t);return l`
+  </svg>`};var pt={models:[{id:"3",name:"Model 3",variants:[{id:"3.1",label:"2017\u20132023",colours:[{id:"red_multi_coat",name:"Red Multi-Coat",swatch:"#c41e28",hasImages:!0},{id:"deep_blue_metallic",name:"Deep Blue Metallic",swatch:"#223873",hasImages:!0},{id:"pearl_white_multi_coat",name:"Pearl White Multi-Coat",swatch:"#f2f2f2"},{id:"midnight_silver_metallic",name:"Midnight Silver Metallic",swatch:"#71757a"},{id:"solid_black",name:"Solid Black",swatch:"#141414"},{id:"silver_metallic",name:"Silver Metallic",swatch:"#c0c0c0"}]},{id:"3.2",label:"2024+ Highland",colours:[{id:"pearl_white",name:"Pearl White",swatch:"#f2f2f2"},{id:"solid_black",name:"Solid Black",swatch:"#141414"},{id:"quicksilver",name:"Quicksilver",swatch:"#9e9a91"},{id:"ultra_red",name:"Ultra Red",swatch:"#c41e28"},{id:"midnight_cherry_red",name:"Midnight Cherry Red",swatch:"#850029"},{id:"stealth_grey",name:"Stealth Grey",swatch:"#515356"}]}]},{id:"Y",name:"Model Y",variants:[{id:"Y.1",label:"2020\u20132024",colours:[{id:"pearl_white_multi_coat",name:"Pearl White Multi-Coat",swatch:"#f2f2f2"},{id:"solid_black",name:"Solid Black",swatch:"#141414"},{id:"midnight_silver_metallic",name:"Midnight Silver Metallic",swatch:"#71757a"},{id:"deep_blue_metallic",name:"Deep Blue Metallic",swatch:"#223873"},{id:"red_multi_coat",name:"Red Multi-Coat",swatch:"#c41e28"},{id:"midnight_cherry_red",name:"Midnight Cherry Red",swatch:"#850029"},{id:"quicksilver",name:"Quicksilver",swatch:"#9e9a91"},{id:"stealth_grey",name:"Stealth Grey",swatch:"#515356"}]},{id:"Y.2",label:"2025+ Juniper",colours:[{id:"pearl_white",name:"Pearl White",swatch:"#f2f2f2"},{id:"solid_black",name:"Solid Black",swatch:"#141414"},{id:"quicksilver",name:"Quicksilver",swatch:"#9e9a91"},{id:"ultra_red",name:"Ultra Red",swatch:"#c41e28"},{id:"midnight_cherry_red",name:"Midnight Cherry Red",swatch:"#850029"},{id:"stealth_grey",name:"Stealth Grey",swatch:"#515356"}]}]},{id:"S",name:"Model S",variants:[{id:"S.1",label:"2012\u20132021",colours:[{id:"pearl_white_multi_coat",name:"Pearl White Multi-Coat",swatch:"#f2f2f2"},{id:"solid_black",name:"Solid Black",swatch:"#141414"},{id:"midnight_silver_metallic",name:"Midnight Silver Metallic",swatch:"#71757a"},{id:"deep_blue_metallic",name:"Deep Blue Metallic",swatch:"#223873"},{id:"red_multi_coat",name:"Red Multi-Coat",swatch:"#c41e28"},{id:"silver_metallic",name:"Silver Metallic",swatch:"#c0c0c0"}]},{id:"S.2",label:"2021+ Refresh",colours:[{id:"pearl_white_multi_coat",name:"Pearl White Multi-Coat",swatch:"#f2f2f2"},{id:"solid_black",name:"Solid Black",swatch:"#141414"},{id:"midnight_silver_metallic",name:"Midnight Silver Metallic",swatch:"#71757a"},{id:"ultra_red",name:"Ultra Red",swatch:"#c41e28"},{id:"midnight_cherry_red",name:"Midnight Cherry Red",swatch:"#850029"},{id:"quicksilver",name:"Quicksilver",swatch:"#9e9a91"},{id:"stealth_grey",name:"Stealth Grey",swatch:"#515356"}]}]},{id:"X",name:"Model X",variants:[{id:"X.1",label:"2015\u20132021",colours:[{id:"solid_black",name:"Solid Black",swatch:"#141414"},{id:"pearl_white_multi_coat",name:"Pearl White Multi-Coat",swatch:"#f2f2f2"},{id:"midnight_silver_metallic",name:"Midnight Silver Metallic",swatch:"#71757a"},{id:"deep_blue_metallic",name:"Deep Blue Metallic",swatch:"#223873"},{id:"red_multi_coat",name:"Red Multi-Coat",swatch:"#c41e28"},{id:"silver_metallic",name:"Silver Metallic",swatch:"#c0c0c0"}]},{id:"X.2",label:"2021+ Refresh",colours:[{id:"pearl_white_multi_coat",name:"Pearl White Multi-Coat",swatch:"#f2f2f2"},{id:"solid_black",name:"Solid Black",swatch:"#141414"},{id:"midnight_silver_metallic",name:"Midnight Silver Metallic",swatch:"#71757a"},{id:"ultra_red",name:"Ultra Red",swatch:"#c41e28"},{id:"midnight_cherry_red",name:"Midnight Cherry Red",swatch:"#850029"},{id:"quicksilver",name:"Quicksilver",swatch:"#9e9a91"},{id:"stealth_grey",name:"Stealth Grey",swatch:"#515356"}]}]},{id:"CT",name:"Cybertruck",variants:[{id:"CT.1",label:"2024+",colours:[{id:"stainless_steel",name:"Stainless Steel",swatch:"#b0b0b0"},{id:"satin_black",name:"Satin Black",swatch:"#1a1a1a"}]}]}]};var Ot=new Map;for(let n of pt.models)for(let t of n.variants)for(let e of t.colours)Ot.has(e.id)||Ot.set(e.id,{name:e.name,dir:e.id,swatch:e.swatch});var mt=Array.from(Ot.values());var O=pt.models.map(n=>({id:n.id,name:n.name,variants:n.variants.map(t=>({id:t.id,label:t.label,colours:["neutral",...t.colours.filter(e=>e.hasImages).map(e=>e.id)],factoryColours:t.colours}))}));function Rt(n,t){let e=O.find(i=>i.id===n);return e?e.variants.find(i=>i.id===t)?.colours??["neutral"]:["neutral"]}function Tt(n){return O.find(e=>e.id===n)?.variants??[]}var Lt=class extends v{static get properties(){return{hass:{type:Object},config:{type:Object}}}setConfig(t){this.config=t}_valueChanged(t){if(!this.config||!this.hass)return;let e=t.target,s={...this.config,[e.name]:e.value};this.dispatchEvent(new CustomEvent("config-changed",{detail:{config:s}}))}_modelChanged(t){if(!this.config||!this.hass)return;let e=t.target.value,i=Tt(e)[0]?.id??"",a={...this.config,car_model:e,car_variant:i};this.dispatchEvent(new CustomEvent("config-changed",{detail:{config:a}}))}render(){if(!this.config)return o``;let t=this.config.car_model??"3",e=Tt(t);return o`
       <div class="editor">
         <label>
           Car Name (entity prefix) *
@@ -1821,7 +1821,7 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
         <label>
           Model
           <select name="car_model" .value=${t} @change=${this._modelChanged}>
-            ${R.map(s=>l`
+            ${O.map(s=>o`
               <option value="${s.id}" ?selected=${s.id===t}>${s.name}</option>
             `)}
           </select>
@@ -1829,9 +1829,16 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
         <label>
           Variant
           <select name="car_variant" .value=${this.config.car_variant??""} @change=${this._valueChanged}>
-            ${e.map(s=>l`
+            ${e.map(s=>o`
               <option value="${s.id}" ?selected=${s.id===this.config.car_variant}>${s.label}</option>
             `)}
+          </select>
+        </label>
+        <label>
+          Integration
+          <select name="integration" .value=${this.config.integration??"fleet"} @change=${this._valueChanged}>
+            <option value="fleet" ?selected=${(this.config.integration??"fleet")==="fleet"}>Tesla Fleet (official)</option>
+            <option value="custom" ?selected=${this.config.integration==="custom"}>Tesla Custom (alandtse)</option>
           </select>
         </label>
         <label>
@@ -1853,7 +1860,7 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
           />
         </label>
       </div>
-    `}static get styles(){return k`
+    `}static get styles(){return x`
       .editor {
         display: flex;
         flex-direction: column;
@@ -1875,17 +1882,17 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
         color: var(--primary-text-color, #000);
         font-size: 1em;
       }
-    `}};customElements.define("tesla-card-editor",Tt);var Q=class Q extends x{static get properties(){return{hass:{type:Object},config:{type:Object},customColour:{type:Object},layout:{type:String}}}_eid(t){return ht(t,this.config.car_name)}_state(t){return this.hass?.states[this._eid(t)]}_val(t){return this._state(t)?.state}_attr(t,e){return this._state(t)?.attributes?.[e]}_nattr(t,e){let s=this._attr(t,e);return s!=null?Number(s):null}_imgUrl(t){let{image_path:e,car_model:s,car_variant:i,car_color:a}=this.config;return`${e}/${s}/${i}/${a}/${t}?v=${Q._imgVer}`}_btnUrl(t){return`${this.config.image_path}/buttons/${t}?v=${Q._imgVer}`}_maskUrl(t){let{image_path:e,car_model:s,car_variant:i}=this.config,a=t.replace(".png","-mask.png");return`${e}/${s}/${i}/neutral/${a}?v=${Q._imgVer}`}get _hasCustomOverlay(){return!!this.customColour&&this.customColour.s>0}_customOverlayStyleFor(t){let e=this.customColour;if(!e||e.s===0)return"";let s=this._maskUrl(t);return`position:absolute;inset:0;pointer-events:none;background:hsl(${e.h},${e.s}%,50%);mix-blend-mode:color;-webkit-mask-image:url(${s});mask-image:url(${s});-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;`}async _svc(t,e,s,i={}){try{await this.hass.callService(t,e,{entity_id:this._eid(s),...i})}catch(a){console.error("[tesla-card] service error",t,e,a)}}_close(){this.dispatchEvent(new CustomEvent("close-menu",{bubbles:!0,composed:!0}))}};rt(Q,"_imgVer",Date.now());var T=Q;var Lt=class extends T{static get properties(){return{...super.properties,_pendingLimit:{state:!0},_pendingAmps:{state:!0}}}static get styles(){return[O,be]}constructor(){super(),this._pendingLimit=null,this._pendingAmps=null}_pct(t,e,s){return Math.round((t-e)/(s-e)*100)}_onLimitInput(t){t.target.style.setProperty("--pct",`${this._pct(+t.target.value,+t.target.min,+t.target.max)}%`),this._pendingLimit=+t.target.value}_onLimitChange(t){this._pendingLimit=null,this._svc("number","set_value",r.CHARGE_LIMIT_NUMBER,{value:+t.target.value})}_onAmpsInput(t){t.target.style.setProperty("--pct",`${this._pct(+t.target.value,+t.target.min,+t.target.max)}%`),this._pendingAmps=+t.target.value}_onAmpsChange(t){this._pendingAmps=null,this._svc("number","set_value",r.CHARGING_AMPS_NUMBER,{value:+t.target.value})}_adjustAmps(t){let e=this._nattr(r.CHARGING_AMPS_NUMBER,"step")??1,s=this._nattr(r.CHARGING_AMPS_NUMBER,"min")??5,i=this._nattr(r.CHARGING_AMPS_NUMBER,"max")??32,a=this._pendingAmps??Number(this._val(r.CHARGING_AMPS_NUMBER)??16);this._pendingAmps=Math.max(s,Math.min(i,a+t*e)),clearTimeout(this._ampsTimer),this._ampsTimer=setTimeout(()=>{this._svc("number","set_value",r.CHARGING_AMPS_NUMBER,{value:this._pendingAmps}),this._pendingAmps=null},800)}render(){if(!this.config||!this.hass)return l``;let t=this._val(r.BATTERY_RANGE),e=this._attr(r.BATTERY_RANGE,"unit_of_measurement")??"km",s=t!=null?`${Math.round(Number(t))} ${e}`:null,i=this._val(r.CHARGER_DOOR)==="open"||this._val(r.PLUGGED_IN)==="on",a=this._pendingLimit??Number(this._val(r.CHARGE_LIMIT_NUMBER)??80),o=this._nattr(r.CHARGE_LIMIT_NUMBER,"min")??50,p=this._nattr(r.CHARGE_LIMIT_NUMBER,"max")??100,h=this._nattr(r.CHARGE_LIMIT_NUMBER,"step")??1,f=this._pct(a,o,p),g=this._pendingAmps??Number(this._val(r.CHARGING_AMPS_NUMBER)??16),u=this._nattr(r.CHARGING_AMPS_NUMBER,"min")??5,b=this._nattr(r.CHARGING_AMPS_NUMBER,"max")??32,v=this._attr(r.ENERGY_ADDED,"added_range");return l`
+    `}};customElements.define("tesla-card-editor",Lt);var G=class G extends v{static get properties(){return{hass:{type:Object},config:{type:Object},customColour:{type:Object},layout:{type:String}}}get E(){return ht(this.config?.integration)}_eid(t){return dt(t,this.config.car_name)}_state(t){return this.hass?.states[this._eid(t)]}_val(t){return this._state(t)?.state}_attr(t,e){return this._state(t)?.attributes?.[e]}_nattr(t,e){let s=this._attr(t,e);return s!=null?Number(s):null}_imgUrl(t){let{image_path:e,car_model:s,car_variant:i,car_color:a}=this.config;return`${e}/${s}/${i}/${a}/${t}?v=${G._imgVer}`}_btnUrl(t){return`${this.config.image_path}/buttons/${t}?v=${G._imgVer}`}_maskUrl(t){let{image_path:e,car_model:s,car_variant:i}=this.config,a=t.replace(".png","-mask.png");return`${e}/${s}/${i}/neutral/${a}?v=${G._imgVer}`}get _hasCustomOverlay(){return!!this.customColour&&this.customColour.s>0}_customOverlayStyleFor(t){let e=this.customColour;if(!e||e.s===0)return"";let s=this._maskUrl(t);return`position:absolute;inset:0;pointer-events:none;background:hsl(${e.h},${e.s}%,50%);mix-blend-mode:color;-webkit-mask-image:url(${s});mask-image:url(${s});-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;`}_domainOf(t){return t.split(".")[0]}_activate(t){let e=this._domainOf(t);return e==="cover"?this._svc("cover","toggle_cover",t):this._svc(e,"press",t)}_openClose(t,e,s){let i=s?e:t,a=this._domainOf(i);return a==="cover"?this._svc("cover",s?"close_cover":"open_cover",i):this._svc(a,"press",i)}async _svc(t,e,s,i={}){try{await this.hass.callService(t,e,{entity_id:this._eid(s),...i})}catch(a){console.error("[tesla-card] service error",t,e,a)}}_close(){this.dispatchEvent(new CustomEvent("close-menu",{bubbles:!0,composed:!0}))}};nt(G,"_imgVer",Date.now());var R=G;var Nt=class extends R{static get properties(){return{...super.properties,_pendingLimit:{state:!0},_pendingAmps:{state:!0}}}static get styles(){return[M,be]}constructor(){super(),this._pendingLimit=null,this._pendingAmps=null}_pct(t,e,s){return Math.round((t-e)/(s-e)*100)}_onLimitInput(t){t.target.style.setProperty("--pct",`${this._pct(+t.target.value,+t.target.min,+t.target.max)}%`),this._pendingLimit=+t.target.value}_onLimitChange(t){this._pendingLimit=null,this._svc("number","set_value",this.E.CHARGE_LIMIT_NUMBER,{value:+t.target.value})}_onAmpsInput(t){t.target.style.setProperty("--pct",`${this._pct(+t.target.value,+t.target.min,+t.target.max)}%`),this._pendingAmps=+t.target.value}_onAmpsChange(t){this._pendingAmps=null,this._svc("number","set_value",this.E.CHARGING_AMPS_NUMBER,{value:+t.target.value})}_adjustAmps(t){let e=this._nattr(this.E.CHARGING_AMPS_NUMBER,"step")??1,s=this._nattr(this.E.CHARGING_AMPS_NUMBER,"min")??5,i=this._nattr(this.E.CHARGING_AMPS_NUMBER,"max")??32,a=this._pendingAmps??Number(this._val(this.E.CHARGING_AMPS_NUMBER)??16);this._pendingAmps=Math.max(s,Math.min(i,a+t*e)),clearTimeout(this._ampsTimer),this._ampsTimer=setTimeout(()=>{this._svc("number","set_value",this.E.CHARGING_AMPS_NUMBER,{value:this._pendingAmps}),this._pendingAmps=null},800)}render(){if(!this.config||!this.hass)return o``;let t=this._val(this.E.BATTERY_RANGE),e=this._attr(this.E.BATTERY_RANGE,"unit_of_measurement")??"km",s=t!=null?`${Math.round(Number(t))} ${e}`:null,i=this._val(this.E.CHARGER_DOOR)==="open"||this._val(this.E.PLUGGED_IN)==="on",a=this._pendingLimit??Number(this._val(this.E.CHARGE_LIMIT_NUMBER)??80),r=this._nattr(this.E.CHARGE_LIMIT_NUMBER,"min")??50,d=this._nattr(this.E.CHARGE_LIMIT_NUMBER,"max")??100,h=this._nattr(this.E.CHARGE_LIMIT_NUMBER,"step")??1,g=this._pct(a,r,d),u=this._pendingAmps??Number(this._val(this.E.CHARGING_AMPS_NUMBER)??16),p=this._nattr(this.E.CHARGING_AMPS_NUMBER,"min")??5,f=this._nattr(this.E.CHARGING_AMPS_NUMBER,"max")??32,b=this._attr(this.E.ENERGY_ADDED,"added_range");return o`
       <div class="charger-menu${this.layout==="landscape"?" landscape":""}">
 
         <!-- Header: "Charging" + range subtitle -->
         <div class="panel-header">
           <button class="panel-back" @click=${this._close}>
-            <span class="icon">${d(c["chevron-left"])}</span>
+            <span class="icon">${c(l["chevron-left"])}</span>
           </button>
           <div class="panel-title-block">
             <span class="panel-title">Charging</span>
-            ${s?l`<span class="panel-subtitle">${s}</span>`:""}
+            ${s?o`<span class="panel-subtitle">${s}</span>`:""}
           </div>
         </div>
 
@@ -1893,83 +1900,83 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
         <div class="chg-card">
           <div class="chg-limit-header">
             <span class="chg-limit-title">Charge limit: ${a}%</span>
-            ${v?l`
-              <p class="chg-limit-sub">${v} km added during last charging session</p>`:""}
+            ${b?o`
+              <p class="chg-limit-sub">${b} km added during last charging session</p>`:""}
           </div>
 
           <!-- Green pill slider for charge limit -->
-          <input type="range" class="chg-slider" style="--pct:${f}%"
-            min=${o} max=${p} step=${h}
+          <input type="range" class="chg-slider" style="--pct:${g}%"
+            min=${r} max=${d} step=${h}
             .value=${String(a)}
             @input=${this._onLimitInput} @change=${this._onLimitChange}/>
 
           <!-- Amps stepper row -->
           <div class="chg-amps-row">
             <button class="chg-amps-btn"
-              ?disabled=${g<=u}
+              ?disabled=${u<=p}
               @click=${()=>this._adjustAmps(-1)}>
-              <span class="icon">${d(c["chevron-left"])}</span>
+              <span class="icon">${c(l["chevron-left"])}</span>
             </button>
-            <span class="chg-amps-value">${g} A</span>
+            <span class="chg-amps-value">${u} A</span>
             <button class="chg-amps-btn"
-              ?disabled=${g>=b}
+              ?disabled=${u>=f}
               @click=${()=>this._adjustAmps(1)}>
-              <span class="icon">${d(c["chevron-right"])}</span>
+              <span class="icon">${c(l["chevron-right"])}</span>
             </button>
           </div>
         </div>
 
         <!-- Open / Close Charge Port — plain text link -->
         <button class="chg-port-btn"
-          @click=${()=>this._svc("button","press",i?r.CHARGE_PORT_CLOSE:r.CHARGE_PORT_OPEN)}>
+          @click=${()=>this._openClose(this.E.CHARGE_PORT_OPEN,this.E.CHARGE_PORT_CLOSE,i)}>
           ${i?"Close Charge Port":"Open Charge Port"}
         </button>
 
       </div>
-    `}};customElements.define("tesla-menu-charger",Lt);var It=class extends T{static get properties(){return{...super.properties,_pendingTemp:{state:!0},_climExpanded:{state:!0}}}static get styles(){return[O,ve]}constructor(){super(),this._pendingTemp=null,this._climExpanded=!1}_adjustTemp(t){let e=Number(this._attr(r.CLIMATE,"target_temp_step")??.5),s=Number(this._attr(r.CLIMATE,"min_temp")??15),i=Number(this._attr(r.CLIMATE,"max_temp")??28),a=this._pendingTemp??(this._attr(r.CLIMATE,"temperature")!=null?Number(this._attr(r.CLIMATE,"temperature")):22);this._pendingTemp=Math.max(s,Math.min(i,Math.round((a+t*e)/e)*e)),clearTimeout(this._tempTimer),this._tempTimer=setTimeout(()=>{this._svc("climate","set_temperature",r.CLIMATE,{temperature:this._pendingTemp}),this._pendingTemp=null},800)}_seatHeatFile(t){if(!t||t==="Off")return"Tesla_Heated_Seat_Off.svg";let e=parseInt(t);return!isNaN(e)&&e>=1&&e<=3?`Tesla_Heated_Seat_${e}.svg`:t==="Low"?"Tesla_Heated_Seat_1.svg":t==="Medium"?"Tesla_Heated_Seat_2.svg":t==="High"?"Tesla_Heated_Seat_3.svg":"Tesla_Heated_Seat_Off.svg"}_close(){this._climExpanded=!1,super._close()}render(){if(!this.config||!this.hass)return l``;let t=this._val(r.CLIMATE),e=t!=null&&t!=="off"&&t!=="unavailable",s=this._attr(r.CLIMATE,"temperature"),i=s!=null?Number(s):null,a=this._pendingTemp??i,o=this._attr(r.CLIMATE,"temperature_unit")??"\xB0C",p=a!=null?a.toFixed(1):"\u2014",h=this._val(r.DEFROST_SWITCH)==="on",f=this._val(r.HEATED_SEAT_LEFT),g=this._val(r.HEATED_SEAT_RIGHT),u=this._val(r.HEATED_SEAT_REAR_LEFT),b=this._val(r.HEATED_SEAT_REAR_CENTER),v=this._val(r.HEATED_SEAT_REAR_RIGHT),$=this._val(r.TEMPERATURE_INSIDE),j=this._attr(r.TEMPERATURE_INSIDE,"unit_of_measurement")??"\xB0C",z=$!=null?`${Math.round(Number($))}${j}`:null,w=this._val(r.TEMPERATURE_OUTSIDE),y=this._attr(r.TEMPERATURE_OUTSIDE,"unit_of_measurement")??"\xB0C",A=w!=null?`${Math.round(Number(w))}${y}`:null,L=this._val(r.WINDOWS_COVER)==="open",et=this._val(r.CAMP_MODE)==="on",st=this._val(r.DOG_MODE)==="on",P=this._val(r.CABIN_OVERHEAT)??"Off",it=this._val(r.PLUGGED_IN)==="on"?"climate-bg-charging.png":"climate-bg.png";return l`
+    `}};customElements.define("tesla-menu-charger",Nt);var It=class extends R{static get properties(){return{...super.properties,_pendingTemp:{state:!0},_climExpanded:{state:!0}}}static get styles(){return[M,ve]}constructor(){super(),this._pendingTemp=null,this._climExpanded=!1}_adjustTemp(t){let e=Number(this._attr(this.E.CLIMATE,"target_temp_step")??.5),s=Number(this._attr(this.E.CLIMATE,"min_temp")??15),i=Number(this._attr(this.E.CLIMATE,"max_temp")??28),a=this._pendingTemp??(this._attr(this.E.CLIMATE,"temperature")!=null?Number(this._attr(this.E.CLIMATE,"temperature")):22);this._pendingTemp=Math.max(s,Math.min(i,Math.round((a+t*e)/e)*e)),clearTimeout(this._tempTimer),this._tempTimer=setTimeout(()=>{this._svc("climate","set_temperature",this.E.CLIMATE,{temperature:this._pendingTemp}),this._pendingTemp=null},800)}_seatHeatFile(t){if(!t||t==="Off")return"Tesla_Heated_Seat_Off.svg";let e=parseInt(t);return!isNaN(e)&&e>=1&&e<=3?`Tesla_Heated_Seat_${e}.svg`:t==="Low"?"Tesla_Heated_Seat_1.svg":t==="Medium"?"Tesla_Heated_Seat_2.svg":t==="High"?"Tesla_Heated_Seat_3.svg":"Tesla_Heated_Seat_Off.svg"}_setCabinOverheat(t){if(this._domainOf(this.E.CABIN_OVERHEAT)==="climate"){let i={Off:"off","No A/C":"fan_only",On:"cool"}[t]??"off";i==="off"?this._svc("climate","turn_off",this.E.CABIN_OVERHEAT):this._svc("climate","set_hvac_mode",this.E.CABIN_OVERHEAT,{hvac_mode:i})}else this._svc("select","select_option",this.E.CABIN_OVERHEAT,{option:t})}_close(){this._climExpanded=!1,super._close()}render(){if(!this.config||!this.hass)return o``;let t=this._val(this.E.CLIMATE),e=t!=null&&t!=="off"&&t!=="unavailable",s=this._attr(this.E.CLIMATE,"temperature"),i=s!=null?Number(s):null,a=this._pendingTemp??i,r=this._attr(this.E.CLIMATE,"temperature_unit")??"\xB0C",d=a!=null?a.toFixed(1):"\u2014",h=this._val(this.E.DEFROST_SWITCH)==="on",g=this._val(this.E.HEATED_SEAT_LEFT),u=this._val(this.E.HEATED_SEAT_RIGHT),p=this._val(this.E.HEATED_SEAT_REAR_LEFT),f=this._val(this.E.HEATED_SEAT_REAR_CENTER),b=this._val(this.E.HEATED_SEAT_REAR_RIGHT),y=this._val(this.E.TEMPERATURE_INSIDE),Q=this._attr(this.E.TEMPERATURE_INSIDE,"unit_of_measurement")??"\xB0C",D=y!=null?`${Math.round(Number(y))}${Q}`:null,k=this._val(this.E.TEMPERATURE_OUTSIDE),w=this._attr(this.E.TEMPERATURE_OUTSIDE,"unit_of_measurement")??"\xB0C",E=k!=null?`${Math.round(Number(k))}${w}`:null,T=this._val(this.E.WINDOWS_COVER)==="open",et=this._val(this.E.CAMP_MODE)==="on",st=this._val(this.E.DOG_MODE)==="on",L=this._val(this.E.CABIN_OVERHEAT)??"Off",ut=this._domainOf(this.E.CABIN_OVERHEAT)==="climate"?{off:"Off",fan_only:"No A/C",cool:"On"}[L]??"Off":L,j=this._val(this.E.PLUGGED_IN)==="on"?"climate-bg-charging.png":"climate-bg.png";return o`
       <div class="climate-menu${this.layout==="landscape"?" landscape":""}">
 
         <!-- Car area: outer clips, inner sizes to image, seats overlay image -->
         <div class="clim-car-area${this._climExpanded?" clim-car-collapsed":""}">
           <div class="clim-car-inner">
             <img class="clim-car-bg"
-              src="${this._imgUrl(it)}"
+              src="${this._imgUrl(j)}"
               alt="Car interior view" />
-            ${this._hasCustomOverlay?l`
-              <div style="${this._customOverlayStyleFor(it)}"></div>`:""}
+            ${this._hasCustomOverlay?o`
+              <div style="${this._customOverlayStyleFor(j)}"></div>`:""}
 
             <!-- Front seats -->
             <button class="clim-seat-zone clim-seat-fl"
-              @click=${()=>this._svc("select","select_next",r.HEATED_SEAT_LEFT,{cycle:!0})}>
-              <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(f??"Off"))}" alt="" />
-              <span class="clim-seat-label">${f??"Off"}</span>
-            </button>
-            <button class="clim-seat-zone clim-seat-fr"
-              @click=${()=>this._svc("select","select_next",r.HEATED_SEAT_RIGHT,{cycle:!0})}>
+              @click=${()=>this._svc("select","select_next",this.E.HEATED_SEAT_LEFT,{cycle:!0})}>
               <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(g??"Off"))}" alt="" />
               <span class="clim-seat-label">${g??"Off"}</span>
             </button>
-            <!-- Rear seats -->
-            <button class="clim-seat-zone clim-seat-rl"
-              @click=${()=>this._svc("select","select_next",r.HEATED_SEAT_REAR_LEFT,{cycle:!0})}>
+            <button class="clim-seat-zone clim-seat-fr"
+              @click=${()=>this._svc("select","select_next",this.E.HEATED_SEAT_RIGHT,{cycle:!0})}>
               <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(u??"Off"))}" alt="" />
               <span class="clim-seat-label">${u??"Off"}</span>
             </button>
+            <!-- Rear seats -->
+            <button class="clim-seat-zone clim-seat-rl"
+              @click=${()=>this._svc("select","select_next",this.E.HEATED_SEAT_REAR_LEFT,{cycle:!0})}>
+              <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(p??"Off"))}" alt="" />
+              <span class="clim-seat-label">${p??"Off"}</span>
+            </button>
             <button class="clim-seat-zone clim-seat-rc"
-              @click=${()=>this._svc("select","select_next",r.HEATED_SEAT_REAR_CENTER,{cycle:!0})}>
-              <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(b??"Off"))}" alt="" />
-              <span class="clim-seat-label">${b??"Off"}</span>
+              @click=${()=>this._svc("select","select_next",this.E.HEATED_SEAT_REAR_CENTER,{cycle:!0})}>
+              <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(f??"Off"))}" alt="" />
+              <span class="clim-seat-label">${f??"Off"}</span>
             </button>
             <button class="clim-seat-zone clim-seat-rr"
-              @click=${()=>this._svc("select","select_next",r.HEATED_SEAT_REAR_RIGHT,{cycle:!0})}>
-              <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(v??"Off"))}" alt="" />
-              <span class="clim-seat-label">${v??"Off"}</span>
+              @click=${()=>this._svc("select","select_next",this.E.HEATED_SEAT_REAR_RIGHT,{cycle:!0})}>
+              <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(b??"Off"))}" alt="" />
+              <span class="clim-seat-label">${b??"Off"}</span>
             </button>
           </div>
 
           <!-- Floating back button (positioned in outer container) -->
           <button class="clim-back-btn" @click=${this._close}>
-            <span class="icon">${d(c["chevron-left"])}</span>
+            <span class="icon">${c(l["chevron-left"])}</span>
           </button>
         </div>
 
@@ -1983,42 +1990,42 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
           </button>
 
           <!-- Interior · Exterior temps -->
-          ${z||A?l`
+          ${D||E?o`
             <div class="clim-temp-info">
-              ${z?l`Interior ${z}`:""}
-              ${z&&A?" \xB7 ":""}
-              ${A?l`Exterior ${A}`:""}
+              ${D?o`Interior ${D}`:""}
+              ${D&&E?" \xB7 ":""}
+              ${E?o`Exterior ${E}`:""}
             </div>`:""}
 
           <!-- Main control row: [Power/Off] [← 20.0° →] [Vent] -->
           <div class="clim-main-row">
             <button class="clim-icon-btn${e?" clim-active":""}"
-              @click=${()=>this._svc("climate",e?"turn_off":"turn_on",r.CLIMATE)}>
-              <span class="icon">${d(c.power)}</span>
+              @click=${()=>this._svc("climate",e?"turn_off":"turn_on",this.E.CLIMATE)}>
+              <span class="icon">${c(l.power)}</span>
               <span>${e?"On":"Off"}</span>
             </button>
 
             <div class="clim-temp-control">
               <button class="clim-arrow-btn" @click=${()=>this._adjustTemp(-1)}>
-                <span class="icon">${d(c["chevron-left"])}</span>
+                <span class="icon">${c(l["chevron-left"])}</span>
               </button>
-              <span class="clim-temp-value">${p}°</span>
+              <span class="clim-temp-value">${d}°</span>
               <button class="clim-arrow-btn" @click=${()=>this._adjustTemp(1)}>
-                <span class="icon">${d(c["chevron-right"])}</span>
+                <span class="icon">${c(l["chevron-right"])}</span>
               </button>
             </div>
 
-            <button class="clim-icon-btn${L?" clim-active":""}"
-              @click=${()=>this._svc("cover",L?"close_cover":"open_cover",r.WINDOWS_COVER)}>
-              <span class="icon">${d(L?c["vent-close"]:c["vent-open"])}</span>
-              <span>${L?"Close":"Vent"}</span>
+            <button class="clim-icon-btn${T?" clim-active":""}"
+              @click=${()=>this._svc("cover",T?"close_cover":"open_cover",this.E.WINDOWS_COVER)}>
+              <span class="icon">${c(T?l["vent-close"]:l["vent-open"])}</span>
+              <span>${T?"Close":"Vent"}</span>
             </button>
           </div>
 
           <!-- Always-visible: Defrost Car -->
           <button class="clim-full-btn${h?" active":""}"
-            @click=${()=>this._svc("switch",h?"turn_off":"turn_on",r.DEFROST_SWITCH)}>
-            <span class="icon">${d(c.defrost)}</span>
+            @click=${()=>this._svc("switch",h?"turn_off":"turn_on",this.E.DEFROST_SWITCH)}>
+            <span class="icon">${c(l.defrost)}</span>
             <span>Defrost Car</span>
           </button>
 
@@ -2028,13 +2035,13 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
             <!-- Camp Mode + Dog Mode in one grouped container -->
             <div class="clim-list-group">
               <button class="clim-list-item${et?" hot":""}"
-                @click=${()=>this._svc("switch",et?"turn_off":"turn_on",r.CAMP_MODE)}>
-                <span class="icon clim-list-icon">${d(c.tent)}</span>
+                @click=${()=>this._svc("switch",et?"turn_off":"turn_on",this.E.CAMP_MODE)}>
+                <span class="icon clim-list-icon">${c(l.tent)}</span>
                 <span class="clim-list-label">Camp Mode</span>
               </button>
               <button class="clim-list-item${st?" hot":""}"
-                @click=${()=>this._svc("switch",st?"turn_off":"turn_on",r.DOG_MODE)}>
-                <span class="icon clim-list-icon">${d(c.dog)}</span>
+                @click=${()=>this._svc("switch",st?"turn_off":"turn_on",this.E.DOG_MODE)}>
+                <span class="icon clim-list-icon">${c(l.dog)}</span>
                 <span class="clim-list-label">Dog Mode</span>
               </button>
             </div>
@@ -2045,10 +2052,10 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
             <!-- Cabin Overheat Protection -->
             <div class="clim-section-title">Cabin Overheat Protection</div>
             <div class="clim-list-group clim-segment-group clim-list-group--last">
-              ${["Off","No A/C","On"].map(G=>l`
-                <button class="clim-segment-btn${P===G?" selected":""}"
-                  @click=${()=>this._svc("select","select_option",r.CABIN_OVERHEAT,{option:G})}>
-                  ${G}
+              ${["Off","No A/C","On"].map(P=>o`
+                <button class="clim-segment-btn${ut===P?" selected":""}"
+                  @click=${()=>this._setCabinOverheat(P)}>
+                  ${P}
                 </button>`)}
             </div>
 
@@ -2056,11 +2063,11 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
 
         </div><!-- /clim-sheet -->
       </div>
-    `}};customElements.define("tesla-menu-climate",It);var Nt=class extends T{static get styles(){return[O,xe]}render(){if(!this.config||!this.hass)return l``;let e=this._val(r.DOOR_LOCK)==="locked",s=this._val(r.FRUNK_COVER)==="open"||this._val(r.FRUNK)==="on",i=this._val(r.TRUNK)==="on",a=this._val(r.PLUGGED_IN)==="on",o=this._val(r.CHARGER_DOOR)==="open"||a,p=this._val(r.WINDOWS_COVER)==="open",h=a?"controls-bg-charging.png":"controls-bg.png";return l`
+    `}};customElements.define("tesla-menu-climate",It);var Ht=class extends R{static get styles(){return[M,xe]}render(){if(!this.config||!this.hass)return o``;let e=this._val(this.E.DOOR_LOCK)==="locked",s=this._val(this.E.FRUNK_COVER)==="open"||this._val(this.E.FRUNK)==="on",i=this._val(this.E.TRUNK)==="on",a=this._val(this.E.PLUGGED_IN)==="on",r=this._val(this.E.CHARGER_DOOR)==="open"||a,d=this._val(this.E.WINDOWS_COVER)==="open",h=a?"controls-bg-charging.png":"controls-bg.png";return o`
       <div class="controls-menu${this.layout==="landscape"?" landscape":""}">
         <div class="panel-header">
           <button class="panel-back" @click=${this._close}>
-            <span class="icon">${d(c["chevron-left"])}</span>
+            <span class="icon">${c(l["chevron-left"])}</span>
           </button>
           <span class="panel-title">Controls</span>
         </div>
@@ -2068,53 +2075,53 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
           <img class="ctrl-car-bg"
             src="${this._imgUrl(h)}"
             alt="Car top view" />
-          ${this._hasCustomOverlay?l`
+          ${this._hasCustomOverlay?o`
             <div style="${this._customOverlayStyleFor(h)}"></div>`:""}
           <!-- Frunk — text only, top centre -->
           <button class="ctrl-zone ctrl-frunk"
-            @click=${()=>this._svc("cover","toggle_cover",r.FRUNK_COVER)}>
+            @click=${()=>this._svc("cover","toggle_cover",this.E.FRUNK_COVER)}>
             ${s?"Close":"Open"}
           </button>
           <!-- Lock — icon only, car centre -->
           <button class="ctrl-zone ctrl-lock"
-            @click=${()=>this._svc("lock",e?"unlock":"lock",r.DOOR_LOCK)}>
-            <span class="icon">${d(e?c.lock:c.unlock)}</span>
+            @click=${()=>this._svc("lock",e?"unlock":"lock",this.E.DOOR_LOCK)}>
+            <span class="icon">${c(e?l.lock:l.unlock)}</span>
           </button>
           <!-- Trunk — text only, bottom centre -->
           <button class="ctrl-zone ctrl-trunk"
-            @click=${()=>this._svc("button","press",r.OPEN_TRUNK)}>
+            @click=${()=>this._activate(this.E.OPEN_TRUNK)}>
             ${i?"Close":"Open"}
           </button>
           <!-- Charge port — icon only, bottom left -->
-          <button class="ctrl-zone ctrl-port ${o?"port-open":""}"
-            @click=${()=>this._svc("button","press",o?r.CHARGE_PORT_CLOSE:r.CHARGE_PORT_OPEN)}>
-            <span class="icon">${d(c["charge-bolt"])}</span>
+          <button class="ctrl-zone ctrl-port ${r?"port-open":""}"
+            @click=${()=>this._openClose(this.E.CHARGE_PORT_OPEN,this.E.CHARGE_PORT_CLOSE,r)}>
+            <span class="icon">${c(l["charge-bolt"])}</span>
           </button>
         </div>
         <div class="ctrl-actions">
           <button class="ctrl-action-btn"
-            @click=${()=>this._svc("button","press",r.FLASH_LIGHTS)}>
-            <span class="icon">${d(c["flash-lights"])}</span>
+            @click=${()=>this._svc("button","press",this.E.FLASH_LIGHTS)}>
+            <span class="icon">${c(l["flash-lights"])}</span>
             <span>Flash</span>
           </button>
           <button class="ctrl-action-btn"
-            @click=${()=>this._svc("button","press",r.HORN)}>
-            <span class="icon">${d(c.horn)}</span>
+            @click=${()=>this._svc("button","press",this.E.HORN)}>
+            <span class="icon">${c(l.horn)}</span>
             <span>Horn</span>
           </button>
           <button class="ctrl-action-btn"
-            @click=${()=>this._svc("button","press",r.REMOTE_START)}>
-            <span class="icon">${d(c["remote-start"])}</span>
+            @click=${()=>this._svc("button","press",this.E.REMOTE_START)}>
+            <span class="icon">${c(l["remote-start"])}</span>
             <span>Start</span>
           </button>
           <button class="ctrl-action-btn"
-            @click=${()=>this._svc("cover",p?"close_cover":"open_cover",r.WINDOWS_COVER)}>
-            <span class="icon">${d(p?c["vent-close"]:c["vent-open"])}</span>
-            <span>${p?"Close":"Vent"}</span>
+            @click=${()=>this._svc("cover",d?"close_cover":"open_cover",this.E.WINDOWS_COVER)}>
+            <span class="icon">${c(d?l["vent-close"]:l["vent-open"])}</span>
+            <span>${d?"Close":"Vent"}</span>
           </button>
         </div>
       </div>
-    `}};customElements.define("tesla-menu-controls",Nt);var Ut=class extends x{static get properties(){return{selected:{type:String},available:{type:Array},showBack:{type:Boolean},customH:{type:Number},customS:{type:Number},slideFrom:{type:String,reflect:!0,attribute:"slide-from"},_showCustom:{state:!0},_hue:{state:!0},_sat:{state:!0}}}static get styles(){return k`
+    `}};customElements.define("tesla-menu-controls",Ht);var Ut=class extends v{static get properties(){return{selected:{type:String},available:{type:Array},showBack:{type:Boolean},customH:{type:Number},customS:{type:Number},slideFrom:{type:String,reflect:!0,attribute:"slide-from"},_showCustom:{state:!0},_hue:{state:!0},_sat:{state:!0}}}static get styles(){return x`
       :host {
         display: block;
         font-family: system-ui, -apple-system, sans-serif;
@@ -2401,21 +2408,21 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
       }
 
       .picker-reset:hover { color: rgba(255,255,255,0.7); }
-    `}constructor(){super(),this.selected="neutral",this.available=["neutral"],this.showBack=!1,this.customH=0,this.customS=80,this._showCustom=!1,this._hue=0,this._sat=80}willUpdate(t){(t.has("selected")||t.has("customH")||t.has("customS"))&&this.selected==="custom"&&(this._showCustom=!0,this._hue=this.customH??0,this._sat=this.customS??80)}_selectColour(t){this._showCustom=!1,this.dispatchEvent(new CustomEvent("colour-changed",{detail:{dir:t.dir,name:t.name},bubbles:!0,composed:!0})),this._close()}_openCustom(){this._showCustom=!0}_onHueInput(t){this._hue=Number(t.target.value),this._fireCustomChange()}_onSatInput(t){this._sat=Number(t.target.value),this._fireCustomChange()}_fireCustomChange(){this.dispatchEvent(new CustomEvent("colour-changed",{detail:{dir:"custom",name:"Custom",h:this._hue,s:this._sat},bubbles:!0,composed:!0}))}_reset(){this._showCustom=!1,this.dispatchEvent(new CustomEvent("colour-changed",{detail:null,bubbles:!0,composed:!0})),this._close()}_back(){this.dispatchEvent(new CustomEvent("picker-back",{bubbles:!0,composed:!0}))}_close(){this.dispatchEvent(new CustomEvent("picker-close",{bubbles:!0,composed:!0}))}_onOverlayClick(t){t.target===t.currentTarget&&this._close()}render(){let t=this.available??["neutral"],e=this.selected==="custom";return l`
+    `}constructor(){super(),this.selected="neutral",this.available=["neutral"],this.showBack=!1,this.customH=0,this.customS=80,this._showCustom=!1,this._hue=0,this._sat=80}willUpdate(t){(t.has("selected")||t.has("customH")||t.has("customS"))&&this.selected==="custom"&&(this._showCustom=!0,this._hue=this.customH??0,this._sat=this.customS??80)}_selectColour(t){this._showCustom=!1,this.dispatchEvent(new CustomEvent("colour-changed",{detail:{dir:t.dir,name:t.name},bubbles:!0,composed:!0})),this._close()}_openCustom(){this._showCustom=!0}_onHueInput(t){this._hue=Number(t.target.value),this._fireCustomChange()}_onSatInput(t){this._sat=Number(t.target.value),this._fireCustomChange()}_fireCustomChange(){this.dispatchEvent(new CustomEvent("colour-changed",{detail:{dir:"custom",name:"Custom",h:this._hue,s:this._sat},bubbles:!0,composed:!0}))}_reset(){this._showCustom=!1,this.dispatchEvent(new CustomEvent("colour-changed",{detail:null,bubbles:!0,composed:!0})),this._close()}_back(){this.dispatchEvent(new CustomEvent("picker-back",{bubbles:!0,composed:!0}))}_close(){this.dispatchEvent(new CustomEvent("picker-close",{bubbles:!0,composed:!0}))}_onOverlayClick(t){t.target===t.currentTarget&&this._close()}render(){let t=this.available??["neutral"],e=this.selected==="custom";return o`
       <div class="picker-overlay" @click=${this._onOverlayClick}>
         <div class="picker-panel">
 
           <div class="picker-header">
-            ${this.showBack?l`
+            ${this.showBack?o`
               <button class="picker-back" @click=${this._back}>
-                <span class="icon">${d(c["chevron-left"])}</span>
+                <span class="icon">${c(l["chevron-left"])}</span>
               </button>`:""}
             <span class="picker-title">Colour</span>
             <button class="picker-close" @click=${this._close}>&times;</button>
           </div>
 
           <div class="picker-swatches">
-            ${ut.map(s=>{let i=t.includes(s.dir),a=this.selected===s.dir;return l`
+            ${mt.map(s=>{let i=t.includes(s.dir),a=this.selected===s.dir;return o`
                 <button
                   class="swatch-btn${i?"":" unavailable"}"
                   @click=${i?()=>this._selectColour(s):null}>
@@ -2429,7 +2436,7 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
             </button>
           </div>
 
-          ${this._showCustom?l`
+          ${this._showCustom?o`
             <div class="picker-custom" style="--picker-hue:${this._hue}">
               <div class="slider-row">
                 <span class="slider-label">Hue</span>
@@ -2452,7 +2459,7 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
 
         </div>
       </div>
-    `}};customElements.define("tesla-colour-picker",Ut);var Ht=class extends x{static get properties(){return{model:{type:String},variant:{type:String},slideFrom:{type:String,reflect:!0,attribute:"slide-from"}}}static get styles(){return k`
+    `}};customElements.define("tesla-colour-picker",Ut);var Dt=class extends v{static get properties(){return{model:{type:String},variant:{type:String},slideFrom:{type:String,reflect:!0,attribute:"slide-from"}}}static get styles(){return x`
       :host {
         display: block;
         font-family: system-ui, -apple-system, sans-serif;
@@ -2668,32 +2675,32 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
         font-style: italic;
         margin-left: 8px;
       }
-    `}_select(t,e){this.dispatchEvent(new CustomEvent("model-changed",{detail:{model:t,variant:e},bubbles:!0,composed:!0}))}_back(){this.dispatchEvent(new CustomEvent("picker-back",{bubbles:!0,composed:!0}))}_close(){this.dispatchEvent(new CustomEvent("picker-close",{bubbles:!0,composed:!0}))}_onOverlayClick(t){t.target===t.currentTarget&&this._close()}render(){return l`
+    `}_select(t,e){this.dispatchEvent(new CustomEvent("model-changed",{detail:{model:t,variant:e},bubbles:!0,composed:!0}))}_back(){this.dispatchEvent(new CustomEvent("picker-back",{bubbles:!0,composed:!0}))}_close(){this.dispatchEvent(new CustomEvent("picker-close",{bubbles:!0,composed:!0}))}_onOverlayClick(t){t.target===t.currentTarget&&this._close()}render(){return o`
       <div class="picker-overlay" @click=${this._onOverlayClick}>
         <div class="picker-panel">
           <div class="picker-header">
             <button class="picker-back" @click=${this._back}>
-              <span class="icon">${d(c["chevron-left"])}</span>
+              <span class="icon">${c(l["chevron-left"])}</span>
             </button>
             <span class="picker-title">Model</span>
             <button class="picker-close" @click=${this._close}>&times;</button>
           </div>
           <div class="model-list">
-            ${R.map(t=>l`
+            ${O.map(t=>o`
               <div class="model-section">
                 <div class="model-section-title">${t.name}</div>
                 <div class="model-group">
-                  ${t.variants.map(e=>{let s=e.id===this.variant,a=e.colours.length>1||e.colours[0]!=="neutral"||s;return l`
+                  ${t.variants.map(e=>{let s=e.id===this.variant,a=e.colours.length>1||e.colours[0]!=="neutral"||s;return o`
                       <button class="model-item${s?" selected":""}${a?"":" unavailable"}"
                         @click=${a?()=>this._select(t.id,e.id):null}>
                         <span class="model-icon">
-                          <span class="icon">${d(c.car)}</span>
+                          <span class="icon">${c(l.car)}</span>
                         </span>
                         <span class="model-label">${e.label}</span>
-                        ${a?"":l`<span class="model-no-images">no images</span>`}
-                        ${s?l`
+                        ${a?"":o`<span class="model-no-images">no images</span>`}
+                        ${s?o`
                           <span class="model-check">
-                            <span class="icon">${d(c.check)}</span>
+                            <span class="icon">${c(l.check)}</span>
                           </span>`:""}
                       </button>`})}
                 </div>
@@ -2702,151 +2709,151 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
           </div>
         </div>
       </div>
-    `}};customElements.define("tesla-model-picker",Ht);var ss=["chargeport","frunk","fr","ff","nr","nf"],we={"nf+nr":"nf-nr-combined-overlay.png","ff+fr":"ff-fr-combined-overlay.png"},is=["fr"],as=["frunk","nf","nr"],ye={"nf+nr":"oncharge-nf-nr-combined-overlay.png"},ns="tesla-card-colour-",rs="tesla-card-model-",os="tesla-card-layout-",ls="tesla-card-size-",$e=["small","medium","large"],H=class H extends x{static get properties(){return{hass:{type:Object},config:{type:Object},_menu:{state:!0},_imageError:{state:!0},_settingsView:{state:!0},_modelOverride:{state:!0},_colourOverride:{state:!0},_layout:{state:!0},_settingsSlide:{state:!0},_cardSize:{state:!0}}}static get styles(){return[O,ke]}constructor(){super(),this._menu=null,this._imageError=!1,this._settingsView=null,this._modelOverride=null,this._colourOverride=null,this._layout="portrait",this._settingsSlide=null,this._cardSize="medium",this._baseConfig=null,this._combinedAvail={},this._onchargeAvail=!1,this._cableAvail=!1,this._toggleCharger=()=>this._toggle("charger"),this._toggleClimate=()=>this._toggle("climate"),this._toggleControls=()=>this._toggle("controls"),this._handleCloseMenu=()=>{this._menu=null},this._handleColourChanged=t=>this._onColourChanged(t),this._handleModelChanged=t=>this._onModelChanged(t),this._handleModelBack=()=>{this._settingsSlide=null,this._settingsView="main"},this._handleColourBack=()=>{this._settingsSlide="left",this._settingsView="model"},this._handlePickerClose=()=>{this._settingsView=null,this._settingsSlide=null}}setConfig(t){if(!t.car_name)throw new Error("car_name is required");this._baseConfig={car_model:"3",car_variant:"3.1",car_color:"red_multi_coat",image_path:"/hacsfiles/homeassistant-fe-tesla",show_speed:!0,...t},this._applyConfig()}_applyConfig(){let t={...this._baseConfig};this._modelOverride&&(t.car_model=this._modelOverride.model,t.car_variant=this._modelOverride.variant);let e=this._colourOverride;e&&(t.car_color=e.dir==="custom"?"neutral":e.dir),this.config=t,this._preloadCombinedOverlays()}_preloadCombinedOverlays(){for(let[s,i]of Object.entries(we)){let a=new Image;a.onload=()=>{this._combinedAvail[s]=!0,this.requestUpdate()},a.onerror=()=>{this._combinedAvail[s]=!1},a.src=this._overlayUrl(i)}let t=new Image;t.onload=()=>{this._onchargeAvail=!0,this.requestUpdate()},t.onerror=()=>{this._onchargeAvail=!1},t.src=this._overlayUrl("oncharge-base.png");let e=new Image;e.onload=()=>{this._cableAvail=!0,this.requestUpdate()},e.onerror=()=>{this._cableAvail=!1},e.src=this._overlayUrl("oncharge-cable-overlay.png");for(let[s,i]of Object.entries(ye)){let a=new Image;a.onload=()=>{this._combinedAvail["oc_"+s]=!0,this.requestUpdate()},a.onerror=()=>{this._combinedAvail["oc_"+s]=!1},a.src=this._overlayUrl(i)}}static getConfigElement(){return document.createElement("tesla-card-editor")}static getStubConfig(){return{car_name:"",car_model:"3",car_variant:"3.1",car_color:"red_multi_coat",image_path:"/hacsfiles/homeassistant-fe-tesla"}}connectedCallback(){super.connectedCallback(),this._baseConfig&&(this._restoreModel(),this._restoreColour()),this._restoreLayout(),this._restoreSize()}_colourLsKey(){return ns+(this._baseConfig?.car_name??"default")}_restoreColour(){try{let t=localStorage.getItem(this._colourLsKey());if(!t)return;try{this._colourOverride=JSON.parse(t)}catch{this._colourOverride={dir:t}}this._applyConfig()}catch{}}_persistColour(){try{this._colourOverride?localStorage.setItem(this._colourLsKey(),JSON.stringify(this._colourOverride)):localStorage.removeItem(this._colourLsKey())}catch{}}_onColourChanged(t){let e=t.detail;e?e.dir==="custom"?this._colourOverride={dir:"custom",h:e.h,s:e.s}:this._colourOverride={dir:e.dir}:this._colourOverride=null,this._applyConfig(),this._persistColour(),this._imageError=!1}_modelLsKey(){return rs+(this._baseConfig?.car_name??"default")}_restoreModel(){try{let t=localStorage.getItem(this._modelLsKey());t&&(this._modelOverride=JSON.parse(t),this._applyConfig())}catch{}}_persistModel(){try{this._modelOverride?localStorage.setItem(this._modelLsKey(),JSON.stringify(this._modelOverride)):localStorage.removeItem(this._modelLsKey())}catch{}}_onModelChanged(t){let{model:e,variant:s}=t.detail;this._modelOverride={model:e,variant:s};let i=this._colourOverride;i&&i.dir!=="custom"&&(Ot(e,s).includes(i.dir)||(this._colourOverride=null,this._persistColour())),this._applyConfig(),this._persistModel(),this._imageError=!1,this._settingsSlide="right",this._settingsView="colour"}_layoutLsKey(){return os+(this._baseConfig?.car_name??"default")}_restoreLayout(){try{localStorage.getItem(this._layoutLsKey())==="landscape"&&(this._layout="landscape")}catch{}}_persistLayout(){try{localStorage.setItem(this._layoutLsKey(),this._layout)}catch{}}_toggleLayout(){this._layout=this._layout==="landscape"?"portrait":"landscape",this._persistLayout()}_sizeLsKey(){return ls+(this._baseConfig?.car_name??"default")}_restoreSize(){try{let t=localStorage.getItem(this._sizeLsKey());t&&$e.includes(t)&&(this._cardSize=t)}catch{}}_persistSize(){try{localStorage.setItem(this._sizeLsKey(),this._cardSize)}catch{}}_setCardSize(t){this._cardSize!==t&&(this._cardSize=t,this._persistSize())}_imgUrl(t){let{image_path:e,car_model:s,car_variant:i,car_color:a}=this.config;return`${e}/${s}/${i}/${a}/${t}?v=${H._imgVer}`}_overlayUrl(t){let{image_path:e,car_model:s,car_variant:i,car_color:a}=this.config;return`${e}/${s}/${i}/${a}/overlays/${t}?v=${H._imgVer}`}_btnUrl(t){return`${this.config.image_path}/buttons/${t}?v=${H._imgVer}`}get _customColour(){let t=this._colourOverride;return!t||t.dir!=="custom"?null:{h:t.h,s:t.s}}get _hasCustomOverlay(){let t=this._customColour;return!!t&&t.s>0}_maskUrl(t){let{image_path:e,car_model:s,car_variant:i}=this.config,a=t.replace(".png","-mask.png");return`${e}/${s}/${i}/neutral/${a}?v=${H._imgVer}`}_customOverlayStyleFor(t){let e=this._customColour;if(!e||e.s===0)return"";let s=this._maskUrl(t);return`position:absolute;inset:0;pointer-events:none;background:hsl(${e.h},${e.s}%,50%);mix-blend-mode:color;-webkit-mask-image:url(${s});mask-image:url(${s});-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;`}_eid(t){return ht(t,this.config.car_name)}_state(t){return this.hass?.states[this._eid(t)]}_val(t){return this._state(t)?.state}_attr(t,e){return this._state(t)?.attributes?.[e]}async _svc(t,e,s,i={}){try{await this.hass.callService(t,e,{entity_id:this._eid(s),...i})}catch(a){console.error("[tesla-card] service error",t,e,a)}}_toggle(t){this._menu=this._menu===t?null:t}_openSettings(){this._settingsView="main",this._settingsSlide=null}_openModelPicker(){this._settingsView="model",this._settingsSlide=null}_closeSettings(){this._settingsView=null,this._settingsSlide=null}_onSettingsOverlayClick(t){t.target===t.currentTarget&&this._closeSettings()}render(){if(!this.config||!this.hass)return l``;let t=this._menu,e=this._colourOverride,s=this._val(r.BATTERY_LEVEL),i=s!=null?Math.round(Number(s)):null,a=i!=null?Math.max(0,Math.min(100,i)):0,o=a>=50?"high":a>=20?"medium":"low",p=this._val(r.BATTERY_RANGE),h=this._attr(r.BATTERY_RANGE,"unit_of_measurement")??"km",f=p!=null?`${Math.round(Number(p))} ${h}`:null,g=this._val(r.CHARGING)==="on",u=this._val(r.ONLINE)==="on",b=this._state(r.ONLINE),v=this._val(r.FRUNK_COVER)==="open"||this._val(r.FRUNK)==="on",$=this._val(r.TRUNK)==="on",j=this._val(r.PLUGGED_IN)==="on",z=this._val(r.CHARGER_DOOR)==="open"||j,w={nf:this._attr(r.DOORS,"driver_front")===!0,nr:this._attr(r.DOORS,"driver_rear")===!0,ff:this._attr(r.DOORS,"passenger_front")===!0,fr:this._attr(r.DOORS,"passenger_rear")===!0},y=j&&this._onchargeAvail,A=y?"oncharge-":"",L=`${A}base.png`,et=y?as:ss,st=y?is:[],P={frunk:v,nf:w.nf,nr:w.nr,fr:w.fr};y||(P.chargeport=z,P.ff=w.ff);let Pt=y?"oc_nf+nr":"nf+nr",it=w.nf&&w.nr&&this._combinedAvail[Pt],G=!y&&w.ff&&w.fr&&this._combinedAvail["ff+fr"],Dt=y?ye:we,Bt=[];for(let m of st)P[m]&&Bt.push(`${A}${m}-overlay.png`);let Qt=$?`${A}trunk-overlay.png`:null,at=[],jt=!1,Gt=!1;for(let m of et)if(P[m]){if((m==="nf"||m==="nr")&&it){jt&&at.push(Dt["nf+nr"]),jt=!0;continue}if((m==="ff"||m==="fr")&&G){Gt&&at.push(Dt["ff+fr"]),Gt=!0;continue}at.push(`${A}${m}-overlay.png`)}let mt=this._val(r.DOOR_LOCK),nt=mt==="locked",Ae=this._val(r.CHARGING_STATE)??"\u2014",Ce=this._val(r.CHARGE_RATE),Ee=this._attr(r.CHARGE_RATE,"unit_of_measurement")??"kW",gt=this._val(r.CLIMATE),Ft=gt!=null&&gt!=="off"&&gt!=="unavailable",Vt=this._attr(r.CLIMATE,"temperature"),Se=this._attr(r.CLIMATE,"temperature_unit")??"\xB0C",Me=Vt!=null?Number(Vt).toFixed(1):"\u2014",Kt=!u&&b?"Asleep":this._val(r.PARKING_BRAKE)==="on"?"Parked":(()=>{if(!this.config.show_speed)return null;let m=this._attr(r.LOCATION,"speed");return m!=null&&Number(m)>0?`${Math.round(Number(m))} km/h`:null})(),Oe=g?`Charging \xB7 ${Ce??"\u2014"} ${Ee}`:j?"Plugged in":Ae,Re=Ft?`${Me}${Se}`:"Off",qt=mt?nt?"Locked":"Unlocked":null,ft=this._val(r.LOCATION),Wt=ft?ft.charAt(0).toUpperCase()+ft.slice(1).replace(/_/g," "):null,Te=this._val(r.SENTRY_MODE)==="on",_t=R.find(m=>m.id===this.config.car_model),Yt=_t?.variants.find(m=>m.id===this.config.car_variant),Le=_t&&Yt?`${_t.name} \xB7 ${Yt.label}`:this.config.car_model,Zt=e?.dir==="custom",Ie=Zt?null:ut.find(m=>m.dir===this.config.car_color),Ne=Zt?"Custom":Ie?.name??this.config.car_color,Ue=Ot(this.config.car_model,this.config.car_variant),He=this._layout==="landscape",ze=this._cardSize!=="medium"?`size-${this._cardSize}`:"";return l`
-      <ha-card class="${He?"landscape":""} ${ze}">
+    `}};customElements.define("tesla-model-picker",Dt);var ns=["chargeport","frunk","fr","ff","nr","nf"],ye={"nf+nr":"nf-nr-combined-overlay.png","ff+fr":"ff-fr-combined-overlay.png"},rs=["fr"],os=["frunk","nf","nr"],Ee={"nf+nr":"oncharge-nf-nr-combined-overlay.png"},ls="tesla-card-colour-",cs="tesla-card-model-",hs="tesla-card-layout-",ds="tesla-card-size-",$e=["small","medium","large"],U=class U extends v{static get properties(){return{hass:{type:Object},config:{type:Object},_menu:{state:!0},_imageError:{state:!0},_settingsView:{state:!0},_modelOverride:{state:!0},_colourOverride:{state:!0},_layout:{state:!0},_settingsSlide:{state:!0},_cardSize:{state:!0}}}static get styles(){return[M,ke]}get E(){return ht(this.config?.integration)}constructor(){super(),this._menu=null,this._imageError=!1,this._settingsView=null,this._modelOverride=null,this._colourOverride=null,this._layout="portrait",this._settingsSlide=null,this._cardSize="medium",this._baseConfig=null,this._combinedAvail={},this._onchargeAvail=!1,this._cableAvail=!1,this._toggleCharger=()=>this._toggle("charger"),this._toggleClimate=()=>this._toggle("climate"),this._toggleControls=()=>this._toggle("controls"),this._handleCloseMenu=()=>{this._menu=null},this._handleColourChanged=t=>this._onColourChanged(t),this._handleModelChanged=t=>this._onModelChanged(t),this._handleModelBack=()=>{this._settingsSlide=null,this._settingsView="main"},this._handleColourBack=()=>{this._settingsSlide="left",this._settingsView="model"},this._handlePickerClose=()=>{this._settingsView=null,this._settingsSlide=null}}setConfig(t){if(!t.car_name)throw new Error("car_name is required");this._baseConfig={car_model:"3",car_variant:"3.1",car_color:"red_multi_coat",image_path:"/hacsfiles/homeassistant-fe-tesla",show_speed:!0,...t},this._applyConfig()}_applyConfig(){let t={...this._baseConfig};this._modelOverride&&(t.car_model=this._modelOverride.model,t.car_variant=this._modelOverride.variant);let e=this._colourOverride;e&&(t.car_color=e.dir==="custom"?"neutral":e.dir),this.config=t,this._preloadCombinedOverlays()}_preloadCombinedOverlays(){for(let[s,i]of Object.entries(ye)){let a=new Image;a.onload=()=>{this._combinedAvail[s]=!0,this.requestUpdate()},a.onerror=()=>{this._combinedAvail[s]=!1},a.src=this._overlayUrl(i)}let t=new Image;t.onload=()=>{this._onchargeAvail=!0,this.requestUpdate()},t.onerror=()=>{this._onchargeAvail=!1},t.src=this._overlayUrl("oncharge-base.png");let e=new Image;e.onload=()=>{this._cableAvail=!0,this.requestUpdate()},e.onerror=()=>{this._cableAvail=!1},e.src=this._overlayUrl("oncharge-cable-overlay.png");for(let[s,i]of Object.entries(Ee)){let a=new Image;a.onload=()=>{this._combinedAvail["oc_"+s]=!0,this.requestUpdate()},a.onerror=()=>{this._combinedAvail["oc_"+s]=!1},a.src=this._overlayUrl(i)}}static getConfigElement(){return document.createElement("tesla-card-editor")}static getStubConfig(){return{car_name:"",car_model:"3",car_variant:"3.1",car_color:"red_multi_coat",image_path:"/hacsfiles/homeassistant-fe-tesla"}}connectedCallback(){super.connectedCallback(),this._baseConfig&&(this._restoreModel(),this._restoreColour()),this._restoreLayout(),this._restoreSize()}_colourLsKey(){return ls+(this._baseConfig?.car_name??"default")}_restoreColour(){try{let t=localStorage.getItem(this._colourLsKey());if(!t)return;try{this._colourOverride=JSON.parse(t)}catch{this._colourOverride={dir:t}}this._applyConfig()}catch{}}_persistColour(){try{this._colourOverride?localStorage.setItem(this._colourLsKey(),JSON.stringify(this._colourOverride)):localStorage.removeItem(this._colourLsKey())}catch{}}_onColourChanged(t){let e=t.detail;e?e.dir==="custom"?this._colourOverride={dir:"custom",h:e.h,s:e.s}:this._colourOverride={dir:e.dir}:this._colourOverride=null,this._applyConfig(),this._persistColour(),this._imageError=!1}_modelLsKey(){return cs+(this._baseConfig?.car_name??"default")}_restoreModel(){try{let t=localStorage.getItem(this._modelLsKey());t&&(this._modelOverride=JSON.parse(t),this._applyConfig())}catch{}}_persistModel(){try{this._modelOverride?localStorage.setItem(this._modelLsKey(),JSON.stringify(this._modelOverride)):localStorage.removeItem(this._modelLsKey())}catch{}}_onModelChanged(t){let{model:e,variant:s}=t.detail;this._modelOverride={model:e,variant:s};let i=this._colourOverride;i&&i.dir!=="custom"&&(Rt(e,s).includes(i.dir)||(this._colourOverride=null,this._persistColour())),this._applyConfig(),this._persistModel(),this._imageError=!1,this._settingsSlide="right",this._settingsView="colour"}_layoutLsKey(){return hs+(this._baseConfig?.car_name??"default")}_restoreLayout(){try{localStorage.getItem(this._layoutLsKey())==="landscape"&&(this._layout="landscape")}catch{}}_persistLayout(){try{localStorage.setItem(this._layoutLsKey(),this._layout)}catch{}}_toggleLayout(){this._layout=this._layout==="landscape"?"portrait":"landscape",this._persistLayout()}_sizeLsKey(){return ds+(this._baseConfig?.car_name??"default")}_restoreSize(){try{let t=localStorage.getItem(this._sizeLsKey());t&&$e.includes(t)&&(this._cardSize=t)}catch{}}_persistSize(){try{localStorage.setItem(this._sizeLsKey(),this._cardSize)}catch{}}_setCardSize(t){this._cardSize!==t&&(this._cardSize=t,this._persistSize())}_imgUrl(t){let{image_path:e,car_model:s,car_variant:i,car_color:a}=this.config;return`${e}/${s}/${i}/${a}/${t}?v=${U._imgVer}`}_overlayUrl(t){let{image_path:e,car_model:s,car_variant:i,car_color:a}=this.config;return`${e}/${s}/${i}/${a}/overlays/${t}?v=${U._imgVer}`}_btnUrl(t){return`${this.config.image_path}/buttons/${t}?v=${U._imgVer}`}get _customColour(){let t=this._colourOverride;return!t||t.dir!=="custom"?null:{h:t.h,s:t.s}}get _hasCustomOverlay(){let t=this._customColour;return!!t&&t.s>0}_maskUrl(t){let{image_path:e,car_model:s,car_variant:i}=this.config,a=t.replace(".png","-mask.png");return`${e}/${s}/${i}/neutral/${a}?v=${U._imgVer}`}_customOverlayStyleFor(t){let e=this._customColour;if(!e||e.s===0)return"";let s=this._maskUrl(t);return`position:absolute;inset:0;pointer-events:none;background:hsl(${e.h},${e.s}%,50%);mix-blend-mode:color;-webkit-mask-image:url(${s});mask-image:url(${s});-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;`}_eid(t){return dt(t,this.config.car_name)}_state(t){return this.hass?.states[this._eid(t)]}_val(t){return this._state(t)?.state}_attr(t,e){return this._state(t)?.attributes?.[e]}async _svc(t,e,s,i={}){try{await this.hass.callService(t,e,{entity_id:this._eid(s),...i})}catch(a){console.error("[tesla-card] service error",t,e,a)}}_toggle(t){this._menu=this._menu===t?null:t}_openSettings(){this._settingsView="main",this._settingsSlide=null}_openModelPicker(){this._settingsView="model",this._settingsSlide=null}_closeSettings(){this._settingsView=null,this._settingsSlide=null}_onSettingsOverlayClick(t){t.target===t.currentTarget&&this._closeSettings()}render(){if(!this.config||!this.hass)return o``;let t=this._menu,e=this._colourOverride,s=this._val(this.E.BATTERY_LEVEL),i=s!=null?Math.round(Number(s)):null,a=i!=null?Math.max(0,Math.min(100,i)):0,r=a>=50?"high":a>=20?"medium":"low",d=this._val(this.E.BATTERY_RANGE),h=this._attr(this.E.BATTERY_RANGE,"unit_of_measurement")??"km",g=d!=null?`${Math.round(Number(d))} ${h}`:null,u=this._val(this.E.CHARGING)==="on",p=this._val(this.E.ONLINE)==="on",f=this._state(this.E.ONLINE),b=this._val(this.E.FRUNK_COVER)==="open"||this._val(this.E.FRUNK)==="on",y=this._val(this.E.TRUNK)==="on",Q=this._val(this.E.PLUGGED_IN)==="on",D=this._val(this.E.CHARGER_DOOR)==="open"||Q,k={nf:this._attr(this.E.DOORS,"driver_front")===!0,nr:this._attr(this.E.DOORS,"driver_rear")===!0,ff:this._attr(this.E.DOORS,"passenger_front")===!0,fr:this._attr(this.E.DOORS,"passenger_rear")===!0},w=Q&&this._onchargeAvail,E=w?"oncharge-":"",T=`${E}base.png`,et=w?os:ns,st=w?rs:[],L={frunk:b,nf:k.nf,nr:k.nr,fr:k.fr};w||(L.chargeport=D,L.ff=k.ff);let zt=w?"oc_nf+nr":"nf+nr",ut=k.nf&&k.nr&&this._combinedAvail[zt],Bt=!w&&k.ff&&k.fr&&this._combinedAvail["ff+fr"],j=w?Ee:ye,P=[];for(let m of st)L[m]&&P.push(`${E}${m}-overlay.png`);let Gt=y?`${E}trunk-overlay.png`:null,it=[],Qt=!1,jt=!1;for(let m of et)if(L[m]){if((m==="nf"||m==="nr")&&ut){Qt&&it.push(j["nf+nr"]),Qt=!0;continue}if((m==="ff"||m==="fr")&&Bt){jt&&it.push(j["ff+fr"]),jt=!0;continue}it.push(`${E}${m}-overlay.png`)}let gt=this._val(this.E.DOOR_LOCK),at=gt==="locked",Ae=this._val(this.E.CHARGING_STATE)??"\u2014",Ce=this._val(this.E.CHARGE_RATE),Se=this._attr(this.E.CHARGE_RATE,"unit_of_measurement")??"kW",_t=this._val(this.E.CLIMATE),Ft=_t!=null&&_t!=="off"&&_t!=="unavailable",Vt=this._attr(this.E.CLIMATE,"temperature"),Me=this._attr(this.E.CLIMATE,"temperature_unit")??"\xB0C",Oe=Vt!=null?Number(Vt).toFixed(1):"\u2014",Kt=!p&&f?"Asleep":this._val(this.E.PARKING_BRAKE)==="on"?"Parked":(()=>{if(!this.config.show_speed)return null;let m=this._attr(this.E.LOCATION,"speed");return m!=null&&Number(m)>0?`${Math.round(Number(m))} km/h`:null})(),Re=u?`Charging \xB7 ${Ce??"\u2014"} ${Se}`:Q?"Plugged in":Ae,Te=Ft?`${Oe}${Me}`:"Off",Yt=gt?at?"Locked":"Unlocked":null,ft=this._val(this.E.LOCATION),Wt=ft?ft.charAt(0).toUpperCase()+ft.slice(1).replace(/_/g," "):null,Le=this._val(this.E.SENTRY_MODE)==="on",bt=O.find(m=>m.id===this.config.car_model),qt=bt?.variants.find(m=>m.id===this.config.car_variant),Ne=bt&&qt?`${bt.name} \xB7 ${qt.label}`:this.config.car_model,Zt=e?.dir==="custom",Ie=Zt?null:mt.find(m=>m.dir===this.config.car_color),He=Zt?"Custom":Ie?.name??this.config.car_color,Ue=Rt(this.config.car_model,this.config.car_variant),De=this._layout==="landscape",Pe=this._cardSize!=="medium"?`size-${this._cardSize}`:"";return o`
+      <ha-card class="${De?"landscape":""} ${Pe}">
 
         <!-- ── Header (hidden when a submenu is open) ─────── -->
-        ${t?"":l`
+        ${t?"":o`
           <div class="header">
             <div class="header-left">
               <div class="car-name-row">
                 <span class="car-name">${this.config.name??this.config.car_name}</span>
-                <span class="icon name-chevron">${d(c["chevron-down"])}</span>
+                <span class="icon name-chevron">${c(l["chevron-down"])}</span>
               </div>
               <div class="battery-summary">
-                ${i!=null?l`
+                ${i!=null?o`
                   <div class="battery-bar-small">
-                    <div class="battery-fill-small ${o}" style="width:${a}%"></div>
+                    <div class="battery-fill-small ${r}" style="width:${a}%"></div>
                   </div>
-                  <span class="range-text">${f??"\u2014"}</span>`:""}
+                  <span class="range-text">${g??"\u2014"}</span>`:""}
               </div>
-              ${Kt?l`<span class="status-text">${Kt}</span>`:""}
+              ${Kt?o`<span class="status-text">${Kt}</span>`:""}
             </div>
             <div class="header-right">
               <button class="icon-btn" title="Settings"
                 @click=${()=>this._openSettings()}>
-                <span class="icon">${d(c.settings)}</span>
+                <span class="icon">${c(l.settings)}</span>
               </button>
               <button class="icon-btn" title="Refresh"
-                @click=${()=>this._svc("button","press",r.FORCE_UPDATE)}>
-                <span class="icon">${d(c.refresh)}</span>
+                @click=${()=>this._svc("button","press",this.E.FORCE_UPDATE)}>
+                <span class="icon">${c(l.refresh)}</span>
               </button>
             </div>
           </div>
         `}
 
         <!-- ── Landing body (car + nav side-by-side in landscape) ── -->
-        ${t?"":l`
+        ${t?"":o`
           <div class="landing-body">
             <div class="landing-left">
               <div class="car-image-area">
-                ${this._imageError?l`
+                ${this._imageError?o`
                   <div class="car-image-placeholder">
-                    <span class="icon">${d(c.car)}</span>
+                    <span class="icon">${c(l.car)}</span>
                     <span>Image not found</span>
-                  </div>`:l`
+                  </div>`:o`
                   <img class="car-image"
-                    src="${this._overlayUrl(L)}"
+                    src="${this._overlayUrl(T)}"
                     alt="Tesla ${this.config.car_model}"
                     @error=${()=>{this._imageError=!0}}
                     @load=${()=>{this._imageError=!1}}
                   />
-                  ${Bt.map(m=>l`
+                  ${P.map(m=>o`
                     <img class="car-overlay"
                       src="${this._overlayUrl(m)}"
                       alt="" />`)}
-                  ${Qt?l`
+                  ${Gt?o`
                     <img class="car-overlay"
-                      src="${this._overlayUrl(Qt)}"
+                      src="${this._overlayUrl(Gt)}"
                       alt="" />`:""}
-                  ${at.map(m=>l`
+                  ${it.map(m=>o`
                     <img class="car-overlay"
                       src="${this._overlayUrl(m)}"
                       alt="" />`)}
-                  ${g&&y&&this._cableAvail?l`
+                  ${u&&w&&this._cableAvail?o`
                     <img class="car-overlay charging-glow"
                       src="${this._overlayUrl("oncharge-cable-overlay.png")}"
                       alt="" />`:""}
                 `}
-                ${this._hasCustomOverlay?l`
+                ${this._hasCustomOverlay?o`
                   <div class="car-colour-overlay"
-                    style="${this._customOverlayStyleFor(L)}"></div>`:""}
+                    style="${this._customOverlayStyleFor(T)}"></div>`:""}
               </div>
               <!-- Quick action icons: lock, controls, charge, climate -->
               <div class="quick-actions">
-                ${mt?l`
-                  <button class="quick-btn ${nt?"q-locked":"q-unlocked"}"
-                    @click=${()=>this._svc("lock",nt?"unlock":"lock",r.DOOR_LOCK)}>
-                    <span class="icon">${d(nt?c.lock:c.unlock)}</span>
-                  </button>`:l`<span style="width:48px"></span>`}
+                ${gt?o`
+                  <button class="quick-btn ${at?"q-locked":"q-unlocked"}"
+                    @click=${()=>this._svc("lock",at?"unlock":"lock",this.E.DOOR_LOCK)}>
+                    <span class="icon">${c(at?l.lock:l.unlock)}</span>
+                  </button>`:o`<span style="width:48px"></span>`}
                 <button class="quick-btn" @click=${this._toggleControls}>
-                  <span class="icon">${d(c.car)}</span>
+                  <span class="icon">${c(l.car)}</span>
                 </button>
-                <button class="quick-btn ${g?"q-active":""}" @click=${this._toggleCharger}>
-                  <span class="icon">${d(c["charge-bolt"])}</span>
+                <button class="quick-btn ${u?"q-active":""}" @click=${this._toggleCharger}>
+                  <span class="icon">${c(l["charge-bolt"])}</span>
                 </button>
                 <button class="quick-btn ${Ft?"q-active":""}" @click=${this._toggleClimate}>
-                  <span class="icon">${d(c["climate-fan"])}</span>
+                  <span class="icon">${c(l["climate-fan"])}</span>
                 </button>
               </div>
             </div>
             <div class="nav-rows">
               <button class="nav-row"
                 @click=${this._toggleControls}>
-                <span class="icon nav-icon">${d(c.car)}</span>
+                <span class="icon nav-icon">${c(l.car)}</span>
                 <div class="nav-text">
                   <span class="nav-label">Controls</span>
-                  ${qt?l`<span class="nav-sublabel">${qt}</span>`:""}
+                  ${Yt?o`<span class="nav-sublabel">${Yt}</span>`:""}
                 </div>
-                <span class="icon nav-chevron">${d(c["chevron-right"])}</span>
+                <span class="icon nav-chevron">${c(l["chevron-right"])}</span>
               </button>
               <button class="nav-row"
                 @click=${this._toggleClimate}>
-                <span class="icon nav-icon">${d(c["climate-fan"])}</span>
+                <span class="icon nav-icon">${c(l["climate-fan"])}</span>
                 <div class="nav-text">
                   <span class="nav-label">Climate</span>
-                  <span class="nav-sublabel">${Re}</span>
+                  <span class="nav-sublabel">${Te}</span>
                 </div>
-                <span class="icon nav-chevron">${d(c["chevron-right"])}</span>
+                <span class="icon nav-chevron">${c(l["chevron-right"])}</span>
               </button>
               <button class="nav-row" disabled>
-                <span class="icon nav-icon">${d(c.location)}</span>
+                <span class="icon nav-icon">${c(l.location)}</span>
                 <div class="nav-text">
                   <span class="nav-label">Location</span>
-                  ${Wt?l`<span class="nav-sublabel">${Wt}</span>`:""}
+                  ${Wt?o`<span class="nav-sublabel">${Wt}</span>`:""}
                 </div>
-                <span class="icon nav-chevron">${d(c["chevron-right"])}</span>
+                <span class="icon nav-chevron">${c(l["chevron-right"])}</span>
               </button>
               <button class="nav-row"
                 @click=${this._toggleCharger}>
-                <span class="icon nav-icon">${d(c["charge-bolt"])}</span>
+                <span class="icon nav-icon">${c(l["charge-bolt"])}</span>
                 <div class="nav-text">
                   <span class="nav-label">Charging</span>
-                  <span class="nav-sublabel">${Oe}</span>
+                  <span class="nav-sublabel">${Re}</span>
                 </div>
-                <span class="icon nav-chevron">${d(c["chevron-right"])}</span>
+                <span class="icon nav-chevron">${c(l["chevron-right"])}</span>
               </button>
               <button class="nav-row" disabled>
-                <span class="icon nav-icon">${d(c.schedule)}</span>
+                <span class="icon nav-icon">${c(l.schedule)}</span>
                 <div class="nav-text">
                   <span class="nav-label">Set Schedules</span>
                 </div>
-                <span class="icon nav-chevron">${d(c["chevron-right"])}</span>
+                <span class="icon nav-chevron">${c(l["chevron-right"])}</span>
               </button>
               <button class="nav-row" disabled>
-                <span class="icon nav-icon">${d(c.security)}</span>
+                <span class="icon nav-icon">${c(l.security)}</span>
                 <div class="nav-text">
                   <span class="nav-label">Security & Drivers</span>
-                  <span class="nav-sublabel">${Te?"Sentry Mode active":"Phone key disconnected"}</span>
+                  <span class="nav-sublabel">${Le?"Sentry Mode active":"Phone key disconnected"}</span>
                 </div>
-                <span class="icon nav-chevron">${d(c["chevron-right"])}</span>
+                <span class="icon nav-chevron">${c(l["chevron-right"])}</span>
               </button>
             </div>
           </div>
         `}
 
         <!-- ── Submenu panels ─────────────────────────────── -->
-        ${t==="charger"?l`
+        ${t==="charger"?o`
           <tesla-menu-charger
             .hass=${this.hass}
             .config=${this.config}
@@ -2855,7 +2862,7 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
             @close-menu=${this._handleCloseMenu}>
           </tesla-menu-charger>`:""}
 
-        ${t==="climate"?l`
+        ${t==="climate"?o`
           <tesla-menu-climate
             .hass=${this.hass}
             .config=${this.config}
@@ -2865,7 +2872,7 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
             @close-menu=${this._handleCloseMenu}>
           </tesla-menu-climate>`:""}
 
-        ${t==="controls"?l`
+        ${t==="controls"?o`
           <tesla-menu-controls
             .hass=${this.hass}
             .config=${this.config}
@@ -2876,7 +2883,7 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
           </tesla-menu-controls>`:""}
 
         <!-- ── Settings: main menu ─────────────────────────── -->
-        ${this._settingsView==="main"?l`
+        ${this._settingsView==="main"?o`
           <div class="settings-overlay"
             @click=${m=>this._onSettingsOverlayClick(m)}>
             <div class="settings-panel">
@@ -2888,34 +2895,34 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
               <div class="settings-rows">
                 <button class="settings-row"
                   @click=${()=>this._openModelPicker()}>
-                  <span class="icon settings-row-icon">${d(c.car)}</span>
+                  <span class="icon settings-row-icon">${c(l.car)}</span>
                   <div class="settings-row-text">
                     <span class="settings-row-label">Model & Colour</span>
-                    <span class="settings-row-sub">${Le} · ${Ne}</span>
+                    <span class="settings-row-sub">${Ne} · ${He}</span>
                   </div>
-                  <span class="icon settings-row-chevron">${d(c["chevron-right"])}</span>
+                  <span class="icon settings-row-chevron">${c(l["chevron-right"])}</span>
                 </button>
                 <div class="settings-row settings-row-static">
-                  <span class="icon settings-row-icon">${d(c.resize)}</span>
+                  <span class="icon settings-row-icon">${c(l.resize)}</span>
                   <div class="settings-row-text">
                     <span class="settings-row-label">Card Size</span>
                   </div>
                   <div class="settings-size-control">
-                    ${$e.map(m=>l`
+                    ${$e.map(m=>o`
                       <button class="settings-size-btn${this._cardSize===m?" selected":""}"
-                        @click=${Pe=>{Pe.stopPropagation(),this._setCardSize(m)}}>
+                        @click=${ze=>{ze.stopPropagation(),this._setCardSize(m)}}>
                         ${m==="small"?"S":m==="medium"?"M":"L"}
                       </button>`)}
                   </div>
                 </div>
                 <button class="settings-row"
                   @click=${()=>this._toggleLayout()}>
-                  <span class="icon settings-row-icon">${d(c.layout)}</span>
+                  <span class="icon settings-row-icon">${c(l.layout)}</span>
                   <div class="settings-row-text">
                     <span class="settings-row-label">Layout</span>
                     <span class="settings-row-sub">${this._layout==="landscape"?"Landscape":"Portrait"}</span>
                   </div>
-                  <span class="icon settings-row-chevron">${d(c["chevron-right"])}</span>
+                  <span class="icon settings-row-chevron">${c(l["chevron-right"])}</span>
                 </button>
               </div>
             </div>
@@ -2923,7 +2930,7 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
         `:""}
 
         <!-- ── Settings: model picker ──────────────────────── -->
-        ${this._settingsView==="model"?l`
+        ${this._settingsView==="model"?o`
           <tesla-model-picker
             .model=${this.config.car_model}
             .variant=${this.config.car_variant}
@@ -2934,7 +2941,7 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
           </tesla-model-picker>`:""}
 
         <!-- ── Settings: colour picker ─────────────────────── -->
-        ${this._settingsView==="colour"?l`
+        ${this._settingsView==="colour"?o`
           <tesla-colour-picker
             .selected=${e?.dir??this.config.car_color}
             .available=${Ue}
@@ -2948,7 +2955,7 @@ var De=Object.defineProperty;var Be=(n,t,e)=>t in n?De(n,t,{enumerable:!0,config
           </tesla-colour-picker>`:""}
 
       </ha-card>
-    `}getCardSize(){return 5}getGridOptions(){return{columns:12,min_columns:4,rows:"auto",min_rows:3}}};rt(H,"_imgVer",Date.now());var zt=H;customElements.define("tesla-card",zt);window.customCards=window.customCards||[];window.customCards.push({type:"tesla-card",name:"Tesla Card",description:"A Lovelace card for the alandtse/tesla Home Assistant integration",preview:!1});
+    `}getCardSize(){return 5}getGridOptions(){return{columns:12,min_columns:4,rows:"auto",min_rows:3}}};nt(U,"_imgVer",Date.now());var Pt=U;customElements.define("tesla-card",Pt);window.customCards=window.customCards||[];window.customCards.push({type:"tesla-card",name:"Tesla Card",description:"A Lovelace card for Tesla vehicles \u2014 supports both official Fleet and alandtse/tesla integrations",preview:!1});
 /*! Bundled license information:
 
 @lit/reactive-element/css-tag.js:

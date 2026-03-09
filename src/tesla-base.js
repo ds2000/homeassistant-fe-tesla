@@ -1,5 +1,5 @@
 import { LitElement } from 'lit';
-import { entityId } from './entity-config.js';
+import { entityId, getEntities } from './entity-config.js';
 
 /**
  * Shared base class for tesla-card submenu components.
@@ -17,6 +17,10 @@ export class TeslaBase extends LitElement {
       layout:       { type: String },  // 'portrait' | 'landscape'
     };
   }
+
+  // ── Entity map (integration-aware) ─────────────────────────────────────────
+
+  get E() { return getEntities(this.config?.integration); }
 
   // ── Entity helpers ──────────────────────────────────────────────────────────
 
@@ -63,6 +67,25 @@ export class TeslaBase extends LitElement {
       + `-webkit-mask-size:contain;mask-size:contain;`
       + `-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;`
       + `-webkit-mask-position:center;mask-position:center;`;
+  }
+
+  // ── Domain helper ──────────────────────────────────────────────────────────
+
+  _domainOf(t) { return t.split('.')[0]; }
+
+  /** Press a button or toggle a cover — picks the right service per domain */
+  _activate(entityTpl) {
+    const d = this._domainOf(entityTpl);
+    if (d === 'cover') return this._svc('cover', 'toggle_cover', entityTpl);
+    return this._svc(d, 'press', entityTpl);
+  }
+
+  /** Open/close — works with both cover entities and separate button entities */
+  _openClose(openTpl, closeTpl, isOpen) {
+    const tpl = isOpen ? closeTpl : openTpl;
+    const d = this._domainOf(tpl);
+    if (d === 'cover') return this._svc('cover', isOpen ? 'close_cover' : 'open_cover', tpl);
+    return this._svc(d, 'press', tpl);
   }
 
   // ── Service call ────────────────────────────────────────────────────────────

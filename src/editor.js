@@ -63,6 +63,13 @@ export class TeslaCardEditor extends LitElement {
           </select>
         </label>
         <label>
+          Integration
+          <select name="integration" .value=${this.config.integration ?? 'fleet'} @change=${this._valueChanged}>
+            <option value="fleet" ?selected=${(this.config.integration ?? 'fleet') === 'fleet'}>Tesla Fleet (official)</option>
+            <option value="custom" ?selected=${this.config.integration === 'custom'}>Tesla Custom (alandtse)</option>
+          </select>
+        </label>
+        <label>
           Image Path
           <input
             name="image_path"

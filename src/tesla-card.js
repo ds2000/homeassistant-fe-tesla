@@ -1,7 +1,7 @@
 import { LitElement, html } from 'lit';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { sharedStyles, cardStyles } from './styles.js';
-import { ENTITIES, entityId } from './entity-config.js';
+import { getEntities, entityId } from './entity-config.js';
 import { ICONS } from './icons.js';
 import { FACTORY_COLOURS } from './recolour.js';
 import { TESLA_MODELS, getVariantColours } from './models.js';
@@ -64,6 +64,9 @@ class TeslaCard extends LitElement {
   }
 
   static get styles() { return [sharedStyles, cardStyles]; }
+
+  // ── Entity map (integration-aware) ──
+  get E() { return getEntities(this.config?.integration); }
 
   constructor() {
     super();
@@ -399,30 +402,30 @@ class TeslaCard extends LitElement {
     const co = this._colourOverride;
 
     // ── Status values ──
-    const batRaw    = this._val(ENTITIES.BATTERY_LEVEL);
+    const batRaw    = this._val(this.E.BATTERY_LEVEL);
     const battery   = batRaw != null ? Math.round(Number(batRaw)) : null;
     const batPct    = battery != null ? Math.max(0, Math.min(100, battery)) : 0;
     const batCls    = batPct >= 50 ? 'high' : batPct >= 20 ? 'medium' : 'low';
-    const rangeRaw  = this._val(ENTITIES.BATTERY_RANGE);
-    const rangeUnit = this._attr(ENTITIES.BATTERY_RANGE, 'unit_of_measurement') ?? 'km';
+    const rangeRaw  = this._val(this.E.BATTERY_RANGE);
+    const rangeUnit = this._attr(this.E.BATTERY_RANGE, 'unit_of_measurement') ?? 'km';
     const range     = rangeRaw != null ? `${Math.round(Number(rangeRaw))} ${rangeUnit}` : null;
-    const charging  = this._val(ENTITIES.CHARGING) === 'on';
-    const online    = this._val(ENTITIES.ONLINE) === 'on';
-    const onlineEnt = this._state(ENTITIES.ONLINE);
+    const charging  = this._val(this.E.CHARGING) === 'on';
+    const online    = this._val(this.E.ONLINE) === 'on';
+    const onlineEnt = this._state(this.E.ONLINE);
 
     // Car image — overlay stacking
-    const frunkOpen       = this._val(ENTITIES.FRUNK_COVER) === 'open'
-                         || this._val(ENTITIES.FRUNK)         === 'on';
-    const trunkOpen       = this._val(ENTITIES.TRUNK)         === 'on';
-    const pluggedIn       = this._val(ENTITIES.PLUGGED_IN)    === 'on';
-    const chargerDoorOpen = this._val(ENTITIES.CHARGER_DOOR) === 'open' || pluggedIn;
+    const frunkOpen       = this._val(this.E.FRUNK_COVER) === 'open'
+                         || this._val(this.E.FRUNK)         === 'on';
+    const trunkOpen       = this._val(this.E.TRUNK)         === 'on';
+    const pluggedIn       = this._val(this.E.PLUGGED_IN)    === 'on';
+    const chargerDoorOpen = this._val(this.E.CHARGER_DOOR) === 'open' || pluggedIn;
 
     // Individual door states from binary_sensor.{car_name}_doors attributes
     const doorState = {
-      nf: this._attr(ENTITIES.DOORS, 'driver_front')    === true,
-      nr: this._attr(ENTITIES.DOORS, 'driver_rear')     === true,
-      ff: this._attr(ENTITIES.DOORS, 'passenger_front') === true,
-      fr: this._attr(ENTITIES.DOORS, 'passenger_rear')  === true,
+      nf: this._attr(this.E.DOORS, 'driver_front')    === true,
+      nr: this._attr(this.E.DOORS, 'driver_rear')     === true,
+      ff: this._attr(this.E.DOORS, 'passenger_front') === true,
+      fr: this._attr(this.E.DOORS, 'passenger_rear')  === true,
     };
 
     // When plugged in and on-charge images exist, switch to rear 3/4 view
@@ -488,22 +491,22 @@ class TeslaCard extends LitElement {
     }
 
     // ── Derived display values for nav rows ──
-    const lockState   = this._val(ENTITIES.DOOR_LOCK);
+    const lockState   = this._val(this.E.DOOR_LOCK);
     const isLocked    = lockState === 'locked';
-    const chgState    = this._val(ENTITIES.CHARGING_STATE) ?? '—';
-    const chgRate     = this._val(ENTITIES.CHARGE_RATE);
-    const chgRateUnit = this._attr(ENTITIES.CHARGE_RATE, 'unit_of_measurement') ?? 'kW';
-    const climState   = this._val(ENTITIES.CLIMATE);
+    const chgState    = this._val(this.E.CHARGING_STATE) ?? '—';
+    const chgRate     = this._val(this.E.CHARGE_RATE);
+    const chgRateUnit = this._attr(this.E.CHARGE_RATE, 'unit_of_measurement') ?? 'kW';
+    const climState   = this._val(this.E.CLIMATE);
     const climOn      = climState != null && climState !== 'off' && climState !== 'unavailable';
-    const tgtTempRaw  = this._attr(ENTITIES.CLIMATE, 'temperature');
-    const tempUnit    = this._attr(ENTITIES.CLIMATE, 'temperature_unit') ?? '°C';
+    const tgtTempRaw  = this._attr(this.E.CLIMATE, 'temperature');
+    const tempUnit    = this._attr(this.E.CLIMATE, 'temperature_unit') ?? '°C';
     const tempStr     = tgtTempRaw != null ? Number(tgtTempRaw).toFixed(1) : '—';
 
     const statusText = !online && onlineEnt ? 'Asleep'
-      : this._val(ENTITIES.PARKING_BRAKE) === 'on' ? 'Parked'
+      : this._val(this.E.PARKING_BRAKE) === 'on' ? 'Parked'
       : (() => {
           if (!this.config.show_speed) return null;
-          const s = this._attr(ENTITIES.LOCATION, 'speed');
+          const s = this._attr(this.E.LOCATION, 'speed');
           return s != null && Number(s) > 0 ? `${Math.round(Number(s))} km/h` : null;
         })();
 
@@ -514,13 +517,13 @@ class TeslaCard extends LitElement {
     const controlsSub = lockState ? (isLocked ? 'Locked' : 'Unlocked') : null;
 
     // Location sublabel from device_tracker
-    const locationState = this._val(ENTITIES.LOCATION);
+    const locationState = this._val(this.E.LOCATION);
     const locationSub   = locationState
       ? locationState.charAt(0).toUpperCase() + locationState.slice(1).replace(/_/g, ' ')
       : null;
 
     // Sentry mode for Security & Drivers row
-    const sentryOn = this._val(ENTITIES.SENTRY_MODE) === 'on';
+    const sentryOn = this._val(this.E.SENTRY_MODE) === 'on';
 
     // ── Settings sublabels ──
     const curModel   = TESLA_MODELS.find(m => m.id === this.config.car_model);
@@ -564,7 +567,7 @@ class TeslaCard extends LitElement {
                 <span class="icon">${unsafeHTML(ICONS.settings)}</span>
               </button>
               <button class="icon-btn" title="Refresh"
-                @click=${() => this._svc('button', 'press', ENTITIES.FORCE_UPDATE)}>
+                @click=${() => this._svc('button', 'press', this.E.FORCE_UPDATE)}>
                 <span class="icon">${unsafeHTML(ICONS.refresh)}</span>
               </button>
             </div>
@@ -612,7 +615,7 @@ class TeslaCard extends LitElement {
               <div class="quick-actions">
                 ${lockState ? html`
                   <button class="quick-btn ${isLocked ? 'q-locked' : 'q-unlocked'}"
-                    @click=${() => this._svc('lock', isLocked ? 'unlock' : 'lock', ENTITIES.DOOR_LOCK)}>
+                    @click=${() => this._svc('lock', isLocked ? 'unlock' : 'lock', this.E.DOOR_LOCK)}>
                     <span class="icon">${unsafeHTML(isLocked ? ICONS.lock : ICONS.unlock)}</span>
                   </button>` : html`<span style="width:48px"></span>`}
                 <button class="quick-btn" @click=${this._toggleControls}>
@@ -806,6 +809,6 @@ window.customCards = window.customCards || [];
 window.customCards.push({
   type:        'tesla-card',
   name:        'Tesla Card',
-  description: 'A Lovelace card for the alandtse/tesla Home Assistant integration',
+  description: 'A Lovelace card for Tesla vehicles — supports both official Fleet and alandtse/tesla integrations',
   preview:     false,
 });

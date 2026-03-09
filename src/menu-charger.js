@@ -1,7 +1,7 @@
 import { html } from 'lit';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { TeslaBase } from './tesla-base.js';
-import { ENTITIES } from './entity-config.js';
+
 import { sharedStyles, chargerStyles } from './styles.js';
 import { ICONS } from './icons.js';
 
@@ -34,7 +34,7 @@ class TeslaMenuCharger extends TeslaBase {
 
   _onLimitChange(e) {
     this._pendingLimit = null;
-    this._svc('number', 'set_value', ENTITIES.CHARGE_LIMIT_NUMBER, { value: +e.target.value });
+    this._svc('number', 'set_value', this.E.CHARGE_LIMIT_NUMBER, { value: +e.target.value });
   }
 
   _onAmpsInput(e) {
@@ -44,18 +44,18 @@ class TeslaMenuCharger extends TeslaBase {
 
   _onAmpsChange(e) {
     this._pendingAmps = null;
-    this._svc('number', 'set_value', ENTITIES.CHARGING_AMPS_NUMBER, { value: +e.target.value });
+    this._svc('number', 'set_value', this.E.CHARGING_AMPS_NUMBER, { value: +e.target.value });
   }
 
   _adjustAmps(delta) {
-    const step = this._nattr(ENTITIES.CHARGING_AMPS_NUMBER, 'step') ?? 1;
-    const min  = this._nattr(ENTITIES.CHARGING_AMPS_NUMBER, 'min')  ?? 5;
-    const max  = this._nattr(ENTITIES.CHARGING_AMPS_NUMBER, 'max')  ?? 32;
-    const cur  = this._pendingAmps ?? Number(this._val(ENTITIES.CHARGING_AMPS_NUMBER) ?? 16);
+    const step = this._nattr(this.E.CHARGING_AMPS_NUMBER, 'step') ?? 1;
+    const min  = this._nattr(this.E.CHARGING_AMPS_NUMBER, 'min')  ?? 5;
+    const max  = this._nattr(this.E.CHARGING_AMPS_NUMBER, 'max')  ?? 32;
+    const cur  = this._pendingAmps ?? Number(this._val(this.E.CHARGING_AMPS_NUMBER) ?? 16);
     this._pendingAmps = Math.max(min, Math.min(max, cur + delta * step));
     clearTimeout(this._ampsTimer);
     this._ampsTimer = setTimeout(() => {
-      this._svc('number', 'set_value', ENTITIES.CHARGING_AMPS_NUMBER, { value: this._pendingAmps });
+      this._svc('number', 'set_value', this.E.CHARGING_AMPS_NUMBER, { value: this._pendingAmps });
       this._pendingAmps = null;
     }, 800);
   }
@@ -65,24 +65,24 @@ class TeslaMenuCharger extends TeslaBase {
   render() {
     if (!this.config || !this.hass) return html``;
 
-    const rangeRaw  = this._val(ENTITIES.BATTERY_RANGE);
-    const rangeUnit = this._attr(ENTITIES.BATTERY_RANGE, 'unit_of_measurement') ?? 'km';
+    const rangeRaw  = this._val(this.E.BATTERY_RANGE);
+    const rangeUnit = this._attr(this.E.BATTERY_RANGE, 'unit_of_measurement') ?? 'km';
     const range     = rangeRaw != null ? `${Math.round(Number(rangeRaw))} ${rangeUnit}` : null;
 
-    const chargerDoorOpen = this._val(ENTITIES.CHARGER_DOOR) === 'open'
-                         || this._val(ENTITIES.PLUGGED_IN)    === 'on';
+    const chargerDoorOpen = this._val(this.E.CHARGER_DOOR) === 'open'
+                         || this._val(this.E.PLUGGED_IN)    === 'on';
 
-    const limitVal  = this._pendingLimit ?? Number(this._val(ENTITIES.CHARGE_LIMIT_NUMBER) ?? 80);
-    const limitMin  = this._nattr(ENTITIES.CHARGE_LIMIT_NUMBER, 'min')  ?? 50;
-    const limitMax  = this._nattr(ENTITIES.CHARGE_LIMIT_NUMBER, 'max')  ?? 100;
-    const limitStep = this._nattr(ENTITIES.CHARGE_LIMIT_NUMBER, 'step') ?? 1;
+    const limitVal  = this._pendingLimit ?? Number(this._val(this.E.CHARGE_LIMIT_NUMBER) ?? 80);
+    const limitMin  = this._nattr(this.E.CHARGE_LIMIT_NUMBER, 'min')  ?? 50;
+    const limitMax  = this._nattr(this.E.CHARGE_LIMIT_NUMBER, 'max')  ?? 100;
+    const limitStep = this._nattr(this.E.CHARGE_LIMIT_NUMBER, 'step') ?? 1;
     const limitPct  = this._pct(limitVal, limitMin, limitMax);
 
-    const ampsVal   = this._pendingAmps ?? Number(this._val(ENTITIES.CHARGING_AMPS_NUMBER) ?? 16);
-    const ampsMin   = this._nattr(ENTITIES.CHARGING_AMPS_NUMBER, 'min') ?? 5;
-    const ampsMax   = this._nattr(ENTITIES.CHARGING_AMPS_NUMBER, 'max') ?? 32;
+    const ampsVal   = this._pendingAmps ?? Number(this._val(this.E.CHARGING_AMPS_NUMBER) ?? 16);
+    const ampsMin   = this._nattr(this.E.CHARGING_AMPS_NUMBER, 'min') ?? 5;
+    const ampsMax   = this._nattr(this.E.CHARGING_AMPS_NUMBER, 'max') ?? 32;
 
-    const addedRange = this._attr(ENTITIES.ENERGY_ADDED, 'added_range');
+    const addedRange = this._attr(this.E.ENERGY_ADDED, 'added_range');
 
     return html`
       <div class="charger-menu${this.layout === 'landscape' ? ' landscape' : ''}">
@@ -130,7 +130,7 @@ class TeslaMenuCharger extends TeslaBase {
 
         <!-- Open / Close Charge Port — plain text link -->
         <button class="chg-port-btn"
-          @click=${() => this._svc('button', 'press', chargerDoorOpen ? ENTITIES.CHARGE_PORT_CLOSE : ENTITIES.CHARGE_PORT_OPEN)}>
+          @click=${() => this._openClose(this.E.CHARGE_PORT_OPEN, this.E.CHARGE_PORT_CLOSE, chargerDoorOpen)}>
           ${chargerDoorOpen ? 'Close Charge Port' : 'Open Charge Port'}
         </button>
 
