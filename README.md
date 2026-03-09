@@ -1,10 +1,10 @@
 # Tesla Card for Home Assistant
 
-A custom Lovelace card for the [alandtse/tesla](https://github.com/alandtse/tesla) integration. Control your Tesla directly from your Home Assistant dashboard with a clean, app-style interface.
+A custom Lovelace card for Tesla vehicles in Home Assistant. Supports both the **official [Tesla Fleet](https://www.home-assistant.io/integrations/tesla_fleet/)** integration and the **[alandtse/tesla](https://github.com/alandtse/tesla)** custom integration. Control your Tesla directly from your dashboard with a clean, app-style interface.
 
 [![Add to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=ds2000&repository=homeassistant-fe-tesla&category=plugin)
 
-If you find this card useful: [<img src="/images/bmac.jpeg" height="32">](https://www.buymeacoffee.com/daveshaw301)
+If you find this card useful: [<img src="images/bmac.jpeg" height="32">](https://www.buymeacoffee.com/daveshaw301)
 
 | Landing | Charging | Doors Open |
 |---------|----------|-----------|
@@ -57,7 +57,9 @@ Or manually: open HACS, click **Frontend** > **+**, search for **Tesla Card**, a
 ## Prerequisites
 
 1. A working [Home Assistant](https://www.home-assistant.io/) installation
-2. The [alandtse/tesla](https://github.com/alandtse/tesla) integration installed and configured
+2. One of:
+   - The official [Tesla Fleet](https://www.home-assistant.io/integrations/tesla_fleet/) integration (default), or
+   - The [alandtse/tesla](https://github.com/alandtse/tesla) custom integration
 
 ---
 
@@ -74,10 +76,11 @@ car_name: my_tesla
 
 | Option | Required | Default | Description |
 |--------|----------|---------|-------------|
-| `car_name` | **Yes** | -- | Entity prefix for your car (e.g. `my_tesla` for `sensor.my_tesla_battery`) |
+| `car_name` | **Yes** | -- | Entity prefix for your car (e.g. `my_tesla` for `sensor.my_tesla_battery_level`) |
+| `integration` | No | `fleet` | `fleet` for official Tesla Fleet, `custom` for alandtse/tesla |
 | `car_model` | No | `3` | Model number: `3`, `Y`, `S`, or `X` |
 | `car_color` | No | `red_multi_coat` | Colour ID matching the image folder name |
-| `image_path` | No | `/local/Tesla` | Base path where car images are stored |
+| `image_path` | No | `/hacsfiles/homeassistant-fe-tesla` | Base path where car images are stored |
 | `name` | No | _(car_name)_ | Display name shown at the top of the card |
 | `show_speed` | No | `true` | Show the Parked / speed status column |
 
@@ -86,9 +89,9 @@ car_name: my_tesla
 ```yaml
 type: custom:tesla-card
 car_name: my_tesla
+integration: fleet
 car_model: "3"
 car_color: red_multi_coat
-image_path: /local/Tesla
 name: My Tesla
 show_speed: true
 ```
@@ -101,57 +104,70 @@ The card includes a built-in GUI editor. Click the pencil icon on the card in th
 
 ## Entity Reference
 
-All entity IDs are derived from your `car_name` value automatically. Replace `{car_name}` with your value (e.g. `my_tesla`).
+All entity IDs are derived from your `car_name` value automatically. The card maps to the correct entity names based on the `integration` setting.
 
-### Sensors (read-only)
+<details>
+<summary><strong>Tesla Fleet (official) entities</strong></summary>
 
-| Entity ID | Used for |
-|-----------|----------|
+| Entity | Used for |
+|--------|----------|
+| `sensor.{car_name}_battery_level` | Battery percentage |
+| `sensor.{car_name}_battery_range` | Remaining range |
+| `sensor.{car_name}_charging` | Charging state label |
+| `sensor.{car_name}_charge_rate` | Current charge rate |
+| `sensor.{car_name}_inside_temperature` | Cabin temperature |
+| `lock.{car_name}_door_lock` | Door lock/unlock |
+| `climate.{car_name}_climate` | HVAC on/off, target temperature |
+| `cover.{car_name}_charge_port_door` | Open/close charge port |
+| `cover.{car_name}_frunk` | Open frunk |
+| `cover.{car_name}_trunk` | Open/close trunk |
+| `cover.{car_name}_windows` | Vent/close windows |
+| `number.{car_name}_charge_limit` | Charge limit slider |
+| `number.{car_name}_charge_current` | Charging amps slider |
+| `switch.{car_name}_sentry_mode` | Sentry mode toggle |
+| `switch.{car_name}_defrost` | Defrost toggle |
+| `climate.{car_name}_cabin_overheat_protection` | Cabin overheat protection |
+| `select.{car_name}_seat_heater_front_left` | Left seat heat level |
+| `select.{car_name}_seat_heater_front_right` | Right seat heat level |
+| `button.{car_name}_honk_horn` | Honk horn |
+| `button.{car_name}_flash_lights` | Flash lights |
+| `button.{car_name}_keyless_driving` | Remote start |
+| `button.{car_name}_wake` | Force data update |
+
+</details>
+
+<details>
+<summary><strong>Tesla Custom (alandtse) entities</strong></summary>
+
+| Entity | Used for |
+|--------|----------|
 | `sensor.{car_name}_battery` | Battery percentage |
 | `sensor.{car_name}_battery_range` | Remaining range |
 | `sensor.{car_name}_charging_state` | Charging state label |
-| `sensor.{car_name}_charge_rate` | Current charge rate (kW) |
-| `sensor.{car_name}_charge_limit` | Charge limit (read display) |
+| `sensor.{car_name}_charge_rate` | Current charge rate |
 | `sensor.{car_name}_temperature_inside` | Cabin temperature |
-| `sensor.{car_name}_speed` | Speed (fallback) |
-
-### Binary sensors (read-only)
-
-| Entity ID | Used for |
-|-----------|----------|
-| `binary_sensor.{car_name}_online` | Online/Offline badge |
-| `binary_sensor.{car_name}_charging` | Battery bar bolt, charging state |
-| `binary_sensor.{car_name}_plugged_in` | Charge port image, Start button state |
-| `binary_sensor.{car_name}_parking_brake` | Parked/speed status |
-| `binary_sensor.{car_name}_frunk` | Frunk image + state badge |
-| `binary_sensor.{car_name}_trunk` | Trunk state badge |
-| `binary_sensor.{car_name}_sentry_mode` | Sentry mode indicator |
-
-### Controllable entities
-
-| Entity ID | Used for |
-|-----------|----------|
 | `lock.{car_name}_doors` | Door lock/unlock |
-| `switch.{car_name}_charger` | Start/stop charging |
-| `switch.{car_name}_sentry_mode` | Sentry mode toggle |
-| `switch.{car_name}_defrost` | Defrost toggle |
-| `select.{car_name}_heated_seat_left` | Left seat heat level |
-| `select.{car_name}_heated_seat_right` | Right seat heat level |
 | `climate.{car_name}_hvac_climate_system` | HVAC on/off, target temperature |
-| `number.{car_name}_charge_limit` | Charge limit slider |
-| `number.{car_name}_charging_amps` | Charging amps slider |
 | `button.{car_name}_charge_port_open` | Open charge port |
 | `button.{car_name}_charge_port_close` | Close charge port |
 | `button.{car_name}_frunk` | Open frunk |
 | `button.{car_name}_trunk` | Open/close trunk |
-| `button.{car_name}_vent_windows` | Vent windows |
-| `button.{car_name}_close_windows` | Close windows |
+| `cover.{car_name}_windows` | Vent/close windows |
+| `number.{car_name}_charge_limit` | Charge limit slider |
+| `number.{car_name}_charging_amps` | Charging amps slider |
+| `switch.{car_name}_sentry_mode` | Sentry mode toggle |
+| `switch.{car_name}_defrost` | Defrost toggle |
+| `select.{car_name}_cabin_overheat_protection` | Cabin overheat protection |
+| `select.{car_name}_heated_seat_left` | Left seat heat level |
+| `select.{car_name}_heated_seat_right` | Right seat heat level |
 | `button.{car_name}_horn` | Honk horn |
 | `button.{car_name}_flash_lights` | Flash lights |
 | `button.{car_name}_remote_start` | Remote start |
-| `device_tracker.{car_name}_location_tracker` | Speed attribute (when not parked) |
+| `button.{car_name}_force_data_update` | Force data update |
 
-Not all entities need to exist -- the card silently skips any that are unavailable.
+</details>
+
+Not all entities need to exist — the card silently skips any that are unavailable.
 
 ---
 

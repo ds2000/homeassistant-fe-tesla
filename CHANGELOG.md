@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.4.0] - 2026-03-09
+
+### Added
+- **Official Tesla Fleet integration support** — card now works with both the official [Tesla Fleet](https://www.home-assistant.io/integrations/tesla_fleet/) integration and the [alandtse/tesla](https://github.com/alandtse/tesla) custom integration
+- **Integration selector** in card editor — dropdown to choose between Tesla Fleet (default) and Tesla Custom
+- **Integration-aware service calls** — charge port, trunk, and cabin overheat protection automatically use the correct HA service domain (cover vs button, climate vs select) based on integration type
+
+### Changed
+- Entity config rewritten with dual `FLEET` / `CUSTOM` entity maps — all components use `this.E.` getter instead of hardcoded `ENTITIES.` constants
+- `TeslaBase` gains `_domainOf()`, `_activate()`, and `_openClose()` helpers for cross-integration service calls
+- README updated with dual-integration docs, corrected default image path, and collapsible entity reference tables
+- Card description updated to reflect dual-integration support
+
+### Fixed
+- Buy Me A Coffee image broken on GitHub (leading `/` in image path)
+
 ## [0.3.4] - 2026-03-09
 
 ### Added
