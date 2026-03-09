@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.3.4] - 2026-03-09
+
+### Added
+- **Stealth Grey** colour added to Model 3 Highland (3.2), Model Y 2020–2024 (Y.1), Model Y Juniper (Y.2), Model S Refresh (S.2), and Model X Refresh (X.2)
+
 ## [0.3.0] - 2026-03-03
 
 ### Added

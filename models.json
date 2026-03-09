@@ -70,6 +70,11 @@
               "id": "midnight_cherry_red",
               "name": "Midnight Cherry Red",
               "swatch": "#850029"
+            },
+            {
+              "id": "stealth_grey",
+              "name": "Stealth Grey",
+              "swatch": "#515356"
             }
           ]
         }
@@ -117,6 +122,11 @@
               "id": "quicksilver",
               "name": "Quicksilver",
               "swatch": "#9e9a91"
+            },
+            {
+              "id": "stealth_grey",
+              "name": "Stealth Grey",
+              "swatch": "#515356"
             }
           ]
         },
@@ -148,6 +158,11 @@
               "id": "midnight_cherry_red",
               "name": "Midnight Cherry Red",
               "swatch": "#850029"
+            },
+            {
+              "id": "stealth_grey",
+              "name": "Stealth Grey",
+              "swatch": "#515356"
             }
           ]
         }
@@ -226,6 +241,11 @@
               "id": "quicksilver",
               "name": "Quicksilver",
               "swatch": "#9e9a91"
+            },
+            {
+              "id": "stealth_grey",
+              "name": "Stealth Grey",
+              "swatch": "#515356"
             }
           ]
         }
@@ -304,6 +324,11 @@
               "id": "quicksilver",
               "name": "Quicksilver",
               "swatch": "#9e9a91"
+            },
+            {
+              "id": "stealth_grey",
+              "name": "Stealth Grey",
+              "swatch": "#515356"
             }
           ]
         }
