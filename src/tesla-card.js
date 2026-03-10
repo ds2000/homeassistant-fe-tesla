@@ -27,6 +27,12 @@ const COMBINED_OVERLAYS = {
   'ff+fr': 'ff-fr-combined-overlay.png',
 };
 
+// When ALL four doors are open, use a single all-doors overlay instead of
+// compositing two combined overlays — through the glass of one side, the
+// base image would show closed body instead of the other side's open doors.
+const ALL_DOORS_OVERLAY          = 'all-doors-overlay.png';
+const ALL_DOORS_OVERLAY_ONCHARGE = 'oncharge-all-doors-overlay.png';
+
 // On-charge (rear 3/4 view): different z-order, no chargeport or ff overlays.
 // Files use 'oncharge-' prefix so both sets coexist in the same directory.
 // fr renders below trunk (far-rear door is behind the trunk lid in rear 3/4 view).
@@ -79,7 +85,7 @@ class TeslaCard extends LitElement {
     this._settingsSlide   = null;
     this._cardSize        = 'medium';
     this._baseConfig      = null;
-    this._combinedAvail   = {};   // { 'nf+nr': true/false, 'ff+fr': true/false, 'oc_nf+nr': ... }
+    this._combinedAvail   = {};   // { 'nf+nr': true/false, 'ff+fr': true/false, 'oc_nf+nr': ..., 'all': ..., 'oc_all': ... }
     this._onchargeAvail   = false; // whether oncharge-base.png exists for current colour
     this._cableAvail      = false; // whether oncharge-cable-overlay.png exists
     // Pre-bound so Lit reuses the same function reference across renders
@@ -148,6 +154,15 @@ class TeslaCard extends LitElement {
       img.onerror = () => { this._combinedAvail['oc_' + key] = false; };
       img.src = this._overlayUrl(filename);
     }
+    // All-doors overlays (all 4 doors open simultaneously)
+    const allProbe = new Image();
+    allProbe.onload = () => { this._combinedAvail['all'] = true; this.requestUpdate(); };
+    allProbe.onerror = () => { this._combinedAvail['all'] = false; };
+    allProbe.src = this._overlayUrl(ALL_DOORS_OVERLAY);
+    const ocAllProbe = new Image();
+    ocAllProbe.onload = () => { this._combinedAvail['oc_all'] = true; this.requestUpdate(); };
+    ocAllProbe.onerror = () => { this._combinedAvail['oc_all'] = false; };
+    ocAllProbe.src = this._overlayUrl(ALL_DOORS_OVERLAY_ONCHARGE);
   }
 
   static getConfigElement() {
@@ -460,15 +475,24 @@ class TeslaCard extends LitElement {
       activeOverlays.ff = doorState.ff;
     }
 
+    // Check for all-doors overlay (all 4 doors open simultaneously).
+    // Uses a single overlay from the all_doors screenshot instead of
+    // compositing individual/combined overlays — eliminates through-glass
+    // artifacts where the base image body is visible instead of open doors.
+    const allDoorsKey = useOncharge ? 'oc_all' : 'all';
+    const allDoorsOpen = doorState.nf && doorState.nr && (useOncharge || doorState.ff) && (useOncharge || doorState.fr);
+    const useAllDoors = allDoorsOpen && this._combinedAvail[allDoorsKey];
+
     // Check for combined overlays (both same-side doors open)
     const combinedKey = useOncharge ? 'oc_nf+nr' : 'nf+nr';
-    const useNfNrCombined = doorState.nf && doorState.nr && this._combinedAvail[combinedKey];
-    const useFfFrCombined = !useOncharge && doorState.ff && doorState.fr && this._combinedAvail['ff+fr'];
+    const useNfNrCombined = !useAllDoors && doorState.nf && doorState.nr && this._combinedAvail[combinedKey];
+    const useFfFrCombined = !useAllDoors && !useOncharge && doorState.ff && doorState.fr && this._combinedAvail['ff+fr'];
     const combinedMap = useOncharge ? COMBINED_OVERLAYS_ONCHARGE : COMBINED_OVERLAYS;
 
     // Overlays below trunk (oncharge: fr is behind trunk lid)
     const belowTrunkFiles = [];
     for (const name of belowTrunk) {
+      if (useAllDoors && (name === 'fr' || name === 'ff' || name === 'nf' || name === 'nr')) continue;
       if (activeOverlays[name]) belowTrunkFiles.push(`${prefix}${name}-overlay.png`);
     }
 
@@ -479,9 +503,22 @@ class TeslaCard extends LitElement {
     const overlayFiles = [];
     let nfNrFirstSeen = false;
     let ffFrFirstSeen = false;
+    let allDoorsInserted = false;
 
     for (const name of zOrder) {
       if (!activeOverlays[name]) continue;
+
+      // When using all-doors overlay, skip individual door overlays and
+      // insert the all-doors overlay at the topmost door position
+      if (useAllDoors && (name === 'nf' || name === 'nr' || name === 'ff' || name === 'fr')) {
+        if (!allDoorsInserted) {
+          // Defer insertion — we want it at the LAST door position in z-order
+        } else {
+          continue;
+        }
+        allDoorsInserted = true;
+        continue;
+      }
 
       // Skip individual doors when using combined overlay;
       // insert combined at the position of the last constituent in z-order
@@ -497,6 +534,12 @@ class TeslaCard extends LitElement {
       }
 
       overlayFiles.push(`${prefix}${name}-overlay.png`);
+    }
+
+    // Insert all-doors overlay at the end (topmost, nearest to camera)
+    if (useAllDoors) {
+      const allDoorsFile = useOncharge ? ALL_DOORS_OVERLAY_ONCHARGE : ALL_DOORS_OVERLAY;
+      overlayFiles.push(allDoorsFile);
     }
 
     // ── Derived display values for nav rows ──

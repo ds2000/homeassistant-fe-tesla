@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.1] - 2026-03-10
+
+### Added
+- **All-doors overlay** — when all 4 doors are open, the card uses a single `all-doors-overlay.png` from the actual all-doors screenshot instead of compositing two combined overlays, eliminating through-glass artifacts where the base image body was visible
+
+### Fixed
+- **Climate panel car bottom correction** — on models where a full-width UI drag bar sits below the car (Model Y), the car mask no longer includes HVAC controls, fixing crop bounds and SSS seat heater icon inpainting
+
 ## [0.4.0] - 2026-03-09
 
 ### Added
