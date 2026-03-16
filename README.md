@@ -4,7 +4,7 @@ A custom Lovelace card for Tesla vehicles in Home Assistant. Supports both the *
 
 [![Add to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=ds2000&repository=homeassistant-fe-tesla&category=plugin)
 
-If you find this card useful: [<img src="images/bmac.jpeg" height="32">](https://www.buymeacoffee.com/daveshaw301)
+If you find this card useful: [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-donate-yellow?logo=buy-me-a-coffee&logoColor=white)](https://www.buymeacoffee.com/daveshaw301)
 
 | Landing | Charging | Doors Open |
 |---------|----------|-----------|
