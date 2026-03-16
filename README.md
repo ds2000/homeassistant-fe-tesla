@@ -22,16 +22,25 @@ If you find this card useful: [![Buy Me A Coffee](https://img.shields.io/badge/B
 - **On-charge mode** — automatically switches to charging images when plugged in, with an animated green glow on the charging cable
 - **Default view** — car image with battery bar, range, parked/speed status, inside temperature
 - **Charger menu** — charging state, charge port open/close, start/stop charging, charge limit slider, charging amps slider
-- **Climate menu** — HVAC on/off, temperature stepper, defrost toggle, heated seat levels (Off/Low/Med/High per seat), window vent/close
+- **Climate menu** — HVAC on/off, temperature stepper, defrost toggle, heated front seats (Off/Low/Med/High), camp mode, dog mode, cabin overheat protection, window vent/close
 - **Controls menu** — door lock/unlock, frunk open, trunk open/close, charge port, remote start, horn, flash lights, window vent/close
 - **Animated climate indicator** — spinning fan icon on landing page when HVAC is active
 - **Custom entity mapping** — use any HA entities (MQTT, third-party integrations) via the built-in entity picker
 - **Landscape layout** — optional wide layout with side-by-side panels
+- **Smart refresh** — wake button wakes the car and forces HA to re-poll all entities
 - **Multiple models & colours** — Model 3, Y, S, X with community-contributed colour variants
 
 **No helper entities required.** Menu state is managed entirely inside the card.
 
 **No card dependencies required.** Single self-contained JS file.
+
+### Roadmap
+
+- Heated steering wheel control
+- More factory colours for all models
+- Additional car models and variants
+
+Help us grow the image library — submit your car's screenshots via the [Image Uploader](https://ds2000.github.io/homeassistant-fe-tesla-image-uploader) (beta).
 
 ---
 
@@ -198,7 +207,7 @@ Not all entities need to exist — the card silently skips any that are unavaila
 
 All contributions are welcome:
 
-- **New car images** -- submit via the [Image Uploader](https://ds2000.github.io/homeassistant-fe-tesla-image-uploader), or add a folder under `images/models/{model}/{variant}/{colour}/`
+- **New car images** — submit via the [Image Uploader](https://ds2000.github.io/homeassistant-fe-tesla-image-uploader) (beta), or manually add a folder under `images/models/{model}/{variant}/{colour}/`
 - **Bug reports** -- open an issue with your HA version, integration version, and what you expected vs what happened
 - **Pull requests** -- please follow the one-feature-at-a-time rule and test against a live HA instance before submitting
 

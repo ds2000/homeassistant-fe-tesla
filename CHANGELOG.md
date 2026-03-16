@@ -1,25 +1,31 @@
 # Changelog
 
-## [1.0.0] - 2026-03-16
+## [0.5.8] - 2026-03-16
 
 ### Added
-- **Custom Entities mode** — new "Custom Entities" integration option in the editor lets users map every entity individually using HA's native entity picker with autocomplete. Supports MQTT, third-party integrations, or any non-standard entity naming. Entities are grouped into 9 collapsible categories (Sensors, Status, Doors, Windows, Lock, Climate, Charging, Covers & Buttons, Location) with a count badge showing configured vs total entities.
+- **Custom Entities mode** — new "Custom Entities" integration option in the editor lets users map every entity individually with autocomplete. Supports MQTT, third-party integrations, or any non-standard entity naming. Entities are grouped into 9 collapsible categories (Sensors, Status, Doors, Windows, Lock, Climate, Charging, Covers & Buttons, Location) with a count badge showing configured vs total.
 - **Camp Mode & Dog Mode** for Tesla Fleet — Fleet integration now uses `climate.set_preset_mode` to activate camp/dog modes via the climate entity's preset modes, in addition to the existing switch-based support for the custom integration.
+- **Smart refresh** — refresh button wakes the car then batch re-polls all key entities after 5 seconds, forcing HA to fetch fresh data from the Fleet API.
 - **Conditional rear seat heaters** — rear seat heater controls only render if the entities exist in HA, accommodating cars and integrations that don't expose them.
 - **Spinning climate fan** — when climate is active, the fan icon in both the quick actions bar and the nav row gently rotates (6s per revolution) for an obvious visual indicator.
 - **Active climate nav row** — Climate nav row icon turns white and sublabel shows the target temperature when HVAC is on.
+- **Smart status text** — shows "Asleep" when offline, "Charging" when charge switch is on, "Parked" when online but stationary, or speed in km/h when moving.
 
 ### Fixed
 - **Fleet entity names corrected** — `cover.{car_name}_froot` and `cover.{car_name}_boot` are the real Fleet integration defaults (not `frunk`/`trunk`). Entity config updated to match.
 - **No `toggle_cover` on Fleet** — the Tesla Fleet integration rejects `toggle_cover` calls. All cover controls now use explicit `open_cover`/`close_cover` based on current state.
 - **Frunk is open-only** — frunk button now calls `open_cover` only and disables when already open (must be physically closed).
+- **Case-insensitive car name** — `car_name` is now auto-lowercased so `Terrance` and `terrance` both work.
 - **Case-insensitive seat heater levels** — Fleet uses lowercase (`off`, `low`, `medium`, `high`); seat heat file matching is now case-insensitive.
+- **Unlocked padlock icon** — now white instead of dimmed, matching locked state visibility.
 - **Buy Me A Coffee badge** — replaced broken local image with shields.io badge that renders in HACS and GitHub.
 
 ### Changed
 - Removed Location, Set Schedules, and Security & Drivers nav rows — these features are not available through the Fleet API.
 - Active nav row chevron no longer rotates or changes colour — stays pointing right with default styling.
 - Active nav row sublabel colour changed from red to white.
+- Lint cleanup: removed unused variables, added test/ to .gitignore.
+- Security audit: 0 hardcoded secrets, 0 eval/injection vectors, 0 external runtime URLs, 0 npm vulnerabilities.
 
 ## [0.4.1] - 2026-03-10
 
