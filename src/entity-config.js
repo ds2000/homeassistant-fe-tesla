@@ -71,13 +71,13 @@ const FLEET = {
   HORN:                 'button.{car_name}_honk_horn',
   FLASH_LIGHTS:         'button.{car_name}_flash_lights',
   REMOTE_START:         'button.{car_name}_keyless_driving',
-  OPEN_FRUNK:           'cover.{car_name}_frunk',
-  OPEN_TRUNK:           'cover.{car_name}_trunk',
+  OPEN_FRUNK:           'cover.{car_name}_froot',
+  OPEN_TRUNK:           'cover.{car_name}_boot',
   FORCE_UPDATE:         'button.{car_name}_wake',
 
   // Covers
   WINDOWS_COVER:        'cover.{car_name}_vent_windows',
-  FRUNK_COVER:          'cover.{car_name}_frunk',
+  FRUNK_COVER:          'cover.{car_name}_froot',
   CHARGER_DOOR:         'cover.{car_name}_charge_port_door',
 
   // Sensors — charging session
