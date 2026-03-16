@@ -2,35 +2,12 @@ import { LitElement, html, css } from 'lit';
 import { TESLA_MODELS, getVariants } from './models.js';
 import { ENTITY_GROUPS } from './entity-config.js';
 
-// Ensure ha-entity-picker is loaded (HA lazy-loads it)
-const loadEntityPicker = async () => {
-  if (customElements.get('ha-entity-picker')) return;
-  const helpers = await window.loadCardHelpers?.();
-  if (helpers) {
-    // Creating a dummy entities card forces HA to load the entity picker
-    const el = await helpers.createCardElement({ type: 'entities', entities: [] });
-    if (el) el.constructor;
-  }
-};
-
 export class TeslaCardEditor extends LitElement {
   static get properties() {
     return {
       hass: { type: Object },
       config: { type: Object },
-      _pickerLoaded: { state: true },
     };
-  }
-
-  constructor() {
-    super();
-    this._pickerLoaded = false;
-  }
-
-  async connectedCallback() {
-    super.connectedCallback();
-    await loadEntityPicker();
-    this._pickerLoaded = true;
   }
 
   setConfig(config) {
@@ -56,16 +33,15 @@ export class TeslaCardEditor extends LitElement {
   _integrationChanged(ev) {
     if (!this.config || !this.hass) return;
     const newConfig = { ...this.config, integration: ev.target.value };
-    // Set a default car_name for custom entities mode if empty
     if (ev.target.value === 'entities' && !newConfig.car_name) {
       newConfig.car_name = 'custom';
     }
     this.dispatchEvent(new CustomEvent('config-changed', { detail: { config: newConfig } }));
   }
 
-  _entityOverrideChanged(key, ev) {
+  _entityOverrideInput(key, ev) {
     if (!this.config || !this.hass) return;
-    const value = ev.detail?.value ?? '';
+    const value = ev.target.value.trim();
     const overrides = { ...(this.config.entity_overrides ?? {}) };
     if (value) {
       overrides[key] = value;
@@ -79,6 +55,14 @@ export class TeslaCardEditor extends LitElement {
   _overrideCount(group) {
     const overrides = this.config.entity_overrides ?? {};
     return group.keys.filter(k => overrides[k.key]).length;
+  }
+
+  /** Get all entity IDs for a given domain, sorted */
+  _entitiesForDomain(domain) {
+    if (!this.hass?.states) return [];
+    return Object.keys(this.hass.states)
+      .filter(eid => eid.startsWith(domain + '.'))
+      .sort();
   }
 
   render() {
@@ -158,19 +142,26 @@ export class TeslaCardEditor extends LitElement {
                     <span class="entity-group-count${count > 0 ? ' has-overrides' : ''}">${count}/${total}</span>
                   </summary>
                   <div class="entity-group-body">
-                    ${group.keys.map(k => html`
-                      <div class="entity-row">
-                        <span class="entity-row-label">${k.label}</span>
-                        <ha-entity-picker
-                          .hass=${this.hass}
-                          .value=${overrides[k.key] ?? ''}
-                          .label=${''}
-                          .includeDomains=${[k.domain]}
-                          allow-custom-entity
-                          @value-changed=${(e) => this._entityOverrideChanged(k.key, e)}
-                        ></ha-entity-picker>
-                      </div>
-                    `)}
+                    ${group.keys.map(k => {
+                      const listId = `el-${k.key}`;
+                      const entities = this._entitiesForDomain(k.domain);
+                      return html`
+                        <div class="entity-row">
+                          <span class="entity-row-label">${k.label}</span>
+                          <input
+                            class="entity-input"
+                            type="text"
+                            list=${listId}
+                            .value=${overrides[k.key] ?? ''}
+                            placeholder="${k.domain}."
+                            @change=${(e) => this._entityOverrideInput(k.key, e)}
+                          />
+                          <datalist id=${listId}>
+                            ${entities.map(eid => html`<option value=${eid}></option>`)}
+                          </datalist>
+                        </div>
+                      `;
+                    })}
                   </div>
                 </details>
               `;
@@ -204,8 +195,6 @@ export class TeslaCardEditor extends LitElement {
         color: var(--primary-text-color, #000);
         font-size: 1em;
       }
-
-      /* ── Custom entities section ────────────────────────── */
 
       .entity-section-header {
         font-size: 1em;
@@ -294,8 +283,9 @@ export class TeslaCardEditor extends LitElement {
         color: var(--secondary-text-color, #888);
       }
 
-      .entity-row ha-entity-picker {
+      .entity-input {
         width: 100%;
+        box-sizing: border-box;
       }
     `;
   }
