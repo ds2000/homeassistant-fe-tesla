@@ -1165,7 +1165,7 @@ var Ke=Object.defineProperty;var Ye=(a,t,e)=>t in a?Ke(a,t,{enumerable:!0,config
   .quick-btn:active { color: #ffffff; }
 
   .quick-btn.q-locked   { color: #ffffff; }    /* locked state */
-  .quick-btn.q-unlocked { color: rgba(255,255,255,0.4); }
+  .quick-btn.q-unlocked { color: #ffffff; }
   .quick-btn.q-active   { color: #ffffff; }    /* on state (charging, climate) */
   .quick-btn.q-climate-on .icon { animation: gentle-spin 6s linear infinite; }
 
