@@ -614,8 +614,9 @@ class TeslaCard extends LitElement {
           return online ? 'Parked' : null;
         })();
 
+    const chgRateDisp = chgRate != null ? Number(chgRate).toFixed(1) : '—';
     const chargerSub  = charging
-      ? `Charging · ${chgRate ?? '—'} ${chgRateUnit}`
+      ? `Charging · ${chgRateDisp} ${chgRateUnit}`
       : pluggedIn ? 'Plugged in' : chgState;
     const climateSub  = climOn ? `${tempStr}${tempUnit}` : 'Off';
     const controlsSub = lockState ? (isLocked ? 'Locked' : 'Unlocked') : null;
