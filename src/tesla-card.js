@@ -1,7 +1,7 @@
 import { LitElement, html } from 'lit';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { sharedStyles, cardStyles } from './styles.js';
-import { getEntities, entityId } from './entity-config.js';
+import { getEntities, resolveEntityId } from './entity-config.js';
 import { ICONS } from './icons.js';
 import { FACTORY_COLOURS } from './recolour.js';
 import { TESLA_MODELS, getVariantColours } from './models.js';
@@ -103,7 +103,7 @@ class TeslaCard extends LitElement {
   // ─── Config ────────────────────────────────────────────────────────────────
 
   setConfig(config) {
-    if (!config.car_name) throw new Error('car_name is required');
+    if (!config.car_name && config.integration !== 'entities') throw new Error('car_name is required');
     this._baseConfig = {
       car_model:   '3',
       car_variant: '3.1',
@@ -374,7 +374,7 @@ class TeslaCard extends LitElement {
 
   // ─── Entity helpers ────────────────────────────────────────────────────────
 
-  _eid(t)      { return t ? entityId(t, this.config.car_name) : null; }
+  _eid(t)      { return resolveEntityId(t, this.config.car_name, this.config.entity_overrides); }
   _state(t)    { const id = this._eid(t); return id ? this.hass?.states[id] : undefined; }
   _val(t)      { return this._state(t)?.state; }
   _attr(t, a)  { return this._state(t)?.attributes?.[a]; }
@@ -676,7 +676,7 @@ class TeslaCard extends LitElement {
                 <button class="quick-btn ${charging ? 'q-active' : ''}" @click=${this._toggleCharger}>
                   <span class="icon">${unsafeHTML(ICONS['charge-bolt'])}</span>
                 </button>
-                <button class="quick-btn ${climOn ? 'q-active' : ''}" @click=${this._toggleClimate}>
+                <button class="quick-btn ${climOn ? 'q-active q-climate-on' : ''}" @click=${this._toggleClimate}>
                   <span class="icon">${unsafeHTML(ICONS['climate-fan'])}</span>
                 </button>
               </div>
@@ -691,20 +691,12 @@ class TeslaCard extends LitElement {
                 </div>
                 <span class="icon nav-chevron">${unsafeHTML(ICONS['chevron-right'])}</span>
               </button>
-              <button class="nav-row"
+              <button class="nav-row${climOn ? ' active' : ''}"
                 @click=${this._toggleClimate}>
                 <span class="icon nav-icon">${unsafeHTML(ICONS['climate-fan'])}</span>
                 <div class="nav-text">
                   <span class="nav-label">Climate</span>
                   <span class="nav-sublabel">${climateSub}</span>
-                </div>
-                <span class="icon nav-chevron">${unsafeHTML(ICONS['chevron-right'])}</span>
-              </button>
-              <button class="nav-row" disabled>
-                <span class="icon nav-icon">${unsafeHTML(ICONS.location)}</span>
-                <div class="nav-text">
-                  <span class="nav-label">Location</span>
-                  ${locationSub ? html`<span class="nav-sublabel">${locationSub}</span>` : ''}
                 </div>
                 <span class="icon nav-chevron">${unsafeHTML(ICONS['chevron-right'])}</span>
               </button>
@@ -714,21 +706,6 @@ class TeslaCard extends LitElement {
                 <div class="nav-text">
                   <span class="nav-label">Charging</span>
                   <span class="nav-sublabel">${chargerSub}</span>
-                </div>
-                <span class="icon nav-chevron">${unsafeHTML(ICONS['chevron-right'])}</span>
-              </button>
-              <button class="nav-row" disabled>
-                <span class="icon nav-icon">${unsafeHTML(ICONS.schedule)}</span>
-                <div class="nav-text">
-                  <span class="nav-label">Set Schedules</span>
-                </div>
-                <span class="icon nav-chevron">${unsafeHTML(ICONS['chevron-right'])}</span>
-              </button>
-              <button class="nav-row" disabled>
-                <span class="icon nav-icon">${unsafeHTML(ICONS.security)}</span>
-                <div class="nav-text">
-                  <span class="nav-label">Security & Drivers</span>
-                  <span class="nav-sublabel">${sentryOn ? 'Sentry Mode active' : 'Phone key disconnected'}</span>
                 </div>
                 <span class="icon nav-chevron">${unsafeHTML(ICONS['chevron-right'])}</span>
               </button>

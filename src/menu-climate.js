@@ -42,12 +42,14 @@ class TeslaMenuClimate extends TeslaBase {
   // ── Seat heat image — maps level to the correct SVG file ─────────────────
 
   _seatHeatFile(level) {
-    if (!level || level === 'Off') return 'Tesla_Heated_Seat_Off.svg';
+    if (!level) return 'Tesla_Heated_Seat_Off.svg';
+    const l = level.toLowerCase();
+    if (l === 'off')    return 'Tesla_Heated_Seat_Off.svg';
+    if (l === 'low')    return 'Tesla_Heated_Seat_1.svg';
+    if (l === 'medium') return 'Tesla_Heated_Seat_2.svg';
+    if (l === 'high')   return 'Tesla_Heated_Seat_3.svg';
     const n = parseInt(level);
     if (!isNaN(n) && n >= 1 && n <= 3) return `Tesla_Heated_Seat_${n}.svg`;
-    if (level === 'Low')    return 'Tesla_Heated_Seat_1.svg';
-    if (level === 'Medium') return 'Tesla_Heated_Seat_2.svg';
-    if (level === 'High')   return 'Tesla_Heated_Seat_3.svg';
     return 'Tesla_Heated_Seat_Off.svg';
   }
 
@@ -66,6 +68,18 @@ class TeslaMenuClimate extends TeslaBase {
     } else {
       this._svc('select', 'select_option', this.E.CABIN_OVERHEAT, { option: opt });
     }
+  }
+
+  // ── Camp/Dog mode — Fleet uses climate presets, Custom uses switches ──────
+
+  _togglePresetOrSwitch(presetName, isOn, switchTpl) {
+    if (switchTpl) {
+      return this._svc('switch', isOn ? 'turn_off' : 'turn_on', switchTpl);
+    }
+    // Fleet: use climate.set_preset_mode
+    return this._svc('climate', 'set_preset_mode', this.E.CLIMATE, {
+      preset_mode: isOn ? 'off' : presetName,
+    });
   }
 
   // ── Close override — also reset expanded state ────────────────────────────
@@ -92,9 +106,13 @@ class TeslaMenuClimate extends TeslaBase {
 
     const leftSeat      = this._val(this.E.HEATED_SEAT_LEFT);
     const rightSeat     = this._val(this.E.HEATED_SEAT_RIGHT);
-    const rearLeftSeat  = this._val(this.E.HEATED_SEAT_REAR_LEFT);
-    const rearCtrSeat   = this._val(this.E.HEATED_SEAT_REAR_CENTER);
-    const rearRightSeat = this._val(this.E.HEATED_SEAT_REAR_RIGHT);
+    const hasRearLeft   = !!this._state(this.E.HEATED_SEAT_REAR_LEFT);
+    const hasRearCtr    = !!this._state(this.E.HEATED_SEAT_REAR_CENTER);
+    const hasRearRight  = !!this._state(this.E.HEATED_SEAT_REAR_RIGHT);
+    const hasRearSeats  = hasRearLeft || hasRearCtr || hasRearRight;
+    const rearLeftSeat  = hasRearLeft  ? this._val(this.E.HEATED_SEAT_REAR_LEFT)   : null;
+    const rearCtrSeat   = hasRearCtr   ? this._val(this.E.HEATED_SEAT_REAR_CENTER) : null;
+    const rearRightSeat = hasRearRight ? this._val(this.E.HEATED_SEAT_REAR_RIGHT)  : null;
 
     const tempInRaw  = this._val(this.E.TEMPERATURE_INSIDE);
     const tempInU    = this._attr(this.E.TEMPERATURE_INSIDE, 'unit_of_measurement') ?? '°C';
@@ -104,10 +122,18 @@ class TeslaMenuClimate extends TeslaBase {
     const tempOut    = tempOutRaw != null ? `${Math.round(Number(tempOutRaw))}${tempOutU}` : null;
 
     const windowsOpen   = this._val(this.E.WINDOWS_COVER) === 'open';
-    const hasCampMode   = !!this.E.CAMP_MODE;
-    const hasDogMode    = !!this.E.DOG_MODE;
-    const campMode      = hasCampMode && this._val(this.E.CAMP_MODE)  === 'on';
-    const dogMode       = hasDogMode  && this._val(this.E.DOG_MODE)   === 'on';
+
+    // Camp/Dog mode — Fleet uses climate preset_modes, Custom uses switches
+    const presetModes   = this._attr(this.E.CLIMATE, 'preset_modes') ?? [];
+    const curPreset     = this._attr(this.E.CLIMATE, 'preset_mode') ?? 'off';
+    const hasCampMode   = !!this.E.CAMP_MODE || presetModes.includes('camp');
+    const hasDogMode    = !!this.E.DOG_MODE  || presetModes.includes('dog');
+    const campMode      = this.E.CAMP_MODE
+      ? this._val(this.E.CAMP_MODE) === 'on'
+      : curPreset === 'camp';
+    const dogMode       = this.E.DOG_MODE
+      ? this._val(this.E.DOG_MODE) === 'on'
+      : curPreset === 'dog';
     const hasCabinOverheat = !!this.E.CABIN_OVERHEAT;
     const cabinOverheatRaw = this._val(this.E.CABIN_OVERHEAT) ?? 'Off';
     const isCabinClimate = hasCabinOverheat && this._domainOf(this.E.CABIN_OVERHEAT) === 'climate';
@@ -140,22 +166,25 @@ class TeslaMenuClimate extends TeslaBase {
               <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(rightSeat ?? 'Off'))}" alt="" />
               <span class="clim-seat-label">${rightSeat ?? 'Off'}</span>
             </button>
-            <!-- Rear seats -->
-            <button class="clim-seat-zone clim-seat-rl"
-              @click=${() => this._svc('select', 'select_next', this.E.HEATED_SEAT_REAR_LEFT, { cycle: true })}>
-              <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(rearLeftSeat ?? 'Off'))}" alt="" />
-              <span class="clim-seat-label">${rearLeftSeat ?? 'Off'}</span>
-            </button>
-            <button class="clim-seat-zone clim-seat-rc"
-              @click=${() => this._svc('select', 'select_next', this.E.HEATED_SEAT_REAR_CENTER, { cycle: true })}>
-              <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(rearCtrSeat ?? 'Off'))}" alt="" />
-              <span class="clim-seat-label">${rearCtrSeat ?? 'Off'}</span>
-            </button>
-            <button class="clim-seat-zone clim-seat-rr"
-              @click=${() => this._svc('select', 'select_next', this.E.HEATED_SEAT_REAR_RIGHT, { cycle: true })}>
-              <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(rearRightSeat ?? 'Off'))}" alt="" />
-              <span class="clim-seat-label">${rearRightSeat ?? 'Off'}</span>
-            </button>
+            <!-- Rear seats (only if entities exist) -->
+            ${hasRearLeft ? html`
+              <button class="clim-seat-zone clim-seat-rl"
+                @click=${() => this._svc('select', 'select_next', this.E.HEATED_SEAT_REAR_LEFT, { cycle: true })}>
+                <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(rearLeftSeat ?? 'Off'))}" alt="" />
+                <span class="clim-seat-label">${rearLeftSeat ?? 'Off'}</span>
+              </button>` : ''}
+            ${hasRearCtr ? html`
+              <button class="clim-seat-zone clim-seat-rc"
+                @click=${() => this._svc('select', 'select_next', this.E.HEATED_SEAT_REAR_CENTER, { cycle: true })}>
+                <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(rearCtrSeat ?? 'Off'))}" alt="" />
+                <span class="clim-seat-label">${rearCtrSeat ?? 'Off'}</span>
+              </button>` : ''}
+            ${hasRearRight ? html`
+              <button class="clim-seat-zone clim-seat-rr"
+                @click=${() => this._svc('select', 'select_next', this.E.HEATED_SEAT_REAR_RIGHT, { cycle: true })}>
+                <img class="btn-img" src="${this._btnUrl(this._seatHeatFile(rearRightSeat ?? 'Off'))}" alt="" />
+                <span class="clim-seat-label">${rearRightSeat ?? 'Off'}</span>
+              </button>` : ''}
           </div>
 
           <!-- Floating back button (positioned in outer container) -->
@@ -216,18 +245,18 @@ class TeslaMenuClimate extends TeslaBase {
           <!-- Expanded section — Camp Mode / Dog Mode + Cabin Overheat Protection -->
           <div class="clim-expanded-content">
 
-            <!-- Camp Mode + Dog Mode (hidden if not available for this integration) -->
+            <!-- Camp Mode + Dog Mode -->
             ${hasCampMode || hasDogMode ? html`
               <div class="clim-list-group">
                 ${hasCampMode ? html`
                   <button class="clim-list-item${campMode ? ' hot' : ''}"
-                    @click=${() => this._svc('switch', campMode ? 'turn_off' : 'turn_on', this.E.CAMP_MODE)}>
+                    @click=${() => this._togglePresetOrSwitch('camp', campMode, this.E.CAMP_MODE)}>
                     <span class="icon clim-list-icon">${unsafeHTML(ICONS.tent)}</span>
                     <span class="clim-list-label">Camp Mode</span>
                   </button>` : ''}
                 ${hasDogMode ? html`
                   <button class="clim-list-item${dogMode ? ' hot' : ''}"
-                    @click=${() => this._svc('switch', dogMode ? 'turn_off' : 'turn_on', this.E.DOG_MODE)}>
+                    @click=${() => this._togglePresetOrSwitch('dog', dogMode, this.E.DOG_MODE)}>
                     <span class="icon clim-list-icon">${unsafeHTML(ICONS.dog)}</span>
                     <span class="clim-list-label">Dog Mode</span>
                   </button>` : ''}

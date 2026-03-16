@@ -1185,6 +1185,7 @@ export const cardStyles = css`
   .quick-btn.q-locked   { color: #ffffff; }    /* locked state */
   .quick-btn.q-unlocked { color: rgba(255,255,255,0.4); }
   .quick-btn.q-active   { color: #ffffff; }    /* on state (charging, climate) */
+  .quick-btn.q-climate-on .icon { animation: gentle-spin 6s linear infinite; }
 
   .quick-btn .icon {
     width: 26px;
@@ -1245,7 +1246,12 @@ export const cardStyles = css`
     transition: color 0.15s ease;
   }
 
-  .nav-row.active .nav-icon { color: #e82127; }
+  .nav-row.active .nav-icon { color: #ffffff; animation: gentle-spin 6s linear infinite; }
+
+  @keyframes gentle-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
 
   /* Official Tesla SVG button images in nav rows */
   .nav-btn-img {
@@ -1275,7 +1281,7 @@ export const cardStyles = css`
     color: rgba(255,255,255,0.38);
   }
 
-  .nav-row.active .nav-sublabel { color: rgba(232,33,39,0.7); }
+  .nav-row.active .nav-sublabel { color: rgba(255,255,255,0.55); }
 
   .nav-chevron {
     width: 18px;
@@ -1285,8 +1291,7 @@ export const cardStyles = css`
   }
 
   .nav-row.active .nav-chevron {
-    transform: rotate(90deg);
-    color: rgba(232,33,39,0.45);
+    color: rgba(255,255,255,0.2);
   }
 
   /* ── State badges ────────────────────────────────────────── */

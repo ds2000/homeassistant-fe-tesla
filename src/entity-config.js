@@ -173,21 +173,130 @@ const CUSTOM = {
 
 const INTEGRATIONS = { fleet: FLEET, custom: CUSTOM };
 
+// ── Entity groups for the custom entities editor ────────────────────────────
+// Each group has a label and an array of { key, label, domain } entries.
+// `key` matches a FLEET/CUSTOM map key. `domain` filters the HA entity picker.
+// Only canonical keys are listed — aliases resolve automatically.
+
+export const ENTITY_GROUPS = [
+  { label: 'Sensors', keys: [
+    { key: 'BATTERY_LEVEL',      label: 'Battery Level',      domain: 'sensor' },
+    { key: 'BATTERY_RANGE',      label: 'Battery Range',      domain: 'sensor' },
+    { key: 'CHARGING_STATE',     label: 'Charging State',     domain: 'sensor' },
+    { key: 'CHARGE_RATE',        label: 'Charge Rate',        domain: 'sensor' },
+    { key: 'TEMPERATURE_INSIDE', label: 'Inside Temperature', domain: 'sensor' },
+    { key: 'TEMPERATURE_OUTSIDE',label: 'Outside Temperature',domain: 'sensor' },
+    { key: 'SPEED',              label: 'Speed',              domain: 'sensor' },
+    { key: 'ODOMETER',           label: 'Odometer',           domain: 'sensor' },
+    { key: 'ENERGY_ADDED',       label: 'Energy Added',       domain: 'sensor' },
+  ]},
+  { label: 'Status', keys: [
+    { key: 'ONLINE',    label: 'Online Status', domain: 'binary_sensor' },
+    { key: 'PLUGGED_IN',label: 'Plugged In',    domain: 'binary_sensor' },
+    { key: 'CHARGING',  label: 'Charge Switch', domain: 'switch' },
+    { key: 'SENTRY_MODE', label: 'Sentry Mode', domain: 'switch' },
+  ]},
+  { label: 'Doors', keys: [
+    { key: 'DOOR_DRIVER_FRONT',    label: 'Driver Front',    domain: 'binary_sensor' },
+    { key: 'DOOR_DRIVER_REAR',     label: 'Driver Rear',     domain: 'binary_sensor' },
+    { key: 'DOOR_PASSENGER_FRONT', label: 'Passenger Front', domain: 'binary_sensor' },
+    { key: 'DOOR_PASSENGER_REAR',  label: 'Passenger Rear',  domain: 'binary_sensor' },
+  ]},
+  { label: 'Windows', keys: [
+    { key: 'WINDOW_DRIVER_FRONT',    label: 'Driver Front',    domain: 'binary_sensor' },
+    { key: 'WINDOW_DRIVER_REAR',     label: 'Driver Rear',     domain: 'binary_sensor' },
+    { key: 'WINDOW_PASSENGER_FRONT', label: 'Passenger Front', domain: 'binary_sensor' },
+    { key: 'WINDOW_PASSENGER_REAR',  label: 'Passenger Rear',  domain: 'binary_sensor' },
+  ]},
+  { label: 'Lock', keys: [
+    { key: 'DOOR_LOCK', label: 'Door Lock', domain: 'lock' },
+  ]},
+  { label: 'Climate', keys: [
+    { key: 'CLIMATE',             label: 'Climate',                domain: 'climate' },
+    { key: 'DEFROST_SWITCH',      label: 'Defrost',                domain: 'switch' },
+    { key: 'HEATED_SEAT_LEFT',    label: 'Heated Seat Front Left', domain: 'select' },
+    { key: 'HEATED_SEAT_RIGHT',   label: 'Heated Seat Front Right',domain: 'select' },
+    { key: 'HEATED_SEAT_REAR_LEFT',   label: 'Heated Seat Rear Left',   domain: 'select' },
+    { key: 'HEATED_SEAT_REAR_CENTER', label: 'Heated Seat Rear Center', domain: 'select' },
+    { key: 'HEATED_SEAT_REAR_RIGHT',  label: 'Heated Seat Rear Right',  domain: 'select' },
+    { key: 'CABIN_OVERHEAT',      label: 'Cabin Overheat Protection', domain: 'climate' },
+    { key: 'WINDOWS_COVER',       label: 'Windows (vent/close)',  domain: 'cover' },
+  ]},
+  { label: 'Charging', keys: [
+    { key: 'CHARGE_LIMIT_NUMBER',  label: 'Charge Limit',    domain: 'number' },
+    { key: 'CHARGING_AMPS_NUMBER', label: 'Charging Amps',   domain: 'number' },
+    { key: 'CHARGER_DOOR',         label: 'Charge Port Door',domain: 'cover' },
+  ]},
+  { label: 'Covers & Buttons', keys: [
+    { key: 'OPEN_FRUNK',    label: 'Frunk',        domain: 'cover' },
+    { key: 'OPEN_TRUNK',    label: 'Trunk',        domain: 'cover' },
+    { key: 'HORN',           label: 'Horn',         domain: 'button' },
+    { key: 'FLASH_LIGHTS',  label: 'Flash Lights', domain: 'button' },
+    { key: 'REMOTE_START',  label: 'Remote Start', domain: 'button' },
+    { key: 'FORCE_UPDATE',  label: 'Wake / Refresh', domain: 'button' },
+  ]},
+  { label: 'Location', keys: [
+    { key: 'LOCATION', label: 'Location Tracker', domain: 'device_tracker' },
+  ]},
+];
+
+// Alias map — when the user overrides one canonical key, the alias resolves too.
+// Key = alias used in card code, Value = canonical key exposed in editor.
+const ENTITY_ALIASES = {
+  CHARGER_SWITCH:     'CHARGING',
+  SENTRY_MODE_SWITCH: 'SENTRY_MODE',
+  FRUNK_COVER:        'OPEN_FRUNK',
+  CHARGE_LIMIT:       'CHARGE_LIMIT_NUMBER',
+  CHARGE_PORT_OPEN:   'CHARGER_DOOR',
+  CHARGE_PORT_CLOSE:  'CHARGER_DOOR',
+};
+
+// Reverse map: template string → key name (built from FLEET, preferring canonical keys)
+const CANONICAL_KEYS = new Set(ENTITY_GROUPS.flatMap(g => g.keys.map(k => k.key)));
+const FLEET_REVERSE = {};
+// First pass: canonical keys take priority
+for (const [k, v] of Object.entries(FLEET)) {
+  if (v && CANONICAL_KEYS.has(k)) FLEET_REVERSE[v] = k;
+}
+// Second pass: fill in any missing (non-canonical) templates
+for (const [k, v] of Object.entries(FLEET)) {
+  if (v && !FLEET_REVERSE[v]) FLEET_REVERSE[v] = k;
+}
+
 /**
  * Get the entity map for a given integration type.
- * @param {string} integration — 'fleet' (default) or 'custom'
+ * @param {string} integration — 'fleet' (default), 'custom', or 'entities'
  * @returns {object}
  */
 export function getEntities(integration = 'fleet') {
+  // 'entities' mode uses FLEET as the base template map;
+  // overrides are applied at resolve time in resolveEntityId().
+  if (integration === 'entities') return FLEET;
   return INTEGRATIONS[integration] || FLEET;
 }
 
 /**
- * Resolve an entity ID template for a given car_name.
- * @param {string} template  — e.g. ENTITIES.BATTERY_LEVEL
+ * Resolve an entity ID template for a given car_name, with optional overrides.
+ * @param {string} template  — e.g. 'sensor.{car_name}_battery_level'
  * @param {string} carName   — e.g. 'terrance'
- * @returns {string}
+ * @param {object} [overrides] — e.g. { BATTERY_LEVEL: 'sensor.my_battery' }
+ * @returns {string|null}
  */
-export function entityId(template, carName) {
+export function resolveEntityId(template, carName, overrides) {
+  if (!template) return null;
+  if (overrides) {
+    // Look up the canonical key for this template
+    let key = FLEET_REVERSE[template];
+    // Check alias if the key itself isn't overridden
+    if (key && !overrides[key] && ENTITY_ALIASES[key]) {
+      key = ENTITY_ALIASES[key];
+    }
+    if (key && overrides[key]) return overrides[key];
+  }
   return template.replace('{car_name}', carName);
+}
+
+/** Backward-compatible — used when no overrides are needed */
+export function entityId(template, carName) {
+  return template ? template.replace('{car_name}', carName) : null;
 }

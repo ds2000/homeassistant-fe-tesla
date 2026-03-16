@@ -1,6 +1,6 @@
 # Tesla Card for Home Assistant
 
-A custom Lovelace card for Tesla vehicles in Home Assistant. Supports both the **official [Tesla Fleet](https://www.home-assistant.io/integrations/tesla_fleet/)** integration and the **[alandtse/tesla](https://github.com/alandtse/tesla)** custom integration. Control your Tesla directly from your dashboard with a clean, app-style interface.
+A custom Lovelace card for Tesla vehicles in Home Assistant. Supports the **official [Tesla Fleet](https://www.home-assistant.io/integrations/tesla_fleet/)** integration, the **[alandtse/tesla](https://github.com/alandtse/tesla)** custom integration, and **fully custom entity mapping** for MQTT or any other integration. Control your Tesla directly from your dashboard with a clean, app-style interface.
 
 [![Add to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=ds2000&repository=homeassistant-fe-tesla&category=plugin)
 
@@ -23,7 +23,9 @@ If you find this card useful: [![Buy Me A Coffee](https://img.shields.io/badge/B
 - **Default view** — car image with battery bar, range, parked/speed status, inside temperature
 - **Charger menu** — charging state, charge port open/close, start/stop charging, charge limit slider, charging amps slider
 - **Climate menu** — HVAC on/off, temperature stepper, defrost toggle, heated seat levels (Off/Low/Med/High per seat), window vent/close
-- **Controls menu** — door lock/unlock with state badge, frunk open, trunk open/close, sentry mode toggle, remote start, horn, flash lights, window vent/close
+- **Controls menu** — door lock/unlock, frunk open, trunk open/close, charge port, remote start, horn, flash lights, window vent/close
+- **Animated climate indicator** — spinning fan icon on landing page when HVAC is active
+- **Custom entity mapping** — use any HA entities (MQTT, third-party integrations) via the built-in entity picker
 - **Landscape layout** — optional wide layout with side-by-side panels
 - **Multiple models & colours** — Model 3, Y, S, X with community-contributed colour variants
 
@@ -59,7 +61,8 @@ Or manually: open HACS, click **Frontend** > **+**, search for **Tesla Card**, a
 1. A working [Home Assistant](https://www.home-assistant.io/) installation
 2. One of:
    - The official [Tesla Fleet](https://www.home-assistant.io/integrations/tesla_fleet/) integration (default), or
-   - The [alandtse/tesla](https://github.com/alandtse/tesla) custom integration
+   - The [alandtse/tesla](https://github.com/alandtse/tesla) custom integration, or
+   - Any integration providing Tesla-like entities (MQTT, custom bridge, etc.) — use Custom Entities mode
 
 ---
 
@@ -76,8 +79,9 @@ car_name: my_tesla
 
 | Option | Required | Default | Description |
 |--------|----------|---------|-------------|
-| `car_name` | **Yes** | -- | Entity prefix for your car (e.g. `my_tesla` for `sensor.my_tesla_battery_level`) |
-| `integration` | No | `fleet` | `fleet` for official Tesla Fleet, `custom` for alandtse/tesla |
+| `car_name` | **Yes**\* | -- | Entity prefix for your car (e.g. `my_tesla` for `sensor.my_tesla_battery_level`) |
+| `integration` | No | `fleet` | `fleet` for official Tesla Fleet, `custom` for alandtse/tesla, `entities` for custom entity mapping |
+| `entity_overrides` | No | -- | Map of entity keys to custom entity IDs (used with `integration: entities`) |
 | `car_model` | No | `3` | Model number: `3`, `Y`, `S`, or `X` |
 | `car_color` | No | `red_multi_coat` | Colour ID matching the image folder name |
 | `image_path` | No | `/hacsfiles/homeassistant-fe-tesla` | Base path where car images are stored |
@@ -95,6 +99,25 @@ car_color: red_multi_coat
 name: My Tesla
 show_speed: true
 ```
+
+### Custom entity mapping
+
+If your entities don't follow the standard Tesla Fleet or alandtse naming convention (e.g. you use MQTT, a third-party bridge, or have renamed entities), select **Custom Entities** as the integration and map each entity individually:
+
+```yaml
+type: custom:tesla-card
+car_name: my_tesla
+integration: entities
+entity_overrides:
+  BATTERY_LEVEL: sensor.my_battery
+  BATTERY_RANGE: sensor.my_range
+  CLIMATE: climate.my_hvac
+  DOOR_LOCK: lock.my_front_door
+```
+
+The visual editor provides a grouped entity picker with HA autocomplete — no YAML needed. Only override the entities you need; the rest will be skipped.
+
+\* `car_name` is optional when using `integration: entities`.
 
 ### Visual editor
 
@@ -116,12 +139,12 @@ All entity IDs are derived from your `car_name` value automatically. The card ma
 | `sensor.{car_name}_charging` | Charging state label |
 | `sensor.{car_name}_charge_rate` | Current charge rate |
 | `sensor.{car_name}_inside_temperature` | Cabin temperature |
-| `lock.{car_name}_door_lock` | Door lock/unlock |
-| `climate.{car_name}_climate` | HVAC on/off, target temperature |
+| `lock.{car_name}_lock` | Door lock/unlock |
+| `climate.{car_name}_climate` | HVAC on/off, target temperature, camp/dog mode presets |
 | `cover.{car_name}_charge_port_door` | Open/close charge port |
-| `cover.{car_name}_frunk` | Open frunk |
-| `cover.{car_name}_trunk` | Open/close trunk |
-| `cover.{car_name}_windows` | Vent/close windows |
+| `cover.{car_name}_froot` | Open frunk |
+| `cover.{car_name}_boot` | Open/close trunk |
+| `cover.{car_name}_vent_windows` | Vent/close windows |
 | `number.{car_name}_charge_limit` | Charge limit slider |
 | `number.{car_name}_charge_current` | Charging amps slider |
 | `switch.{car_name}_sentry_mode` | Sentry mode toggle |

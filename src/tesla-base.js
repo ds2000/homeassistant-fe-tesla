@@ -1,5 +1,5 @@
 import { LitElement } from 'lit';
-import { entityId, getEntities } from './entity-config.js';
+import { resolveEntityId, getEntities } from './entity-config.js';
 
 /**
  * Shared base class for tesla-card submenu components.
@@ -24,7 +24,7 @@ export class TeslaBase extends LitElement {
 
   // ── Entity helpers ──────────────────────────────────────────────────────────
 
-  _eid(t)      { return t ? entityId(t, this.config.car_name) : null; }
+  _eid(t)      { return resolveEntityId(t, this.config.car_name, this.config.entity_overrides); }
   _state(t)    { const id = this._eid(t); return id ? this.hass?.states[id] : undefined; }
   _val(t)      { return this._state(t)?.state; }
   _attr(t, a)  { return this._state(t)?.attributes?.[a]; }
@@ -73,10 +73,13 @@ export class TeslaBase extends LitElement {
 
   _domainOf(t) { return t ? t.split('.')[0] : null; }
 
-  /** Press a button or toggle a cover — picks the right service per domain */
+  /** Press a button or open a cover — picks the right service per domain */
   _activate(entityTpl) {
     const d = this._domainOf(entityTpl);
-    if (d === 'cover') return this._svc('cover', 'toggle_cover', entityTpl);
+    if (d === 'cover') {
+      const isOpen = this._val(entityTpl) === 'open';
+      return this._svc('cover', isOpen ? 'close_cover' : 'open_cover', entityTpl);
+    }
     return this._svc(d, 'press', entityTpl);
   }
 
