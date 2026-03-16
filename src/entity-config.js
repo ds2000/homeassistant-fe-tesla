@@ -83,6 +83,9 @@ const FLEET = {
   // Sensors — charging session
   ENERGY_ADDED:         'sensor.{car_name}_charge_energy_added',
 
+  // Time to full charge
+  TIME_TO_FULL_CHARGE:  'sensor.{car_name}_time_to_full_charge',
+
   // Device tracker
   LOCATION:             'device_tracker.{car_name}_location',
 };
@@ -166,6 +169,9 @@ const CUSTOM = {
 
   // Sensors — charging session
   ENERGY_ADDED:         'sensor.{car_name}_energy_added',
+
+  // Time to full charge
+  TIME_TO_FULL_CHARGE:  'sensor.{car_name}_time_to_full_charge',
 
   // Device tracker
   LOCATION:             'device_tracker.{car_name}_location_tracker',

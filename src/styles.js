@@ -1057,14 +1057,28 @@ export const cardStyles = css`
     transition: width 0.4s ease;
   }
 
-  .battery-fill-small.high   { background: #ffffff; }
-  .battery-fill-small.medium { background: #f39c12; }
-  .battery-fill-small.low    { background: #e82127; }
+  .battery-fill-small.high     { background: #ffffff; }
+  .battery-fill-small.medium   { background: #f39c12; }
+  .battery-fill-small.low      { background: #e82127; }
+  .battery-fill-small.charging { background: #3dd68c; }
 
   .range-text {
     font-size: 0.88em;
     font-weight: 500;
     color: rgba(255,255,255,0.8);
+  }
+
+  .battery-summary.charging .range-text { color: #3dd68c; font-weight: 600; }
+
+  .charging-bolt {
+    width: 16px;
+    height: 16px;
+    color: #3dd68c;
+    margin-left: 2px;
+  }
+
+  .charging-status {
+    color: rgba(255,255,255,0.45);
   }
 
   .status-text {

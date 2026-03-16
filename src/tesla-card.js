@@ -407,6 +407,7 @@ class TeslaCard extends LitElement {
       this.E.WINDOWS_COVER, this.E.CHARGE_LIMIT_NUMBER, this.E.CHARGING_AMPS_NUMBER,
       this.E.DOOR_DRIVER_FRONT, this.E.DOOR_DRIVER_REAR,
       this.E.DOOR_PASSENGER_FRONT, this.E.DOOR_PASSENGER_REAR,
+      this.E.TIME_TO_FULL_CHARGE,
     ];
 
     // Collect valid entity IDs
@@ -454,13 +455,29 @@ class TeslaCard extends LitElement {
     const batRaw    = this._val(this.E.BATTERY_LEVEL);
     const battery   = batRaw != null ? Math.round(Number(batRaw)) : null;
     const batPct    = battery != null ? Math.max(0, Math.min(100, battery)) : 0;
-    const batCls    = batPct >= 50 ? 'high' : batPct >= 20 ? 'medium' : 'low';
+    const batClsBase = batPct >= 50 ? 'high' : batPct >= 20 ? 'medium' : 'low';
     const rangeRaw  = this._val(this.E.BATTERY_RANGE);
     const rangeUnit = this._attr(this.E.BATTERY_RANGE, 'unit_of_measurement') ?? 'km';
     const range     = rangeRaw != null ? `${Math.round(Number(rangeRaw))} ${rangeUnit}` : null;
     const charging  = this._val(this.E.CHARGING) === 'on';
+    const batCls    = charging ? 'charging' : batClsBase;
     const online    = this._val(this.E.ONLINE) === 'on';
     const onlineEnt = this._state(this.E.ONLINE);
+
+    // Time remaining to charge limit
+    const timeToFullRaw = this._val(this.E.TIME_TO_FULL_CHARGE);
+    const chgTimeRemaining = (() => {
+      if (!charging || !timeToFullRaw || timeToFullRaw === 'unavailable') return null;
+      const target = new Date(timeToFullRaw);
+      if (isNaN(target)) return null;
+      const diffMs = target - Date.now();
+      if (diffMs <= 0) return 'Complete';
+      const hrs = Math.floor(diffMs / 3600000);
+      const mins = Math.round((diffMs % 3600000) / 60000);
+      if (hrs >= 24) return '24+ hours remaining to charge limit';
+      if (hrs > 0) return `${hrs}h ${mins}m remaining to charge limit`;
+      return `${mins}m remaining to charge limit`;
+    })();
 
     // Car image — overlay stacking
     const frunkOpen       = this._val(this.E.FRUNK_COVER) === 'open'
@@ -630,14 +647,16 @@ class TeslaCard extends LitElement {
                 <span class="car-name">${this.config.name ?? this.config.car_name}</span>
                 <span class="icon name-chevron">${unsafeHTML(ICONS['chevron-down'])}</span>
               </div>
-              <div class="battery-summary">
+              <div class="battery-summary${charging ? ' charging' : ''}">
                 ${battery != null ? html`
                   <div class="battery-bar-small">
                     <div class="battery-fill-small ${batCls}" style="width:${batPct}%"></div>
                   </div>
-                  <span class="range-text">${range ?? '—'}</span>` : ''}
+                  <span class="range-text">${range ?? '—'}</span>
+                  ${charging ? html`<span class="icon charging-bolt">${unsafeHTML(ICONS['charge-bolt'])}</span>` : ''}` : ''}
               </div>
-              ${statusText ? html`<span class="status-text">${statusText}</span>` : ''}
+              ${chgTimeRemaining ? html`<span class="status-text charging-status">${chgTimeRemaining}</span>`
+                : statusText ? html`<span class="status-text">${statusText}</span>` : ''}
             </div>
             <div class="header-right">
               <button class="icon-btn" title="Settings"
