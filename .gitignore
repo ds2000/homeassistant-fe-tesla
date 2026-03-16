@@ -14,6 +14,9 @@ local/
 # Utility scripts (not part of the card)
 scripts/
 
+# Local test harness (contains proxy that accepts tokens)
+test/
+
 # Editor / IDE
 *.swp
 *.swo

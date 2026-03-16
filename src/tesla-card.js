@@ -14,8 +14,6 @@ import './model-picker.js';
 
 // ─── Overlay image filenames ─────────────────────────────────────────────────
 // Base images (opaque, used as the canvas)
-const IMG_BASE       = 'base.png';
-
 // Transparent overlays composited on top of the base via CSS stacking.
 // Z-order (furthest → nearest to camera in offcharge front 3/4 view):
 const OVERLAY_Z_ORDER = ['chargeport', 'frunk', 'fr', 'ff', 'nr', 'nf'];
@@ -567,15 +565,6 @@ class TeslaCard extends LitElement {
       : pluggedIn ? 'Plugged in' : chgState;
     const climateSub  = climOn ? `${tempStr}${tempUnit}` : 'Off';
     const controlsSub = lockState ? (isLocked ? 'Locked' : 'Unlocked') : null;
-
-    // Location sublabel from device_tracker
-    const locationState = this._val(this.E.LOCATION);
-    const locationSub   = locationState
-      ? locationState.charAt(0).toUpperCase() + locationState.slice(1).replace(/_/g, ' ')
-      : null;
-
-    // Sentry mode for Security & Drivers row
-    const sentryOn = this._val(this.E.SENTRY_MODE) === 'on';
 
     // ── Settings sublabels ──
     const curModel   = TESLA_MODELS.find(m => m.id === this.config.car_model);

@@ -99,7 +99,6 @@ class TeslaMenuClimate extends TeslaBase {
     const tgtTempRaw    = this._attr(this.E.CLIMATE, 'temperature');
     const tgtTemp       = tgtTempRaw != null ? Number(tgtTempRaw) : null;
     const dispTemp      = this._pendingTemp ?? tgtTemp;
-    const tempUnit      = this._attr(this.E.CLIMATE, 'temperature_unit') ?? '°C';
     const tempStr       = dispTemp != null ? dispTemp.toFixed(1) : '—';
 
     const isDefrost     = this._val(this.E.DEFROST_SWITCH) === 'on';
@@ -109,7 +108,6 @@ class TeslaMenuClimate extends TeslaBase {
     const hasRearLeft   = !!this._state(this.E.HEATED_SEAT_REAR_LEFT);
     const hasRearCtr    = !!this._state(this.E.HEATED_SEAT_REAR_CENTER);
     const hasRearRight  = !!this._state(this.E.HEATED_SEAT_REAR_RIGHT);
-    const hasRearSeats  = hasRearLeft || hasRearCtr || hasRearRight;
     const rearLeftSeat  = hasRearLeft  ? this._val(this.E.HEATED_SEAT_REAR_LEFT)   : null;
     const rearCtrSeat   = hasRearCtr   ? this._val(this.E.HEATED_SEAT_REAR_CENTER) : null;
     const rearRightSeat = hasRearRight ? this._val(this.E.HEATED_SEAT_REAR_RIGHT)  : null;
