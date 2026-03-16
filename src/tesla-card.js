@@ -391,6 +391,41 @@ class TeslaCard extends LitElement {
     }
   }
 
+  // ─── Force refresh — wake car then poll all entities ───────────────────────
+
+  async _forceRefresh() {
+    // 1. Wake the car
+    await this._svc('button', 'press', this.E.FORCE_UPDATE);
+
+    // 2. After a delay, request HA to re-poll key entities
+    const REFRESH_ENTITIES = [
+      this.E.BATTERY_LEVEL, this.E.BATTERY_RANGE, this.E.CHARGING_STATE,
+      this.E.CHARGE_RATE, this.E.CHARGING, this.E.PLUGGED_IN, this.E.ONLINE,
+      this.E.CLIMATE, this.E.DOOR_LOCK, this.E.TEMPERATURE_INSIDE,
+      this.E.TEMPERATURE_OUTSIDE, this.E.SENTRY_MODE,
+      this.E.FRUNK_COVER, this.E.OPEN_TRUNK, this.E.CHARGER_DOOR,
+      this.E.WINDOWS_COVER, this.E.CHARGE_LIMIT_NUMBER, this.E.CHARGING_AMPS_NUMBER,
+      this.E.DOOR_DRIVER_FRONT, this.E.DOOR_DRIVER_REAR,
+      this.E.DOOR_PASSENGER_FRONT, this.E.DOOR_PASSENGER_REAR,
+    ];
+
+    // Collect valid entity IDs
+    const entityIds = REFRESH_ENTITIES
+      .map(tpl => this._eid(tpl))
+      .filter(Boolean);
+
+    // Wait for wake to take effect, then batch-update
+    setTimeout(async () => {
+      try {
+        await this.hass.callService('homeassistant', 'update_entity', {
+          entity_id: entityIds,
+        });
+      } catch (e) {
+        console.error('[tesla-card] refresh error', e);
+      }
+    }, 5000);
+  }
+
   // ─── Menu toggle ───────────────────────────────────────────────────────────
 
   _toggle(m) {
@@ -610,7 +645,7 @@ class TeslaCard extends LitElement {
                 <span class="icon">${unsafeHTML(ICONS.settings)}</span>
               </button>
               <button class="icon-btn" title="Refresh"
-                @click=${() => this._svc('button', 'press', this.E.FORCE_UPDATE)}>
+                @click=${() => this._forceRefresh()}>
                 <span class="icon">${unsafeHTML(ICONS.refresh)}</span>
               </button>
             </div>
