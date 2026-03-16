@@ -2,12 +2,35 @@ import { LitElement, html, css } from 'lit';
 import { TESLA_MODELS, getVariants } from './models.js';
 import { ENTITY_GROUPS } from './entity-config.js';
 
+// Ensure ha-entity-picker is loaded (HA lazy-loads it)
+const loadEntityPicker = async () => {
+  if (customElements.get('ha-entity-picker')) return;
+  const helpers = await window.loadCardHelpers?.();
+  if (helpers) {
+    // Creating a dummy entities card forces HA to load the entity picker
+    const el = await helpers.createCardElement({ type: 'entities', entities: [] });
+    if (el) el.constructor;
+  }
+};
+
 export class TeslaCardEditor extends LitElement {
   static get properties() {
     return {
       hass: { type: Object },
       config: { type: Object },
+      _pickerLoaded: { state: true },
     };
+  }
+
+  constructor() {
+    super();
+    this._pickerLoaded = false;
+  }
+
+  async connectedCallback() {
+    super.connectedCallback();
+    await loadEntityPicker();
+    this._pickerLoaded = true;
   }
 
   setConfig(config) {
