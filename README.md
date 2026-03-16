@@ -80,7 +80,7 @@ car_name: my_tesla
 | Option | Required | Default | Description |
 |--------|----------|---------|-------------|
 | `car_name` | **Yes**\* | -- | Entity prefix for your car (e.g. `my_tesla` for `sensor.my_tesla_battery_level`) |
-| `integration` | No | `fleet` | `fleet` for official Tesla Fleet, `custom` for alandtse/tesla, `entities` for custom entity mapping |
+| `integration` | No | `fleet` | `fleet` — Official Tesla Fleet integration · `custom` — alandtse/tesla integration · `entities` — Manual entity mapping |
 | `entity_overrides` | No | -- | Map of entity keys to custom entity IDs (used with `integration: entities`) |
 | `car_model` | No | `3` | Model number: `3`, `Y`, `S`, or `X` |
 | `car_color` | No | `red_multi_coat` | Colour ID matching the image folder name |

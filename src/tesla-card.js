@@ -553,11 +553,13 @@ class TeslaCard extends LitElement {
     const tempStr     = tgtTempRaw != null ? Number(tgtTempRaw).toFixed(1) : '—';
 
     const statusText = !online && onlineEnt ? 'Asleep'
+      : charging ? 'Charging'
       : this.E.PARKING_BRAKE && this._val(this.E.PARKING_BRAKE) === 'on' ? 'Parked'
       : (() => {
           if (!this.config.show_speed) return null;
           const s = this._attr(this.E.LOCATION, 'speed');
-          return s != null && Number(s) > 0 ? `${Math.round(Number(s))} km/h` : null;
+          if (s != null && Number(s) > 0) return `${Math.round(Number(s))} km/h`;
+          return online ? 'Parked' : null;
         })();
 
     const chargerSub  = charging
