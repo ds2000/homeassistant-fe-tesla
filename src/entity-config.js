@@ -293,10 +293,10 @@ export function resolveEntityId(template, carName, overrides) {
     }
     if (key && overrides[key]) return overrides[key];
   }
-  return template.replace('{car_name}', carName);
+  return template.replace('{car_name}', (carName ?? '').toLowerCase());
 }
 
 /** Backward-compatible — used when no overrides are needed */
 export function entityId(template, carName) {
-  return template ? template.replace('{car_name}', carName) : null;
+  return template ? template.replace('{car_name}', (carName ?? '').toLowerCase()) : null;
 }
