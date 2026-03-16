@@ -214,8 +214,6 @@ export class TeslaCardEditor extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 4px;
-        max-height: 500px;
-        overflow-y: auto;
       }
 
       .entity-group {

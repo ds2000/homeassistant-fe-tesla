@@ -1940,8 +1940,6 @@ var Ke=Object.defineProperty;var Ye=(a,t,e)=>t in a?Ke(a,t,{enumerable:!0,config
         display: flex;
         flex-direction: column;
         gap: 4px;
-        max-height: 500px;
-        overflow-y: auto;
       }
 
       .entity-group {
