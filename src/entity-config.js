@@ -58,6 +58,10 @@ const FLEET = {
   HEATED_SEAT_REAR_CENTER:  'select.{car_name}_seat_heater_rear_center',
   HEATED_SEAT_REAR_RIGHT:   'select.{car_name}_seat_heater_rear_right',
 
+  // Steering wheel heater
+  STEERING_WHEEL_HEATER:      'select.{car_name}_steering_wheel_heater',
+  AUTO_STEERING_WHEEL_HEATER: 'switch.{car_name}_auto_steering_wheel_heater',
+
   // Climate
   CLIMATE:              'climate.{car_name}_climate',
 
@@ -145,6 +149,10 @@ const CUSTOM = {
   DEFROST_SWITCH:       'switch.{car_name}_defrost',
   CAMP_MODE:            'switch.{car_name}_camp_mode',
   DOG_MODE:             'switch.{car_name}_dog_mode',
+
+  // Steering wheel heater
+  STEERING_WHEEL_HEATER:      null,
+  AUTO_STEERING_WHEEL_HEATER: null,
 
   // Select — cabin overheat protection
   CABIN_OVERHEAT:       'select.{car_name}_cabin_overheat_protection',
@@ -246,6 +254,8 @@ export const ENTITY_GROUPS = [
     { key: 'HEATED_SEAT_REAR_LEFT',   label: 'Heated Seat Rear Left',   domain: 'select' },
     { key: 'HEATED_SEAT_REAR_CENTER', label: 'Heated Seat Rear Center', domain: 'select' },
     { key: 'HEATED_SEAT_REAR_RIGHT',  label: 'Heated Seat Rear Right',  domain: 'select' },
+    { key: 'STEERING_WHEEL_HEATER',      label: 'Steering Wheel Heater',      domain: 'select' },
+    { key: 'AUTO_STEERING_WHEEL_HEATER', label: 'Auto Steering Wheel Heater', domain: 'switch' },
     { key: 'CABIN_OVERHEAT',      label: 'Cabin Overheat Protection', domain: 'climate' },
     { key: 'WINDOWS_COVER',       label: 'Windows (vent/close)',  domain: 'cover' },
   ]},

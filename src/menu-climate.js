@@ -53,6 +53,14 @@ class TeslaMenuClimate extends TeslaBase {
     return 'Tesla_Heated_Seat_Off.svg';
   }
 
+  // ── Steering wheel heater image — maps level to SVG file ────────────────
+
+  _steeringHeatFile(level) {
+    if (level === 'low')  return 'Tesla_Climate_Heated_Wheel_Low.svg';
+    if (level === 'high') return 'Tesla_Climate_Heated_Wheel_High.svg';
+    return 'Tesla_Climate_Heated_Wheel_Off.svg';
+  }
+
   // ── Cabin Overheat Protection — Fleet uses climate, Custom uses select ────
 
   _setCabinOverheat(opt) {
@@ -138,6 +146,12 @@ class TeslaMenuClimate extends TeslaBase {
     const cabinOverheat = isCabinClimate
       ? ({ off: 'Off', fan_only: 'No A/C', cool: 'On' }[cabinOverheatRaw] ?? 'Off')
       : cabinOverheatRaw;
+    // Steering wheel heater
+    const hasSteeringWheel = !!this._state(this.E.STEERING_WHEEL_HEATER);
+    const steeringLevel    = hasSteeringWheel ? (this._val(this.E.STEERING_WHEEL_HEATER) ?? 'off').toLowerCase() : 'off';
+    const autoSteering     = this._val(this.E.AUTO_STEERING_WHEEL_HEATER) === 'on';
+    const steeringLabel    = autoSteering ? 'Auto' : (steeringLevel === 'off' ? 'Off' : steeringLevel === 'low' ? 'Low' : 'High');
+
     const pluggedIn     = this._val(this.E.PLUGGED_IN) === 'on';
     const climBgFile    = pluggedIn ? 'climate-bg-charging.png' : 'climate-bg.png';
 
@@ -152,6 +166,14 @@ class TeslaMenuClimate extends TeslaBase {
               alt="Car interior view" />
             ${this._hasCustomOverlay ? html`
               <div style="${this._customOverlayStyleFor(climBgFile)}"></div>` : ''}
+
+            <!-- Steering wheel heater -->
+            ${hasSteeringWheel ? html`
+              <button class="clim-steering-zone"
+                @click=${() => this._svc('select', 'select_next', this.E.STEERING_WHEEL_HEATER, { cycle: true })}>
+                <img class="btn-img" src="${this._btnUrl(this._steeringHeatFile(steeringLevel))}" alt="" />
+                <span class="clim-seat-label">${steeringLabel}</span>
+              </button>` : ''}
 
             <!-- Front seats -->
             <button class="clim-seat-zone clim-seat-fl"
