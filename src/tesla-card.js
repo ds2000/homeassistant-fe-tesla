@@ -613,9 +613,9 @@ class TeslaCard extends LitElement {
 
     const statusText = !online && onlineEnt ? 'Asleep'
       : charging ? 'Charging'
-      : this.E.PARKING_BRAKE && this._val(this.E.PARKING_BRAKE) === 'on' ? 'Parked'
       : isDriving ? `${Math.round(speedVal)} ${speedUnit}`
-      : null;
+      : this.E.PARKING_BRAKE && this._val(this.E.PARKING_BRAKE) === 'on' ? 'Parked'
+      : online ? 'Parked' : null;
 
     // Navigation — show when driving with active route
     const distToArrival = this._val(this.E.DISTANCE_TO_ARRIVAL);
