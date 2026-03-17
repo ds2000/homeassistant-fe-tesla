@@ -21,10 +21,12 @@ class TeslaMenuControls extends TeslaBase {
     this._showTyres = false;
   }
 
-  _formatPressure(val, unit) {
+  _formatPressure(val, sourceUnit, displayUnit) {
     if (val == null || val === 'unknown' || val === 'unavailable') return '—';
-    const n = Number(val);
-    if (unit === 'bar' || unit === 'Bar') return n.toFixed(1);
+    let n = Number(val);
+    // Convert if source and display units differ
+    if (sourceUnit === 'psi' && displayUnit === 'bar') n = n * 0.0689476;
+    else if (sourceUnit === 'bar' && displayUnit === 'psi') n = n / 0.0689476;
     return n.toFixed(1);
   }
 
@@ -45,12 +47,13 @@ class TeslaMenuControls extends TeslaBase {
     const bgFile = pluggedIn ? 'controls-bg-charging.png' : 'controls-bg.png';
 
     // Tyre pressure — only show toggle if entities exist
-    const hasTyres = !!this._state(this.E.TYRE_FL);
-    const tyreUnit = this._attr(this.E.TYRE_FL, 'unit_of_measurement') ?? 'psi';
-    const tyreFL = this._formatPressure(this._val(this.E.TYRE_FL), tyreUnit);
-    const tyreFR = this._formatPressure(this._val(this.E.TYRE_FR), tyreUnit);
-    const tyreRL = this._formatPressure(this._val(this.E.TYRE_RL), tyreUnit);
-    const tyreRR = this._formatPressure(this._val(this.E.TYRE_RR), tyreUnit);
+    const hasTyres   = !!this._state(this.E.TYRE_FL);
+    const sourceUnit = this._attr(this.E.TYRE_FL, 'unit_of_measurement') ?? 'psi';
+    const dispUnit   = this.tyreUnit ?? 'psi';
+    const tyreFL = this._formatPressure(this._val(this.E.TYRE_FL), sourceUnit, dispUnit);
+    const tyreFR = this._formatPressure(this._val(this.E.TYRE_FR), sourceUnit, dispUnit);
+    const tyreRL = this._formatPressure(this._val(this.E.TYRE_RL), sourceUnit, dispUnit);
+    const tyreRR = this._formatPressure(this._val(this.E.TYRE_RR), sourceUnit, dispUnit);
 
     return html`
       <div class="controls-menu${this.layout === 'landscape' ? ' landscape' : ''}">
@@ -76,19 +79,19 @@ class TeslaMenuControls extends TeslaBase {
             <!-- Tyre pressure overlays -->
             <div class="tyre-label tyre-fl">
               <span class="tyre-value">${tyreFL}</span>
-              <span class="tyre-unit">${tyreUnit}</span>
+              <span class="tyre-unit">${dispUnit}</span>
             </div>
             <div class="tyre-label tyre-fr">
               <span class="tyre-value">${tyreFR}</span>
-              <span class="tyre-unit">${tyreUnit}</span>
+              <span class="tyre-unit">${dispUnit}</span>
             </div>
             <div class="tyre-label tyre-rl">
               <span class="tyre-value">${tyreRL}</span>
-              <span class="tyre-unit">${tyreUnit}</span>
+              <span class="tyre-unit">${dispUnit}</span>
             </div>
             <div class="tyre-label tyre-rr">
               <span class="tyre-value">${tyreRR}</span>
-              <span class="tyre-unit">${tyreUnit}</span>
+              <span class="tyre-unit">${dispUnit}</span>
             </div>
           ` : html`
             <!-- Frunk — text only, top centre (open only, must be closed physically) -->

@@ -1,6 +1,6 @@
 {
   "name": "tesla-card",
-  "version": "0.6.6",
+  "version": "0.6.7",
   "description": "HACS custom Lovelace card for Tesla vehicles in Home Assistant",
   "type": "module",
   "scripts": {
