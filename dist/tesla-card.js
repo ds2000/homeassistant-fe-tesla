@@ -2340,7 +2340,7 @@ var cs=Object.defineProperty;var hs=(a,t,e)=>t in a?cs(a,t,{enumerable:!0,config
           `:o`
             <!-- Frunk — text only, top centre (open only, must be closed physically) -->
             <button class="ctrl-zone ctrl-frunk"
-              @click=${()=>this._svc("cover","open_cover",this.E.FRUNK_COVER)}
+              @click=${()=>this._activate(this.E.FRUNK_COVER)}
               ?disabled=${s}>
               ${"Open"}
             </button>
@@ -2351,7 +2351,7 @@ var cs=Object.defineProperty;var hs=(a,t,e)=>t in a?cs(a,t,{enumerable:!0,config
             </button>
             <!-- Trunk — text only, bottom centre -->
             <button class="ctrl-zone ctrl-trunk"
-              @click=${()=>this._svc("cover",i?"close_cover":"open_cover",this.E.OPEN_TRUNK)}>
+              @click=${()=>this._activate(this.E.OPEN_TRUNK)}>
               ${i?"Close":"Open"}
             </button>
             <!-- Charge port — icon only, bottom left -->

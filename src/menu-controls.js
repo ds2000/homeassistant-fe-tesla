@@ -93,7 +93,7 @@ class TeslaMenuControls extends TeslaBase {
           ` : html`
             <!-- Frunk — text only, top centre (open only, must be closed physically) -->
             <button class="ctrl-zone ctrl-frunk"
-              @click=${() => this._svc('cover', 'open_cover', this.E.FRUNK_COVER)}
+              @click=${() => this._activate(this.E.FRUNK_COVER)}
               ?disabled=${frunkOpen}>
               ${frunkOpen ? 'Open' : 'Open'}
             </button>
@@ -104,7 +104,7 @@ class TeslaMenuControls extends TeslaBase {
             </button>
             <!-- Trunk — text only, bottom centre -->
             <button class="ctrl-zone ctrl-trunk"
-              @click=${() => this._svc('cover', trunkOpen ? 'close_cover' : 'open_cover', this.E.OPEN_TRUNK)}>
+              @click=${() => this._activate(this.E.OPEN_TRUNK)}>
               ${trunkOpen ? 'Close' : 'Open'}
             </button>
             <!-- Charge port — icon only, bottom left -->

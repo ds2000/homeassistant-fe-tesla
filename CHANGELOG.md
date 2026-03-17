@@ -1,6 +1,32 @@
 # Changelog
 
-## [0.5.8] - 2026-03-16
+## [0.6.5] - 2026-03-17
+
+### Added
+- **Tyre pressure display** — toggle button in Controls menu header shows pressure values at all 4 corners of the car image, with unit display (psi/bar). Only appears if tyre pressure entities exist.
+- **Driving mode** — speed shown in header when car is moving, animated wind lines behind the car at correct 3/4 perspective angle
+- **Navigation row** — appears when driving with active route, shows destination, distance away, and arrival time
+- **Location row** — shows zone name from device_tracker (Home, Not home, etc.), switches to navigation info when driving
+- **Charging header** — green battery bar, green range text, bolt icon, and time remaining to charge limit
+- **Smart refresh** — wake button sends wake command then batch re-polls all key entities after 5s
+- **Smart status text** — Asleep / Charging / speed / Parked based on car state
+- New entities: `SPEED`, `DISTANCE_TO_ARRIVAL`, `TIME_TO_ARRIVAL`, `ROUTE`, `TYRE_FL/FR/RL/RR`, `TIME_TO_FULL_CHARGE`
+
+### Fixed
+- **alandtse/tesla compatibility** — frunk and trunk buttons now use `_activate()` which picks the correct service based on entity domain (cover vs button)
+- **Case-insensitive car name** — auto-lowercased for entity resolution
+- **Case-insensitive seat heater levels** — handles Fleet lowercase values
+- **Unlocked padlock** now white instead of dimmed
+- **Charge rate** rounded to 1 decimal place
+- Entity picker in editor uses native input + datalist (ha-entity-picker doesn't render in all contexts)
+- Entity groups fully visible when expanded (removed max-height)
+
+### Changed
+- Removed Set Schedules and Security & Drivers nav rows (no Fleet API support)
+- Active nav row chevron stays default colour and direction
+- Increased nav row spacing between label and sublabel
+
+## [0.5.0] - 2026-03-16
 
 ### Added
 - **Custom Entities mode** — new "Custom Entities" integration option in the editor lets users map every entity individually with autocomplete. Supports MQTT, third-party integrations, or any non-standard entity naming. Entities are grouped into 9 collapsible categories (Sensors, Status, Doors, Windows, Lock, Climate, Charging, Covers & Buttons, Location) with a count badge showing configured vs total.
