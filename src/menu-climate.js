@@ -271,13 +271,13 @@ class TeslaMenuClimate extends TeslaBase {
                 ${hasCampMode ? html`
                   <button class="clim-list-item${campMode ? ' hot' : ''}"
                     @click=${() => this._togglePresetOrSwitch('camp', campMode, this.E.CAMP_MODE)}>
-                    <span class="icon clim-list-icon">${unsafeHTML(ICONS.tent)}</span>
+                    <img class="clim-list-img" src="${this._btnUrl(campMode ? 'Tesla_Climate_Campmode_On.svg' : 'Tesla_Climate_Campmode_Off.svg')}" alt="" />
                     <span class="clim-list-label">Camp Mode</span>
                   </button>` : ''}
                 ${hasDogMode ? html`
                   <button class="clim-list-item${dogMode ? ' hot' : ''}"
                     @click=${() => this._togglePresetOrSwitch('dog', dogMode, this.E.DOG_MODE)}>
-                    <span class="icon clim-list-icon">${unsafeHTML(ICONS.dog)}</span>
+                    <img class="clim-list-img" src="${this._btnUrl(dogMode ? 'Tesla_Climate_Dogmode_On.svg' : 'Tesla_Climate_Dogmode_Off.svg')}" alt="" />
                     <span class="clim-list-label">Dog Mode</span>
                   </button>` : ''}
               </div>

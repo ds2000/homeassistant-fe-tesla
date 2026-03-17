@@ -65,7 +65,7 @@ class TeslaMenuControls extends TeslaBase {
           ${hasTyres ? html`
             <button class="panel-header-btn${this._showTyres ? ' active' : ''}"
               @click=${() => { this._showTyres = !this._showTyres; }}>
-              <span class="icon">${unsafeHTML(ICONS.tyre)}</span>
+              <img class="panel-header-img" src="${this._btnUrl('Tesla_TPMS.svg')}" alt="TPMS" />
             </button>` : ''}
         </div>
         <div class="ctrl-car-area">

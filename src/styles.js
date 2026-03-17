@@ -358,8 +358,8 @@ export const climateStyles = css`
      Based on Model 3 climate-bg.png (1100×1898). */
   .clim-steering-zone {
     position: absolute;
-    top: 14%;
-    left: 26%;
+    top: 17%;
+    left: 30%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -372,8 +372,8 @@ export const climateStyles = css`
   }
 
   .clim-steering-zone .btn-img {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     pointer-events: none;
   }
 
@@ -607,6 +607,12 @@ export const climateStyles = css`
   }
 
   .clim-list-item.hot .clim-list-icon { color: rgba(255,255,255,0.65); }
+
+  .clim-list-img {
+    width: 28px;
+    height: 28px;
+    pointer-events: none;
+  }
 
   .clim-list-label { flex: 1; }
 
@@ -888,6 +894,7 @@ export const controlsStyles = css`
   }
 
   .panel-header-btn .icon { width: 20px; height: 20px; }
+  .panel-header-img { width: 24px; height: 24px; pointer-events: none; }
   .panel-header-btn:hover { color: rgba(255,255,255,0.8); border-color: rgba(255,255,255,0.4); }
   .panel-header-btn.active { color: #f5c542; border-color: #f5c542; }
 
