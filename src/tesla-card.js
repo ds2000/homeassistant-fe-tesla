@@ -615,9 +615,9 @@ class TeslaCard extends LitElement {
       : charging ? 'Charging'
       : this.E.PARKING_BRAKE && this._val(this.E.PARKING_BRAKE) === 'on' ? 'Parked'
       : isDriving ? `${Math.round(speedVal)} ${speedUnit}`
-      : online ? 'Parked' : null;
+      : null;
 
-    // Navigation — only show when driving with active route
+    // Navigation — show when driving with active route
     const distToArrival = this._val(this.E.DISTANCE_TO_ARRIVAL);
     const timeToArrival = this._val(this.E.TIME_TO_ARRIVAL);
     const routeDest     = this._attr(this.E.ROUTE, 'destination');
@@ -629,6 +629,13 @@ class TeslaCard extends LitElement {
       const timeStr = !isNaN(arrival) ? arrival.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
       return timeStr ? `${dist} · ${timeStr} arrival` : dist;
     })() : null;
+
+    // Location — reverse-geocode from device_tracker state/zone
+    const locationState = this._val(this.E.LOCATION);
+    const hasLocation   = locationState && locationState !== 'unknown' && locationState !== 'unavailable';
+    const locationLabel = hasLocation
+      ? locationState.charAt(0).toUpperCase() + locationState.slice(1).replace(/_/g, ' ')
+      : null;
 
     const chgRateDisp = chgRate != null ? Number(chgRate).toFixed(1) : '—';
     const chargerSub  = charging
@@ -768,12 +775,12 @@ class TeslaCard extends LitElement {
                 </div>
                 <span class="icon nav-chevron">${unsafeHTML(ICONS['chevron-right'])}</span>
               </button>
-              ${hasNavigation ? html`
+              ${hasLocation ? html`
               <div class="nav-row nav-row-static">
-                <span class="icon nav-icon">${unsafeHTML(ICONS.navigation)}</span>
+                <span class="icon nav-icon">${unsafeHTML(ICONS.location)}</span>
                 <div class="nav-text">
-                  <span class="nav-label">${routeDest ?? 'Navigation'}</span>
-                  <span class="nav-sublabel">${navSub}</span>
+                  <span class="nav-label">Location</span>
+                  <span class="nav-sublabel">${isDriving && navSub ? navSub : locationLabel}</span>
                 </div>
                 <span class="icon nav-chevron">${unsafeHTML(ICONS['chevron-right'])}</span>
               </div>` : ''}

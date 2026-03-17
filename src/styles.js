@@ -1253,7 +1253,7 @@ export const cardStyles = css`
     display: flex;
     align-items: center;
     width: 100%;
-    padding: 18px 20px;
+    padding: 20px 20px;
     background: transparent;
     border: none;
     border-bottom: 1px solid rgba(255,255,255,0.06);
@@ -1308,7 +1308,7 @@ export const cardStyles = css`
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
   }
 
   .nav-label {
