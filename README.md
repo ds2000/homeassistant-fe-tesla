@@ -111,9 +111,17 @@ name: My Tesla
 show_speed: true
 ```
 
+### Visual editor
+
+The card includes a built-in GUI editor. Click the pencil icon on the card in the Lovelace UI to configure all options without writing YAML.
+
 ### Custom entity mapping
 
-If your entities don't follow the standard Tesla Fleet or alandtse naming convention (e.g. you use MQTT, a third-party bridge, or have renamed entities), select **Custom Entities** as the integration and map each entity individually:
+If your entities don't follow the standard Tesla Fleet or alandtse naming convention (e.g. you use MQTT, a third-party bridge, or have renamed entities), select **Custom Entities** as the integration and map each entity individually using the visual editor:
+
+![Custom Entities Editor](images/readme/card-custom-entities.png)
+
+Or configure via YAML:
 
 ```yaml
 type: custom:tesla-card
@@ -126,17 +134,11 @@ entity_overrides:
   DOOR_LOCK: lock.my_front_door
 ```
 
-The visual editor provides a grouped entity picker with HA autocomplete — no YAML needed. Only override the entities you need; the rest will be skipped.
+Only override the entities you need; the rest will be skipped.
 
 > **Note:** Custom entity mapping is an advanced, untested feature. It should work with any HA entity that follows standard domain conventions (lock, climate, cover, switch, sensor, etc.) but has not been validated against all third-party integrations. Please report any issues.
 
-![Custom Entities Editor](images/readme/card-custom-entities.png)
-
 \* `car_name` is optional when using `integration: entities`.
-
-### Visual editor
-
-The card includes a built-in GUI editor. Click the pencil icon on the card in the Lovelace UI to configure all options without writing YAML.
 
 ---
 
