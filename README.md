@@ -37,6 +37,7 @@ If you find this card useful: [![Buy Me A Coffee](https://img.shields.io/badge/B
 ### Roadmap
 
 - Heated steering wheel control
+- Wheel spin animation when driving
 - More factory colours for all models
 - Additional car models and variants
 
@@ -125,6 +126,10 @@ entity_overrides:
 ```
 
 The visual editor provides a grouped entity picker with HA autocomplete — no YAML needed. Only override the entities you need; the rest will be skipped.
+
+> **Note:** Custom entity mapping is an advanced, untested feature. It should work with any HA entity that follows standard domain conventions (lock, climate, cover, switch, sensor, etc.) but has not been validated against all third-party integrations. Please report any issues.
+
+![Custom Entities Editor](images/readme/card-custom-entities.png)
 
 \* `car_name` is optional when using `integration: entities`.
 
