@@ -1172,24 +1172,27 @@ var cs=Object.defineProperty;var hs=(a,t,e)=>t in a?cs(a,t,{enumerable:!0,config
     inset: 0;
     pointer-events: none;
     overflow: hidden;
+    z-index: 1;
   }
 
   .wind-line {
     position: absolute;
-    right: 10%;
-    height: 1px;
-    background: linear-gradient(to left, rgba(255,255,255,0.25), transparent);
-    animation: windStreak 1.8s ease-in-out infinite;
+    right: 20%;
+    height: 1.5px;
+    background: linear-gradient(to left, rgba(255,255,255,0.4), transparent);
+    transform-origin: right center;
+    transform: rotate(-27deg);
+    animation: windStreak 2s ease-in-out infinite;
   }
 
-  .wind-line.w1 { top: 38%; width: 18%; animation-delay: 0s; }
-  .wind-line.w2 { top: 48%; width: 22%; animation-delay: 0.6s; }
-  .wind-line.w3 { top: 58%; width: 15%; animation-delay: 1.2s; }
+  .wind-line.w1 { top: 30%; width: 20%; animation-delay: 0s; }
+  .wind-line.w2 { top: 40%; width: 24%; animation-delay: 0.7s; }
+  .wind-line.w3 { top: 50%; width: 17%; animation-delay: 1.3s; }
 
   @keyframes windStreak {
-    0%   { opacity: 0; transform: translateX(0); }
-    20%  { opacity: 0.6; }
-    100% { opacity: 0; transform: translateX(60px); }
+    0%   { opacity: 0; transform: rotate(-27deg) translateX(0); }
+    20%  { opacity: 0.7; }
+    100% { opacity: 0; transform: rotate(-27deg) translateX(70px); }
   }
 
   .car-overlay {
@@ -3008,12 +3011,6 @@ var cs=Object.defineProperty;var hs=(a,t,e)=>t in a?cs(a,t,{enumerable:!0,config
           <div class="landing-body">
             <div class="landing-left">
               <div class="car-image-area">
-                ${mt?o`
-                  <div class="driving-lines">
-                    <div class="wind-line w1"></div>
-                    <div class="wind-line w2"></div>
-                    <div class="wind-line w3"></div>
-                  </div>`:""}
                 ${this._imageError?o`
                   <div class="car-image-placeholder">
                     <span class="icon">${c(l.car)}</span>
@@ -3045,6 +3042,12 @@ var cs=Object.defineProperty;var hs=(a,t,e)=>t in a?cs(a,t,{enumerable:!0,config
                 ${this._hasCustomOverlay?o`
                   <div class="car-colour-overlay"
                     style="${this._customOverlayStyleFor(Q)}"></div>`:""}
+                ${mt?o`
+                  <div class="driving-lines">
+                    <div class="wind-line w1"></div>
+                    <div class="wind-line w2"></div>
+                    <div class="wind-line w3"></div>
+                  </div>`:""}
               </div>
               <!-- Quick action icons: lock, controls, charge, climate -->
               <div class="quick-actions">

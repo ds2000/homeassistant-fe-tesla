@@ -700,12 +700,6 @@ class TeslaCard extends LitElement {
           <div class="landing-body">
             <div class="landing-left">
               <div class="car-image-area">
-                ${isDriving ? html`
-                  <div class="driving-lines">
-                    <div class="wind-line w1"></div>
-                    <div class="wind-line w2"></div>
-                    <div class="wind-line w3"></div>
-                  </div>` : ''}
                 ${this._imageError ? html`
                   <div class="car-image-placeholder">
                     <span class="icon">${unsafeHTML(ICONS.car)}</span>
@@ -737,6 +731,12 @@ class TeslaCard extends LitElement {
                 ${this._hasCustomOverlay ? html`
                   <div class="car-colour-overlay"
                     style="${this._customOverlayStyleFor(baseImg)}"></div>` : ''}
+                ${isDriving ? html`
+                  <div class="driving-lines">
+                    <div class="wind-line w1"></div>
+                    <div class="wind-line w2"></div>
+                    <div class="wind-line w3"></div>
+                  </div>` : ''}
               </div>
               <!-- Quick action icons: lock, controls, charge, climate -->
               <div class="quick-actions">
