@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.0] - 2026-03-17
+
+### Added
+- **Heated steering wheel** on climate screen — cycles through Off/Low/High with Tesla app SVGs, shows "Auto" when auto steering heater switch is on. Only appears if the entity exists.
+- **Tyre pressure display** in Controls menu — toggle button (top-right) shows pressure at all 4 corners. Uses Tesla TPMS SVG icon.
+- **Tyre unit toggle** (psi/bar) in Settings panel — auto-converts pressure values, persisted per car.
+- **Camp/dog mode Tesla SVGs** — replaced inline icons with official Tesla app button images (grey off, white on).
+- **Steering wheel heater SVGs** — Off (grey), Low (1 red wave), High (2 red waves), transparent backgrounds.
+
+### Fixed
+- Steering wheel SVGs cleaned — "AUTO" text paths removed, transparent backgrounds.
+- alandtse/tesla compatibility — frunk and trunk buttons use domain-aware `_activate()` instead of hardcoded `cover` service calls.
+
 ## [0.6.5] - 2026-03-17
 
 ### Added

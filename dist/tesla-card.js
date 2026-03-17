@@ -349,11 +349,12 @@ var hs=Object.defineProperty;var ds=(a,t,e)=>t in a?hs(a,t,{enumerable:!0,config
   .clim-steering-zone {
     position: absolute;
     top: 17%;
-    left: 30%;
+    left: 37.5%;
+    transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px;
+    gap: 0;
     background: none;
     border: none;
     cursor: pointer;
@@ -362,13 +363,14 @@ var hs=Object.defineProperty;var ds=(a,t,e)=>t in a?hs(a,t,{enumerable:!0,config
   }
 
   .clim-steering-zone .btn-img {
-    width: 32px;
-    height: 32px;
+    width: 66px;
+    height: 66px;
     pointer-events: none;
+    margin-bottom: -6px;
   }
 
-  .clim-seat-fl { top: 24%; left: 37%; }
-  .clim-seat-fr { top: 24%; left: 66%; }
+  .clim-seat-fl { top: 27%; left: 37%; }
+  .clim-seat-fr { top: 27%; left: 66%; }
   .clim-seat-rl { top: 45%; left: 38%; }
   .clim-seat-rc { top: 45%; left: 52%; }
   .clim-seat-rr { top: 45%; left: 65%; }

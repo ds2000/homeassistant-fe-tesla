@@ -22,8 +22,10 @@ If you find this card useful: [![Buy Me A Coffee](https://img.shields.io/badge/B
 - **On-charge mode** — automatically switches to charging images when plugged in, with an animated green glow on the charging cable
 - **Default view** — car image with battery bar, range, parked/speed status, inside temperature
 - **Charger menu** — charging state, charge port open/close, start/stop charging, charge limit slider, charging amps slider
-- **Climate menu** — HVAC on/off, temperature stepper, defrost toggle, heated front seats (Off/Low/Med/High), camp mode, dog mode, cabin overheat protection, window vent/close
-- **Controls menu** — door lock/unlock, frunk open, trunk open/close, charge port, remote start, horn, flash lights, window vent/close
+- **Climate menu** — HVAC on/off, temperature stepper, defrost toggle, heated front seats (Off/Low/Med/High), heated steering wheel (Auto/Low/High), camp mode, dog mode, cabin overheat protection, window vent/close
+- **Controls menu** — door lock/unlock, frunk open, trunk open/close, charge port, remote start, horn, flash lights, window vent/close, tyre pressure display (psi/bar toggle)
+- **Driving mode** — speed display, wind line animation, navigation row with destination and arrival time
+- **Charging header** — green battery bar, bolt icon, range in green, time remaining to charge limit
 - **Animated climate indicator** — spinning fan icon on landing page when HVAC is active
 - **Custom entity mapping** — use any HA entities (MQTT, third-party integrations) via the built-in entity picker
 - **Landscape layout** — optional wide layout with side-by-side panels
@@ -36,7 +38,6 @@ If you find this card useful: [![Buy Me A Coffee](https://img.shields.io/badge/B
 
 ### Roadmap
 
-- Heated steering wheel control
 - Wheel spin animation when driving
 - More factory colours for all models
 - Additional car models and variants

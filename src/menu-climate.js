@@ -150,7 +150,7 @@ class TeslaMenuClimate extends TeslaBase {
     const hasSteeringWheel = !!this._state(this.E.STEERING_WHEEL_HEATER);
     const steeringLevel    = hasSteeringWheel ? (this._val(this.E.STEERING_WHEEL_HEATER) ?? 'off').toLowerCase() : 'off';
     const autoSteering     = this._val(this.E.AUTO_STEERING_WHEEL_HEATER) === 'on';
-    const steeringLabel    = autoSteering ? 'Auto' : (steeringLevel === 'off' ? 'Off' : steeringLevel === 'low' ? 'Low' : 'High');
+    const steeringLabel    = autoSteering ? 'Auto' : steeringLevel === 'off' ? 'Off' : steeringLevel === 'low' ? 'Low' : 'High';
 
     const pluggedIn     = this._val(this.E.PLUGGED_IN) === 'on';
     const climBgFile    = pluggedIn ? 'climate-bg-charging.png' : 'climate-bg.png';
