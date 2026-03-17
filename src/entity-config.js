@@ -86,8 +86,13 @@ const FLEET = {
   // Time to full charge
   TIME_TO_FULL_CHARGE:  'sensor.{car_name}_time_to_full_charge',
 
+  // Navigation
+  DISTANCE_TO_ARRIVAL:  'sensor.{car_name}_distance_to_arrival',
+  TIME_TO_ARRIVAL:      'sensor.{car_name}_time_to_arrival',
+
   // Device tracker
   LOCATION:             'device_tracker.{car_name}_location',
+  ROUTE:                'device_tracker.{car_name}_route',
 };
 
 // alandtse/tesla custom integration
@@ -173,8 +178,13 @@ const CUSTOM = {
   // Time to full charge
   TIME_TO_FULL_CHARGE:  'sensor.{car_name}_time_to_full_charge',
 
+  // Navigation
+  DISTANCE_TO_ARRIVAL:  null,
+  TIME_TO_ARRIVAL:      null,
+
   // Device tracker
   LOCATION:             'device_tracker.{car_name}_location_tracker',
+  ROUTE:                null,
 };
 
 const INTEGRATIONS = { fleet: FLEET, custom: CUSTOM };
@@ -192,7 +202,6 @@ export const ENTITY_GROUPS = [
     { key: 'CHARGE_RATE',        label: 'Charge Rate',        domain: 'sensor' },
     { key: 'TEMPERATURE_INSIDE', label: 'Inside Temperature', domain: 'sensor' },
     { key: 'TEMPERATURE_OUTSIDE',label: 'Outside Temperature',domain: 'sensor' },
-    { key: 'SPEED',              label: 'Speed',              domain: 'sensor' },
     { key: 'ODOMETER',           label: 'Odometer',           domain: 'sensor' },
     { key: 'ENERGY_ADDED',       label: 'Energy Added',       domain: 'sensor' },
   ]},
@@ -241,8 +250,12 @@ export const ENTITY_GROUPS = [
     { key: 'REMOTE_START',  label: 'Remote Start', domain: 'button' },
     { key: 'FORCE_UPDATE',  label: 'Wake / Refresh', domain: 'button' },
   ]},
-  { label: 'Location', keys: [
-    { key: 'LOCATION', label: 'Location Tracker', domain: 'device_tracker' },
+  { label: 'Navigation & Location', keys: [
+    { key: 'SPEED',               label: 'Speed',              domain: 'sensor' },
+    { key: 'DISTANCE_TO_ARRIVAL', label: 'Distance to Arrival',domain: 'sensor' },
+    { key: 'TIME_TO_ARRIVAL',     label: 'Time to Arrival',    domain: 'sensor' },
+    { key: 'LOCATION',            label: 'Location Tracker',   domain: 'device_tracker' },
+    { key: 'ROUTE',               label: 'Route Tracker',      domain: 'device_tracker' },
   ]},
 ];
 

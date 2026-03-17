@@ -296,6 +296,12 @@ export const ICONS = {
     <circle cx="12" cy="9" r="2.5"/>
   </svg>`,
 
+  // https://tabler.io/icons/icon/navigation — filled triangle pointing up
+  navigation: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3l7 18l-7-4l-7 4z" />
+  </svg>`,
+
   // ── Vent / Windows ──────────────────────────────────────────────────────────
 
   // Custom — side-view car with open windows (extracted from Tesla_Vent_Open_Windows_Button.svg)

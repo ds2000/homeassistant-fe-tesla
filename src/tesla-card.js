@@ -407,7 +407,8 @@ class TeslaCard extends LitElement {
       this.E.WINDOWS_COVER, this.E.CHARGE_LIMIT_NUMBER, this.E.CHARGING_AMPS_NUMBER,
       this.E.DOOR_DRIVER_FRONT, this.E.DOOR_DRIVER_REAR,
       this.E.DOOR_PASSENGER_FRONT, this.E.DOOR_PASSENGER_REAR,
-      this.E.TIME_TO_FULL_CHARGE,
+      this.E.TIME_TO_FULL_CHARGE, this.E.SPEED,
+      this.E.DISTANCE_TO_ARRIVAL, this.E.TIME_TO_ARRIVAL,
     ];
 
     // Collect valid entity IDs
@@ -604,15 +605,30 @@ class TeslaCard extends LitElement {
     const tempUnit    = this._attr(this.E.CLIMATE, 'temperature_unit') ?? '°C';
     const tempStr     = tgtTempRaw != null ? Number(tgtTempRaw).toFixed(1) : '—';
 
+    // Speed — try dedicated sensor first, then device_tracker attribute
+    const speedRaw = this._val(this.E.SPEED) ?? this._attr(this.E.LOCATION, 'speed');
+    const speedVal = speedRaw != null ? Number(speedRaw) : 0;
+    const speedUnit = this._attr(this.E.SPEED, 'unit_of_measurement') ?? 'km/h';
+    const isDriving = online && speedVal > 0;
+
     const statusText = !online && onlineEnt ? 'Asleep'
       : charging ? 'Charging'
       : this.E.PARKING_BRAKE && this._val(this.E.PARKING_BRAKE) === 'on' ? 'Parked'
-      : (() => {
-          if (!this.config.show_speed) return null;
-          const s = this._attr(this.E.LOCATION, 'speed');
-          if (s != null && Number(s) > 0) return `${Math.round(Number(s))} km/h`;
-          return online ? 'Parked' : null;
-        })();
+      : isDriving ? `${Math.round(speedVal)} ${speedUnit}`
+      : online ? 'Parked' : null;
+
+    // Navigation — only show when driving with active route
+    const distToArrival = this._val(this.E.DISTANCE_TO_ARRIVAL);
+    const timeToArrival = this._val(this.E.TIME_TO_ARRIVAL);
+    const routeDest     = this._attr(this.E.ROUTE, 'destination');
+    const hasNavigation = isDriving && distToArrival != null && distToArrival !== 'unknown'
+                       && timeToArrival != null && timeToArrival !== 'unavailable';
+    const navSub = hasNavigation ? (() => {
+      const dist = `${Number(distToArrival).toFixed(1)} ${this._attr(this.E.DISTANCE_TO_ARRIVAL, 'unit_of_measurement') ?? 'km'} away`;
+      const arrival = new Date(timeToArrival);
+      const timeStr = !isNaN(arrival) ? arrival.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+      return timeStr ? `${dist} · ${timeStr} arrival` : dist;
+    })() : null;
 
     const chgRateDisp = chgRate != null ? Number(chgRate).toFixed(1) : '—';
     const chargerSub  = charging
@@ -677,6 +693,12 @@ class TeslaCard extends LitElement {
           <div class="landing-body">
             <div class="landing-left">
               <div class="car-image-area">
+                ${isDriving ? html`
+                  <div class="driving-lines">
+                    <div class="wind-line w1"></div>
+                    <div class="wind-line w2"></div>
+                    <div class="wind-line w3"></div>
+                  </div>` : ''}
                 ${this._imageError ? html`
                   <div class="car-image-placeholder">
                     <span class="icon">${unsafeHTML(ICONS.car)}</span>
@@ -746,6 +768,15 @@ class TeslaCard extends LitElement {
                 </div>
                 <span class="icon nav-chevron">${unsafeHTML(ICONS['chevron-right'])}</span>
               </button>
+              ${hasNavigation ? html`
+              <div class="nav-row nav-row-static">
+                <span class="icon nav-icon">${unsafeHTML(ICONS.navigation)}</span>
+                <div class="nav-text">
+                  <span class="nav-label">${routeDest ?? 'Navigation'}</span>
+                  <span class="nav-sublabel">${navSub}</span>
+                </div>
+                <span class="icon nav-chevron">${unsafeHTML(ICONS['chevron-right'])}</span>
+              </div>` : ''}
               <button class="nav-row"
                 @click=${this._toggleCharger}>
                 <span class="icon nav-icon">${unsafeHTML(ICONS['charge-bolt'])}</span>

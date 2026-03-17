@@ -1136,6 +1136,33 @@ export const cardStyles = css`
     display: block;
   }
 
+  /* ── Driving wind lines ──────────────────────────────────── */
+
+  .driving-lines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .wind-line {
+    position: absolute;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(to left, rgba(255,255,255,0.25), transparent);
+    animation: windStreak 1.8s ease-in-out infinite;
+  }
+
+  .wind-line.w1 { top: 38%; width: 18%; animation-delay: 0s; }
+  .wind-line.w2 { top: 48%; width: 22%; animation-delay: 0.6s; }
+  .wind-line.w3 { top: 58%; width: 15%; animation-delay: 1.2s; }
+
+  @keyframes windStreak {
+    0%   { opacity: 0; transform: translateX(0); }
+    20%  { opacity: 0.6; }
+    100% { opacity: 0; transform: translateX(60px); }
+  }
+
   .car-overlay {
     position: absolute;
     inset: 0;
@@ -1243,7 +1270,7 @@ export const cardStyles = css`
   .nav-row:hover .nav-icon { color: rgba(255,255,255,0.8); }
   .nav-row:last-child { border-bottom: none; }
 
-  .nav-row:disabled {
+  .nav-row:disabled, .nav-row-static {
     opacity: 1;
     pointer-events: none;
     cursor: default;
