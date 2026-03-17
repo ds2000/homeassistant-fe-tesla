@@ -83,6 +83,12 @@ const FLEET = {
   // Sensors — charging session
   ENERGY_ADDED:         'sensor.{car_name}_charge_energy_added',
 
+  // Tyre pressure
+  TYRE_FL:              'sensor.{car_name}_tyre_pressure_front_left',
+  TYRE_FR:              'sensor.{car_name}_tyre_pressure_front_right',
+  TYRE_RL:              'sensor.{car_name}_tyre_pressure_rear_left',
+  TYRE_RR:              'sensor.{car_name}_tyre_pressure_rear_right',
+
   // Time to full charge
   TIME_TO_FULL_CHARGE:  'sensor.{car_name}_time_to_full_charge',
 
@@ -175,6 +181,12 @@ const CUSTOM = {
   // Sensors — charging session
   ENERGY_ADDED:         'sensor.{car_name}_energy_added',
 
+  // Tyre pressure
+  TYRE_FL:              null,
+  TYRE_FR:              null,
+  TYRE_RL:              null,
+  TYRE_RR:              null,
+
   // Time to full charge
   TIME_TO_FULL_CHARGE:  'sensor.{car_name}_time_to_full_charge',
 
@@ -249,6 +261,12 @@ export const ENTITY_GROUPS = [
     { key: 'FLASH_LIGHTS',  label: 'Flash Lights', domain: 'button' },
     { key: 'REMOTE_START',  label: 'Remote Start', domain: 'button' },
     { key: 'FORCE_UPDATE',  label: 'Wake / Refresh', domain: 'button' },
+  ]},
+  { label: 'Tyre Pressure', keys: [
+    { key: 'TYRE_FL', label: 'Front Left',  domain: 'sensor' },
+    { key: 'TYRE_FR', label: 'Front Right', domain: 'sensor' },
+    { key: 'TYRE_RL', label: 'Rear Left',   domain: 'sensor' },
+    { key: 'TYRE_RR', label: 'Rear Right',  domain: 'sensor' },
   ]},
   { label: 'Navigation & Location', keys: [
     { key: 'SPEED',               label: 'Speed',              domain: 'sensor' },

@@ -850,6 +850,53 @@ export const controlsStyles = css`
 
   .ctrl-port.port-open { color: rgba(255,255,255,0.75); }
 
+  /* ── Panel header button (tyre toggle) ─────────────────── */
+
+  .panel-header-btn {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    padding: 6px;
+    color: rgba(255,255,255,0.5);
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .panel-header-btn .icon { width: 20px; height: 20px; }
+  .panel-header-btn:hover { color: rgba(255,255,255,0.8); border-color: rgba(255,255,255,0.4); }
+  .panel-header-btn.active { color: #f5c542; border-color: #f5c542; }
+
+  /* ── Tyre pressure labels ──────────────────────────────── */
+
+  .tyre-label {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+    animation: fadeSlideIn 0.2s ease-out both;
+  }
+
+  .tyre-value {
+    font-size: 0.95em;
+    font-weight: 600;
+    color: #ffffff;
+  }
+
+  .tyre-unit {
+    font-size: 0.65em;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .tyre-fl { top: 18%; left: 6%; }
+  .tyre-fr { top: 18%; right: 6%; }
+  .tyre-rl { bottom: 18%; left: 6%; }
+  .tyre-rr { bottom: 18%; right: 6%; }
+
   /* Controls: bottom action bar */
   .ctrl-actions {
     display: flex;
