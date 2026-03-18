@@ -347,3 +347,17 @@ export function resolveEntityId(template, carName, overrides) {
 export function entityId(template, carName) {
   return template ? template.replace('{car_name}', (carName ?? '').toLowerCase()) : null;
 }
+
+/**
+ * Fleet entity names vary by HA locale (British: froot/boot/vent_windows,
+ * American: frunk/trunk/windows). This map provides alternatives to try
+ * when the primary entity is not found.
+ */
+export const FLEET_LOCALE_ALTS = {
+  'cover.{car_name}_froot':        'cover.{car_name}_frunk',
+  'cover.{car_name}_frunk':        'cover.{car_name}_froot',
+  'cover.{car_name}_boot':         'cover.{car_name}_trunk',
+  'cover.{car_name}_trunk':        'cover.{car_name}_boot',
+  'cover.{car_name}_vent_windows': 'cover.{car_name}_windows',
+  'cover.{car_name}_windows':      'cover.{car_name}_vent_windows',
+};

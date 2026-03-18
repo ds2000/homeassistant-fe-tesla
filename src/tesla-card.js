@@ -1,7 +1,7 @@
 import { LitElement, html } from 'lit';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { sharedStyles, cardStyles } from './styles.js';
-import { getEntities, resolveEntityId } from './entity-config.js';
+import { getEntities, resolveEntityId, FLEET_LOCALE_ALTS } from './entity-config.js';
 import { ICONS } from './icons.js';
 import { FACTORY_COLOURS } from './recolour.js';
 import { TESLA_MODELS, getVariantColours } from './models.js';
@@ -402,7 +402,14 @@ class TeslaCard extends LitElement {
 
   // ─── Entity helpers ────────────────────────────────────────────────────────
 
-  _eid(t)      { return resolveEntityId(t, this.config.car_name, this.config.entity_overrides); }
+  _eid(t) {
+    const id = resolveEntityId(t, this.config.car_name, this.config.entity_overrides);
+    if (id && !this.hass?.states[id] && FLEET_LOCALE_ALTS[t]) {
+      const alt = resolveEntityId(FLEET_LOCALE_ALTS[t], this.config.car_name, this.config.entity_overrides);
+      if (alt && this.hass?.states[alt]) return alt;
+    }
+    return id;
+  }
   _state(t)    { const id = this._eid(t); return id ? this.hass?.states[id] : undefined; }
   _val(t)      { return this._state(t)?.state; }
   _attr(t, a)  { return this._state(t)?.attributes?.[a]; }
