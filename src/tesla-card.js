@@ -424,8 +424,10 @@ class TeslaCard extends LitElement {
   // ─── Force refresh — wake car then poll all entities ───────────────────────
 
   async _forceRefresh() {
-    // 1. Wake the car
-    await this._svc('button', 'press', this.E.FORCE_UPDATE);
+    // 1. Wake the car (only if entity exists)
+    if (this._state(this.E.FORCE_UPDATE)) {
+      await this._svc('button', 'press', this.E.FORCE_UPDATE);
+    }
 
     // 2. After a delay, request HA to re-poll key entities
     const REFRESH_ENTITIES = [
@@ -441,10 +443,10 @@ class TeslaCard extends LitElement {
       this.E.DISTANCE_TO_ARRIVAL, this.E.TIME_TO_ARRIVAL,
     ];
 
-    // Collect valid entity IDs
+    // Collect valid entity IDs — only include entities that exist in HA
     const entityIds = REFRESH_ENTITIES
       .map(tpl => this._eid(tpl))
-      .filter(Boolean);
+      .filter(id => id && this.hass?.states[id]);
 
     // Wait for wake to take effect, then batch-update
     setTimeout(async () => {
