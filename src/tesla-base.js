@@ -68,9 +68,13 @@ export class TeslaBase extends LitElement {
   _customOverlayStyleFor(imageFile) {
     const c = this.customColour;
     if (!c || c.s === 0) return '';
+    // Ensure h/s are safe integers before interpolating into CSS
+    const h = Math.round(Number(c.h) || 0);
+    const s = Math.round(Number(c.s) || 0);
+    if (s === 0) return '';
     const mask = this._maskUrl(imageFile);
     return `position:absolute;inset:0;pointer-events:none;`
-      + `background:hsl(${c.h},${c.s}%,50%);mix-blend-mode:color;`
+      + `background:hsl(${h},${s}%,50%);mix-blend-mode:color;`
       + `-webkit-mask-image:url(${mask});mask-image:url(${mask});`
       + `-webkit-mask-size:contain;mask-size:contain;`
       + `-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;`

@@ -240,6 +240,12 @@ npm run build
 
 # Watch for changes (with inline sourcemaps)
 npm run watch
+
+# Run tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
 ```
 
-Source files are in `src/`. The compiled output is `dist/tesla-card.js`.
+Source files are in `src/`. The compiled output is `dist/tesla-card.js`. Tests are in `tests/`.

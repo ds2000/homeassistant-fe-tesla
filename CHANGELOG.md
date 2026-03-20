@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.3] - 2026-03-20
+
+### Added
+- **Automated test suite** — Vitest framework with 78 tests covering entity config, models, colours, and security validation. Run with `npm test`.
+
+### Security
+- **Config value validation** — `setConfig()` now rejects `image_path`, `car_model`, `car_variant`, and `car_color` values containing characters that could escape CSS or URL contexts (prevents CSS injection via crafted card config).
+- **Custom colour clamping** — `h` (0–360) and `s` (0–100) values are validated as finite numbers and clamped before interpolation into inline CSS styles. Blocks injection via malicious localStorage writes.
+- **localStorage shape validation** — `_restoreColour()` and `_restoreModel()` now verify the deserialized JSON matches the expected object shape (`{ dir }` / `{ model, variant }`) before assigning to component state.
+
 ## [1.0.0] - 2026-03-17
 
 ### Added

@@ -49,6 +49,13 @@ const LS_TYRE_UNIT_PREFIX = 'tesla-card-tyre-unit-';
 const CARD_SIZES          = ['small', 'medium', 'large'];
 const TYRE_UNITS          = ['psi', 'bar'];
 
+/** Clamp a value to a numeric range; returns null if not a finite number. */
+function _clampNum(v, min, max) {
+  const n = Number(v);
+  if (!isFinite(n)) return null;
+  return Math.max(min, Math.min(max, Math.round(n)));
+}
+
 class TeslaCard extends LitElement {
 
   // Cache-bust version — changes on each page load to pick up new images
@@ -106,6 +113,13 @@ class TeslaCard extends LitElement {
 
   setConfig(config) {
     if (!config.car_name && config.integration !== 'entities') throw new Error('car_name is required');
+    // Validate config values used in URL/CSS contexts to prevent injection
+    const safePathRe = /^[a-zA-Z0-9/_.\-]+$/;
+    const safeIdRe   = /^[a-zA-Z0-9._\-]+$/;
+    if (config.image_path  && !safePathRe.test(config.image_path))  throw new Error('image_path contains invalid characters');
+    if (config.car_model   && !safeIdRe.test(config.car_model))     throw new Error('car_model contains invalid characters');
+    if (config.car_variant && !safeIdRe.test(config.car_variant))   throw new Error('car_variant contains invalid characters');
+    if (config.car_color   && !safeIdRe.test(config.car_color))     throw new Error('car_color contains invalid characters');
     this._baseConfig = {
       car_model:   '3',
       car_variant: '3.1',
@@ -199,7 +213,16 @@ class TeslaCard extends LitElement {
       const raw = localStorage.getItem(this._colourLsKey());
       if (!raw) return;
       try {
-        this._colourOverride = JSON.parse(raw);
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed.dir === 'string') {
+          if (parsed.dir === 'custom') {
+            const h = _clampNum(parsed.h, 0, 360);
+            const s = _clampNum(parsed.s, 0, 100);
+            this._colourOverride = (h !== null && s !== null) ? { dir: 'custom', h, s } : null;
+          } else {
+            this._colourOverride = { dir: parsed.dir };
+          }
+        }
       } catch {
         // Legacy plain string format
         this._colourOverride = { dir: raw };
@@ -223,7 +246,11 @@ class TeslaCard extends LitElement {
     if (!detail) {
       this._colourOverride = null;
     } else if (detail.dir === 'custom') {
-      this._colourOverride = { dir: 'custom', h: detail.h, s: detail.s };
+      const h = _clampNum(detail.h, 0, 360);
+      const s = _clampNum(detail.s, 0, 100);
+      if (h !== null && s !== null) {
+        this._colourOverride = { dir: 'custom', h, s };
+      }
     } else {
       this._colourOverride = { dir: detail.dir };
     }
@@ -242,7 +269,10 @@ class TeslaCard extends LitElement {
     try {
       const raw = localStorage.getItem(this._modelLsKey());
       if (raw) {
-        this._modelOverride = JSON.parse(raw);
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed.model === 'string' && typeof parsed.variant === 'string') {
+          this._modelOverride = { model: parsed.model, variant: parsed.variant };
+        }
         this._applyConfig();
       }
     } catch { /* ignore */ }
@@ -391,9 +421,12 @@ class TeslaCard extends LitElement {
   _customOverlayStyleFor(imageFile) {
     const c = this._customColour;
     if (!c || c.s === 0) return '';
+    // h and s are already clamped numerics via _onColourChanged / _restoreColour
+    const h = Math.round(c.h);
+    const s = Math.round(c.s);
     const mask = this._maskUrl(imageFile);
     return `position:absolute;inset:0;pointer-events:none;`
-      + `background:hsl(${c.h},${c.s}%,50%);mix-blend-mode:color;`
+      + `background:hsl(${h},${s}%,50%);mix-blend-mode:color;`
       + `-webkit-mask-image:url(${mask});mask-image:url(${mask});`
       + `-webkit-mask-size:contain;mask-size:contain;`
       + `-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;`
