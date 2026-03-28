@@ -3,6 +3,7 @@
 ## [1.0.3] - 2026-03-20
 
 ### Added
+- **Model Y 2020–2024 — Deep Blue Metallic** images (contributed by [@ccarcione](https://github.com/ccarcione))
 - **Automated test suite** — Vitest framework with 78 tests covering entity config, models, colours, and security validation. Run with `npm test`.
 
 ### Security
